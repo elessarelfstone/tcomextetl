@@ -1,6 +1,5 @@
 import os
 import fnmatch
-from shutil import move
 
 from zipfile import ZipFile
 from rarfile import RarFile
@@ -9,7 +8,7 @@ from tcomextetl.common.utils import identify_file_format
 from tcomextetl.common.exceptions import ExternalSourceError
 
 
-def extract_by_wildcard(arch_fpath: str, wildcard: str = '*.xlsx', paths=None):
+def extract_by_wildcard(arch_fpath: str, wildcard: str):
 
     """ Extract files from archive. Supports only zip and rar formats. """
 
@@ -30,18 +29,12 @@ def extract_by_wildcard(arch_fpath: str, wildcard: str = '*.xlsx', paths=None):
     # filter by wildcard
     files_to_extract = fnmatch.filter(arch_obj.namelist(), wildcard)
 
-    # slice
-    if paths:
-        files_to_extract = files_to_extract[:len(paths)]
-
     extracted_files_list = []
 
     for i, f in enumerate(files_to_extract):
         arch_obj.extract(f, _dir)
-        src = os.path.join(_dir, f).replace('/', os.sep)
-        dest = paths[i]
-        move(src, dest)
-        extracted_files_list.append(dest)
+        f_path = os.path.join(_dir, f).replace('/', os.sep)
+        extracted_files_list.append(f_path)
 
     return extracted_files_list
 

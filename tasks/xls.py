@@ -38,7 +38,6 @@ class ArchivedWebExcelFileParsingToCsv(CsvFileOutput):
     usecolumns = luigi.Parameter(default=None)
     sheets = luigi.Parameter(default=None)
 
-
     def run(self):
         super().run()
         for f_in in self.input():

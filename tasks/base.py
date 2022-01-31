@@ -3,6 +3,7 @@ import os
 import shutil
 from datetime import datetime
 from pathlib import Path
+from shutil import move
 from time import sleep
 
 import luigi
@@ -17,7 +18,7 @@ from settings import (DATA_PATH, TEMP_PATH, FTP_PATH,
 
 from tcomextetl.extract.http_requests import Downloader
 from tcomextetl.common.arch import extract_by_wildcard
-from tcomextetl.common.utils import build_file_path, get_yaml_task_config
+from tcomextetl.common.utils import build_fpath, get_yaml_task_config
 from tcomextetl.transform import StructRegister
 
 
@@ -38,12 +39,16 @@ class Base(luigi.Task):
 class WebDataFileInput(Base):
 
     url = luigi.Parameter()
+    _downloader = None
+
+    @property
+    def downloader(self):
+        if self._downloader is None:
+            self._downloader = Downloader(self.url)
+        return self._downloader
 
     def output(self):
-        d = Downloader(self.url)
-        # sleep(5)
-        f_path = build_file_path(TEMP_PATH, self.name, f'.{d.ext}')
-        # f_path = os.path.join(TEMP_PATH, self.name)
+        f_path = build_fpath(TEMP_PATH, self.name, f'.{self.downloader.ext}')
         return luigi.LocalTarget(f_path)
 
     @property
@@ -51,11 +56,11 @@ class WebDataFileInput(Base):
         return f'Saving in {self.output().path}' + '\n'
 
     def run(self):
-        d = Downloader(self.url)
-        with open(self.output().path, 'wb') as f:
-            for ch in d:
+        p = self.output().path
+        with open(p, 'wb') as f:
+            for ch in self.downloader:
                 f.write(ch)
-                self.set_status_info(self.status + d.status)
+                self.set_status_info(self.status + self.downloader.status)
 
 
 @requires(WebDataFileInput)
@@ -66,17 +71,21 @@ class ArchivedWebDataFileInput(luigi.Task):
 
     @property
     def file_paths(self):
-        return [build_file_path(TEMP_PATH, f'{self.name}_{i}', self.wildcard[1:]) for i in range(self.files_count)]
+        ext = self.wildcard[1:]
+        cnt = self.files_count
+        return [build_fpath(TEMP_PATH, f'{self.name}_{i}', ext) for i in range(cnt)]
 
     def output(self):
-        # paths = [os.path.join(TEMP_PATH, f) for f in self.unpacked_files()]
-        # paths = [build_file_path(TEMP_PATH, f) for f in self.unpacked_files()]
+        sleep(0.5)
         return [luigi.LocalTarget(f) for f in self.file_paths]
 
     def run(self):
         arch_fpath = self.input().path
-        extract_by_wildcard(arch_fpath, wildcard=self.wildcard,
-                            paths=self.file_paths)
+        e_paths = extract_by_wildcard(arch_fpath, wildcard=self.wildcard)
+
+        # rename extracted files to have understandable names
+        for i, e_path in enumerate(e_paths):
+            move(e_path, self.file_paths[i])
 
 
 class CsvFileOutput(Base):
@@ -90,8 +99,8 @@ class CsvFileOutput(Base):
         return '{date:%Y%m%d}'.format(date=self.date)
 
     def _file_path(self, ext):
-        return build_file_path(self.directory, self.name,
-                               ext, suff=self.file_date)
+        return build_fpath(self.directory, self.name,
+                           ext, suff=self.file_date)
 
     @property
     def output_path(self):

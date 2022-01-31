@@ -1,7 +1,9 @@
 from box import Box
+from pathlib import Path
 from requests import Session
 from requests.auth import HTTPBasicAuth
 
+from tcomextetl.common.exceptions import ExternalSourceError
 from tcomextetl.common.utils import pretty_size, FILE_FORMATS
 
 
@@ -40,7 +42,8 @@ class HttpRequest:
 
         return self.session.request(method, url, params=p,
                                     data=data, headers=self.headers,
-                                    auth=self.auth, stream=stream)
+                                    auth=self.auth, stream=stream,
+                                    verify=self.verify_cert)
 
     def head(self, url, params=None):
         return self.session.head(url, params=params)
@@ -49,11 +52,15 @@ class HttpRequest:
 class Downloader(HttpRequest):
 
     def __init__(self, url, params=None, headers=None, auth=None,
-                 timeout=None, verify_cert=False, chunk_size=8192):
-        super().__init__(params, headers, auth, timeout, verify_cert)
+                 timeout=None, chunk_size=8192):
+        super().__init__(params, headers, auth, timeout)
         self.url = url
         self.chunk_size = chunk_size
         self._file_format = self.file_format()
+
+        if not self._file_format:
+            raise ExternalSourceError('Could not detect format of file')
+
         self._curr_size = 0
 
     @property
@@ -72,10 +79,25 @@ class Downloader(HttpRequest):
         file_format = None
         r = self.head(self.url, self.params)
         if r:
-            content_type = r.headers['Content-Type']
-            formats = list(filter(lambda f: f['mime'] == content_type, FILE_FORMATS))
-            if formats:
-                file_format = formats.pop()
+            content_type = r.headers.get('Content-Type')
+            location = r.headers.get('Location')
+            content_disposition = r.headers.get('Content-Disposition')
+
+            if content_type:
+                _format = list(filter(lambda f: f['mime'] == content_type, FILE_FORMATS))
+                if _format:
+                    file_format = _format.pop()
+
+            # TODO Parse Content-Disposition case
+            # elif content_disposition:
+            #     file_name = content_disposition.
+            #     file_format = content_disposition.
+
+            elif location:
+                suff = Path(location).suffix[1:]
+                _format = list(filter(lambda f: f['extension'] == suff, FILE_FORMATS))
+                if _format:
+                    file_format = _format.pop()
 
         return file_format
 

@@ -102,7 +102,7 @@ def identify_file_format(fpath: str) -> str:
     return None
 
 
-def build_file_path(directory: str, name: str, ext: str, suff: str = None):
+def build_fpath(directory: str, name: str, ext: str, suff: str = None):
     d = Path(directory)
     name = '_'.join([name, suff]) if suff else name
     return d.joinpath(name).with_suffix(ext)
