@@ -54,7 +54,9 @@ class SimpleExcelDataReader:
 
     @property
     def status(self):
-        return f'Parsed {self.parsed_rows} rows, {self.parsed_sheets} sheets.'
+        s = f'Total: {len(self.sheet_names)}'
+        s += f'Parsed: {self.parsed_rows} rows, {self.parsed_sheets} sheets.'
+        return
 
     def __iter__(self):
 

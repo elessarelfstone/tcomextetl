@@ -1,10 +1,16 @@
-from box import Box
-from pathlib import Path
+import re
+import urllib3
 from requests import Session
 from requests.auth import HTTPBasicAuth
 
+from box import Box
+
 from tcomextetl.common.exceptions import ExternalSourceError
 from tcomextetl.common.utils import pretty_size, FILE_FORMATS
+
+# suppress warnings about insecure requests
+# since we don't use certs mostly
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class HttpRequest:
@@ -18,13 +24,15 @@ class HttpRequest:
         if params:
             self.params = params
         else:
-            self.params = Box()
+            self.params = {}
 
         self.headers = headers
         self.auth = auth
 
         if auth and auth.get('user'):
             self.auth = HTTPBasicAuth(auth.get('user'), auth.get('password'))
+
+        self.stat_meta_info = {}
 
         self.timeout = timeout
         self.session = Session()
@@ -76,7 +84,10 @@ class Downloader(HttpRequest):
         return self._file_format['extension']
 
     def file_format(self):
+
+        ext = None
         file_format = None
+
         r = self.head(self.url, self.params)
         if r:
             content_type = r.headers.get('Content-Type')
@@ -88,14 +99,15 @@ class Downloader(HttpRequest):
                 if _format:
                     file_format = _format.pop()
 
-            # TODO Parse Content-Disposition case
-            # elif content_disposition:
-            #     file_name = content_disposition.
-            #     file_format = content_disposition.
+            elif content_disposition:
+                file_name = re.findall('filename=(.+)', content_disposition)[0]
+                ext = file_name.split('.')[-1]
 
             elif location:
-                suff = Path(location).suffix[1:]
-                _format = list(filter(lambda f: f['extension'] == suff, FILE_FORMATS))
+                ext = location.split('.')[-1]
+
+            if ext:
+                _format = list(filter(lambda f: f['extension'] == ext, FILE_FORMATS))
                 if _format:
                     file_format = _format.pop()
 

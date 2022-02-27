@@ -1,6 +1,7 @@
 import json
 
 from tcomextetl.extract.http_requests import HttpRequest
+from tcomextetl.common.exceptions import ExternalSourceError
 
 sgov_host = 'stat.gov.kz'
 
@@ -47,7 +48,14 @@ class SgovApiRCutParser(HttpRequest):
 
         r = self.request(f'https://{sgov_host}/api/sbr/request', data=data)
 
-        return r.json()['obj']
+        payload = r.json()
+        order_id = payload.get('obj')
+        self.stat_meta_info['order_id'] = order_id
+
+        if order_id is None:
+            raise ExternalSourceError('Could not parse response.')
+
+        return order_id
 
     def check_state(self, order_id):
 
@@ -55,13 +63,32 @@ class SgovApiRCutParser(HttpRequest):
             If it's ready returns url.
         """
 
-        r = self.request(f'https://{sgov_host}/api/sbr/requestResult/{order_id}/en')
-        r_data = r.json()
-        if r_data.get('success') is True:
-            if r_data.get('description') == 'Обработан':
-                f_guid = r_data.get('obj', {}).get('fileGuid')
-                return f'https://{sgov_host}/api/sbr/download?bucket=SBR&guid={f_guid}'
-            elif r_data.get('description') == 'В обработке':
-                return None
+        r = self.request(f'https://{sgov_host}/api/sbr/requestResult/{order_id}/ru')
+        payload = r.json()
+
+        success = payload.get('success')
+        obj = payload.get('obj')
+        state = payload.get('description')
+
+        if success is None:
+            raise ExternalSourceError('Could not parse response.')
+
+        # there are so many conditions
+        # cause stat.gov.kz API do not work properly
+        if success is True:
+            if state == 'Обработан':
+                guid = obj.get('fileGuid')
+                self.stat_meta_info['guid'] = guid
+                return f'https://{sgov_host}/api/sbr/download?bucket=SBR&guid={guid}'
+            elif state in ('В обработке', 'Создается'):
+                if obj:
+                    guid = obj.get('fileGuid')
+                    if guid:
+                        return f'https://{sgov_host}/api/sbr/download?bucket=SBR&guid={guid}'
+                    else:
+                        return None
+                else:
+                    return None
+
         else:
             raise SgovApiException('Rcut file guid not available.')

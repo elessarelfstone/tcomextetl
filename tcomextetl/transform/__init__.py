@@ -25,6 +25,12 @@ StructRegister.add('sgov_mkeis', MkeisRow)
 StructRegister.add('sgov_kurk', KurkRow)
 StructRegister.add('sgov_kpved', KpvedRow)
 StructRegister.add('sgov_companies', CompanieRow)
+StructRegister.add('sgov_legal_entities', CompanieRow)
+StructRegister.add('sgov_foreign_branches', CompanieRow)
+StructRegister.add('sgov_joint_ventures', CompanieRow)
+StructRegister.add('sgov_entrepreneurs', CompanieRow)
+StructRegister.add('sgov_legal_branches', CompanieRow)
+
 
 # kgd.gov.kz
 StructRegister.add('kgd_bankrupt', BankruptRow)
@@ -34,13 +40,4 @@ StructRegister.add('kgd_jwaddress', JwaddressRow)
 StructRegister.add('kgd_pseudocompany', PseudocompanyRow)
 StructRegister.add('kgd_taxarrears150', TaxArrears150Row)
 StructRegister.add('kgd_taxviolators', TaxViolatorsRow)
-
-
-
-
-
-
-
-
-
 

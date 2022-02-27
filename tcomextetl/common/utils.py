@@ -40,7 +40,7 @@ Formats = namedtuple('Formats', ['extension', 'mime', 'offset', 'signature'])
 def read_file(fpath: str) -> str:
     """ Return all rows of file as string """
     with open(fpath, 'r', encoding="utf8") as f:
-        data = f.read()
+        data = f.read().rstrip('\r\n')
 
     return data
 
@@ -113,4 +113,3 @@ def get_yaml_task_config(section):
         config = load(c, Loader=Loader)
 
     return config[section]
-
