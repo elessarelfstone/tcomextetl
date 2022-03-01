@@ -37,7 +37,7 @@ class HttpRequest:
         self.timeout = timeout
         self.session = Session()
 
-    def request(self, url, data=None, params=None, stream=False):
+    def request(self, url: str, data=None, params=None, stream=False):
         if data:
             method = 'POST'
         else:

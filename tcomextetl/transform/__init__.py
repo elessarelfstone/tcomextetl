@@ -1,5 +1,6 @@
 from tcomextetl.transform.sgov import *
 from tcomextetl.transform.kgd import *
+from tcomextetl.transform.goszakup import *
 
 
 class StructRegister:
@@ -40,4 +41,8 @@ StructRegister.add('kgd_jwaddress', JwaddressRow)
 StructRegister.add('kgd_pseudocompany', PseudocompanyRow)
 StructRegister.add('kgd_taxarrears150', TaxArrears150Row)
 StructRegister.add('kgd_taxviolators', TaxViolatorsRow)
+
+# goszakup.gov.kz
+
+StructRegister.add('goszakup_companies', GoszakupCompanyRow)
 
