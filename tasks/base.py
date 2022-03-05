@@ -124,9 +124,9 @@ class ApiToCsv(CsvFileOutput):
     def parsed_ids_file_path(self):
         return self._file_path('.prs')
 
-    @property
-    def params(self):
-        return Box()
+    # @property
+    # def params(self):
+    #     return {}
 
     def complete(self):
         if not os.path.exists(self.success_file_path):
@@ -188,8 +188,9 @@ class Runner(luigi.WrapperTask):
     Base class for tasks which are supposed only to prepare
     all input parameters and run tasks with main functionality.
     """
-    date = luigi.DateParameter(default=datetime.today())
     name = luigi.Parameter()
+    period = luigi.Parameter(default='all')
+    date = luigi.DateParameter(default=datetime.today())
 
     @property
     def params(self):

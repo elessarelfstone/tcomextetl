@@ -45,7 +45,8 @@ class ApiRequests(ABC, HttpRequest):
 
         while self.next_page_params:
             self._raw = self.load(self.next_page_params)
-            print(self._raw)
+            # print(self.next_page_params)
+            # print(self._raw)
             data = self.parse()
             self._parsed_count += len(data)
             yield data
