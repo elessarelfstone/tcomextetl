@@ -7,7 +7,6 @@ from shutil import move
 from time import sleep
 
 import luigi
-from box import Box
 from luigi.contrib.ftp import RemoteTarget
 from luigi.parameter import ParameterVisibility
 from luigi.util import requires
@@ -18,6 +17,7 @@ from settings import (DATA_PATH, TEMP_PATH, FTP_PATH,
 
 from tcomextetl.extract.http_requests import Downloader
 from tcomextetl.common.arch import extract_by_wildcard
+from tcomextetl.common.dates import yesterday
 from tcomextetl.common.utils import build_fpath, get_yaml_task_config
 from tcomextetl.transform import StructRegister
 
@@ -191,6 +191,10 @@ class Runner(luigi.WrapperTask):
     name = luigi.Parameter()
     period = luigi.Parameter(default='all')
     date = luigi.DateParameter(default=datetime.today())
+
+    @property
+    def yesterday(self):
+        return yesterday()
 
     @property
     def params(self):

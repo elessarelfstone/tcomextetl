@@ -37,8 +37,8 @@ class HttpRequest:
         self.timeout = timeout
         self.session = Session()
 
-    def request(self, url: str, data=None, params=None, stream=False):
-        if data:
+    def request(self, url: str, data=None, json=None, params=None, stream=False):
+        if data or json:
             method = 'POST'
         else:
             method = 'GET'
@@ -49,7 +49,7 @@ class HttpRequest:
             p = {**self.params, **params}
 
         return self.session.request(method, url, params=p,
-                                    data=data, headers=self.headers,
+                                    data=data, json=json, headers=self.headers,
                                     auth=self.auth, stream=stream,
                                     verify=self.verify_cert)
 

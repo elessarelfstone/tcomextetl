@@ -1,5 +1,3 @@
-import os
-import json
 from pathlib import Path
 from collections import namedtuple
 
@@ -113,3 +111,4 @@ def get_yaml_task_config(section):
         config = load(c, Loader=Loader)
 
     return config[section]
+
