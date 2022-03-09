@@ -1,4 +1,5 @@
-from time import sleep
+import pandas as pd
+
 from urllib.parse import urlparse
 from urllib.parse import parse_qsl
 
@@ -7,13 +8,21 @@ from tcomextetl.common.utils import read_file
 
 
 def unnest(wrapper_entity: str, data: list):
-    """ Flatten every There are a few cases where query has nested entity. """
     unnested = []
+
+    # there are a few cases where
+    # query has nested entity
     for wrapper in data:
         items = wrapper[wrapper_entity]
         unnested.extend(items)
 
     return unnested
+
+
+def norm(d):
+    df = pd.json_normalize(d, sep='')
+    n = df.to_dict(orient='records')[0]
+    return {k.lstrip('_'): v for k, v in n.items()}
 
 
 class GoszakupRestApiParser(ApiRequests):
@@ -87,9 +96,11 @@ class GoszakupGraphQLApiParser(ApiRequests):
     def load(self, params):
         query = read_file(self.gql_fpath)
         variables = params
+
         if self._raw:
             # pagination
             variables['after'] = self.last_id
+
         json = {'query': query, 'variables': variables}
         r = self.request(self.url, params=params, json=json)
 
@@ -103,6 +114,10 @@ class GoszakupGraphQLApiParser(ApiRequests):
 
         if nested_wrapper:
             data = unnest(nested_wrapper, data)
+
+        probe = data[0]
+        if probe.get('_', None):
+            data = [norm(d) for d in data]
 
         return data
 

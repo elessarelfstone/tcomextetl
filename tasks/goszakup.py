@@ -58,18 +58,14 @@ class GoszakupOutput(ApiToCsv):
         append_file(self.success_file_path, 'good')
 
 
-class GoszakupCompaniesOutput(GoszakupOutput):
+@requires(GoszakupOutput)
+class GoszakupFtpOutput(FtpUploadedOutput):
     pass
 
 
-@requires(GoszakupCompaniesOutput)
-class GoszakupCompanyFtpOutput(FtpUploadedOutput):
-    pass
+class GoszakupRunner(Runner):
 
-
-class GoszakupCompanies(Runner):
-
-    name = luigi.Parameter(default='goszakup_companies')
+    name = luigi.Parameter()
     start_date = luigi.Parameter(default=yesterday())
     end_date = luigi.Parameter(default=yesterday())
 
@@ -82,7 +78,23 @@ class GoszakupCompanies(Runner):
             params.pop('endpoint')
             params['from_to'] = (self.start_date, self.end_date)
 
-        return GoszakupCompanyFtpOutput(**params)
+        return GoszakupFtpOutput(**params)
+
+
+class GoszakupCompanies(GoszakupRunner):
+
+    name = luigi.Parameter('goszakup_companies')
+    
+    def requires(self):
+        return super().requires()
+
+
+class GoszakupContracts(GoszakupRunner):
+
+    name = luigi.Parameter('goszakup_contracts')
+
+    def requires(self):
+        return super().requires()
 
 
 if __name__ == '__main__':

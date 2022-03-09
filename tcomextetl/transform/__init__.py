@@ -43,6 +43,7 @@ StructRegister.add('kgd_taxarrears150', TaxArrears150Row)
 StructRegister.add('kgd_taxviolators', TaxViolatorsRow)
 
 # goszakup.gov.kz
-
 StructRegister.add('goszakup_companies', GoszakupCompanyRow)
+StructRegister.add('goszakup_contracts', GoszakupContractRow)
+
 
