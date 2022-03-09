@@ -8,7 +8,7 @@ from tcomextetl.extract.goszakup_requests import (GoszakupRestApiParser,
                                                   GoszakupGraphQLApiParser)
 from tcomextetl.common.csv import dict_to_csvrow, save_csvrows
 from tcomextetl.common.dates import yesterday
-from tcomextetl.common.utils import append_file
+from tcomextetl.common.utils import append_file, rewrite_file
 from settings import (GOSZAKUP_API_HOST, GOSZAKUP_TOKEN)
 
 
@@ -54,8 +54,11 @@ class GoszakupOutput(ApiToCsv):
         for rows in parser:
             data = [dict_to_csvrow(d, self.struct) for d in rows]
             save_csvrows(self.output_path, data)
+            print(parser.status_percent)
+            self.set_status_info(*parser.status_percent)
+            rewrite_file(self.stat_file_path, str(parser.stat))
 
-        append_file(self.success_file_path, 'good')
+        self.finalize()
 
 
 @requires(GoszakupOutput)
@@ -92,6 +95,14 @@ class GoszakupCompanies(GoszakupRunner):
 class GoszakupContracts(GoszakupRunner):
 
     name = luigi.Parameter('goszakup_contracts')
+
+    def requires(self):
+        return super().requires()
+
+
+class GoszakupUntrusted(GoszakupRunner):
+
+    name = luigi.Parameter('goszakup_untrusted')
 
     def requires(self):
         return super().requires()

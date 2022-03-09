@@ -322,3 +322,17 @@ class GoszakupPlanKatoRow:
     is_deleted = attr.ib(default='')
     system_id = attr.ib(default='')
     index_date = attr.ib(default='')
+
+
+@attr.s
+class GoszakupUntrustedSupplierRow:
+    pid = attr.ib(default='')
+    supplier_biin = attr.ib(default='')
+    supplier_innunp = attr.ib(default='')
+    supplier_name_ru = attr.ib(default='')
+    supplier_name_kz = attr.ib(default='')
+    kato_list = attr.ib(default='')
+    index_date = attr.ib(default='')
+    system_id = attr.ib(default='')
+
+

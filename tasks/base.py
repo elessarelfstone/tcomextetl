@@ -113,8 +113,8 @@ class CsvFileOutput(Base):
 class ApiToCsv(CsvFileOutput):
 
     @property
-    def meta_file_path(self):
-        return self._file_path('.meta')
+    def stat_file_path(self):
+        return self._file_path('.stat')
 
     @property
     def success_file_path(self):
@@ -124,9 +124,8 @@ class ApiToCsv(CsvFileOutput):
     def parsed_ids_file_path(self):
         return self._file_path('.prs')
 
-    # @property
-    # def params(self):
-    #     return {}
+    def finalize(self):
+        move(self.stat_file_path, self.success_file_path)
 
     def complete(self):
         if not os.path.exists(self.success_file_path):

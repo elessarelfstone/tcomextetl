@@ -57,6 +57,9 @@ class GoszakupRestApiParser(ApiRequests):
         if self._raw is None:
             return params
 
+        if not self.page:
+            return {}
+
         # parse parameters for pagination
         query = urlparse(self.page).query
         query_params = dict(parse_qsl(query))

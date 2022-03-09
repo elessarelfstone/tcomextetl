@@ -48,6 +48,11 @@ def append_file(fpath, data):
         f.write(data + '\n')
 
 
+def rewrite_file(fpath, data):
+    with open(fpath, 'w', encoding="utf8") as f:
+        f.write(data + '\n')
+
+
 def pretty_size(p_bytes):
     """ Get human-readable file sizes. """
 
