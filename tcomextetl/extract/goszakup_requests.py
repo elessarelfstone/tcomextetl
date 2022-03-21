@@ -4,7 +4,8 @@ from urllib.parse import urlparse
 from urllib.parse import parse_qsl
 
 from tcomextetl.extract.api_requests import ApiRequests
-from tcomextetl.common.utils import read_file
+from tcomextetl.common.exceptions import ExternalSourceError
+from tcomextetl.common.utils import read_file, flatten_data
 
 
 def unnest(wrapper_entity: str, data: list):
@@ -110,19 +111,26 @@ class GoszakupGraphQLApiParser(ApiRequests):
         return r.json()
 
     def parse(self):
-        entity, nested_wrapper = self.entity, None
-        if '_' in self.entity:
-            entity, nested_wrapper = self.entity.split('_')
-        data = self._raw['data'][entity]
 
-        if nested_wrapper:
-            data = unnest(nested_wrapper, data)
+        def clean(d):
+            """ Rid off underscores and digits in name of keys """
 
-        probe = data[0]
-        if probe.get('_', None):
-            data = [norm(d) for d in data]
+            pat = '_0123456789'
+            return {k.lstrip(pat): v for k, v in d.items()}
 
-        return data
+        # there are always 2 sections - data and extensions in response
+        # check out if we got errors
+        errors = self._raw.get('errors')
+        if errors:
+            raise ExternalSourceError(errors[0]['message'])
+
+        data = self._raw['data'][self.entity]
+
+        # level up nested data
+        normalized_data = [flatten_data(d) for d in data]
+
+        #
+        return [clean(d) for d in normalized_data if '_' not in d.keys()]
 
     @property
     def next_page_params(self):

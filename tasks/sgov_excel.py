@@ -139,7 +139,8 @@ class SgovRcutCompaniesLinkRunner(Runner):
 
     def requires(self):
         params = self.params
-        del params['date']
+        params.pop('date')
+        params.pop('skiptop')
         return SgovRcutCompaniesLinkOutput(**params)
 
 

@@ -54,7 +54,6 @@ class GoszakupOutput(ApiToCsv):
         for rows in parser:
             data = [dict_to_csvrow(d, self.struct) for d in rows]
             save_csvrows(self.output_path, data)
-            print(parser.status_percent)
             self.set_status_info(*parser.status_percent)
             rewrite_file(self.stat_file_path, str(parser.stat))
 
@@ -88,24 +87,40 @@ class GoszakupCompanies(GoszakupRunner):
 
     name = luigi.Parameter('goszakup_companies')
     
-    def requires(self):
-        return super().requires()
-
 
 class GoszakupContracts(GoszakupRunner):
 
     name = luigi.Parameter('goszakup_contracts')
 
-    def requires(self):
-        return super().requires()
-
 
 class GoszakupUntrusted(GoszakupRunner):
-
+    # don't run for a day
     name = luigi.Parameter('goszakup_untrusted')
 
-    def requires(self):
-        return super().requires()
+
+class GoszakupLots(GoszakupRunner):
+
+    name = luigi.Parameter('goszakup_lots')
+
+
+class GoszakupTrdBuys(GoszakupRunner):
+
+    name = luigi.Parameter('goszakup_trd_buys')
+
+
+class GoszakupPlanPoints(GoszakupRunner):
+
+    name = luigi.Parameter('goszakup_plan_points')
+
+
+class GoszakupPlansKato(GoszakupRunner):
+
+    name = luigi.Parameter('goszakup_plans_kato')
+
+
+class GoszakupContractUnits(GoszakupRunner):
+
+    name = luigi.Parameter('goszakup_contract_units')
 
 
 if __name__ == '__main__':

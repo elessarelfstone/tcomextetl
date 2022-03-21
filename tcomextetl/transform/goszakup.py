@@ -336,3 +336,32 @@ class GoszakupUntrustedSupplierRow:
     system_id = attr.ib(default='')
 
 
+@attr.s
+class GoszakupContractUnitsRow:
+    contract_id = attr.ib(default='')
+    lot_id = attr.ib(default='')
+    pln_point_id = attr.ib(default='')
+    item_price = attr.ib(default='')
+    item_price_wnds = attr.ib(default='')
+    quantity = attr.ib(default='')
+    total_sum = attr.ib(default='')
+    total_sum_wnds = attr.ib(default='')
+    fact_sum = attr.ib(default='')
+    fact_sum_wnds = attr.ib(default='')
+    ks_proc = attr.ib(default='')
+    ks_sum = attr.ib(default='')
+    deleted = attr.ib(default='')
+    trd_buy_id = attr.ib(default='')
+    contract_registry_id = attr.ib(default='')
+    crdate = attr.ib(default='')
+    exec_fakt_date = attr.ib(default='')
+    exec_plan_date = attr.ib(default='')
+    executed = attr.ib(default='')
+    parent_id = attr.ib(default='')
+    root_id = attr.ib(default='')
+    ref_contract_status_id = attr.ib(default='')
+    cr_deleted = attr.ib(default='')
+    ref_amendm_agreem_justif_id = attr.ib(default='')
+    system_id = attr.ib(default='')
+    index_date = attr.ib(default='')
+

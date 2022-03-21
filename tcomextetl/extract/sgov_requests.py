@@ -45,7 +45,7 @@ class SgovApiRCutParser(HttpRequest):
         data = json.dumps({'conditions': [juridical_type_info, status_info],
                            'stringForMD5': 'string',
                            'cutId': self.rcuts_list[self.which_last]})
-
+        print(data)
         r = self.request(f'https://{sgov_host}/api/sbr/request', data=data)
 
         payload = r.json()

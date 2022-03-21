@@ -46,5 +46,13 @@ StructRegister.add('kgd_taxviolators', TaxViolatorsRow)
 StructRegister.add('goszakup_companies', GoszakupCompanyRow)
 StructRegister.add('goszakup_contracts', GoszakupContractRow)
 StructRegister.add('goszakup_untrusted', GoszakupUntrustedSupplierRow)
+StructRegister.add('goszakup_lots', GoszakupLotsRow)
+StructRegister.add('goszakup_trd_buys', GoszakupTradeBuyRow)
+StructRegister.add('goszakup_plan_points', GoszakupPlanPointRow)
+StructRegister.add('goszakup_plans_kato', GoszakupPlanKatoRow)
+StructRegister.add('goszakup_contract_units', GoszakupContractUnitsRow)
+
+
+
 
 

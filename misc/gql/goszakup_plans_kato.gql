@@ -1,0 +1,17 @@
+query getPlansKato($from: String, $to: String, $limit: Int, $after: Int){
+                  Plans(filter: {timestamp: [$from, $to]}, limit: $limit, after: $after) {
+                    _: PlansKato {
+                        id
+                        pln_points_id: plnPointsId
+                        ref_kato_code: refKatoCode
+                        ref_countries_code: refCountriesCode
+                        full_delivery_place_name_ru: fullDeliveryPlaceNameRu
+                        full_delivery_place_name_kz: fullDeliveryPlaceNameKz
+                        count
+                        is_active: isActive
+                        is_deleted: isDeleted
+                        system_id: systemId
+                        index_date: indexDate
+                    }
+                }
+            }

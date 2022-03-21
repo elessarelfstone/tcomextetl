@@ -1,5 +1,3 @@
-import os
-
 import attr
 
 CSV_SEP = ';'
@@ -45,7 +43,7 @@ def save_csvrows(fpath: str, recs, sep=None, quoter=None):
 
 def dict_to_csvrow(p_dict, struct):
     """ Convert given dict into tuple using
-    given structure(attr class)."""
+    given structure(attr class). """
 
     # cast each keys's name of dict to lower case
     src_dict = {k.lower(): v for k, v in p_dict.items() if k.lower()}
@@ -64,5 +62,3 @@ def dict_to_csvrow(p_dict, struct):
     attr_obj = struct(**d)
 
     return attr.astuple(attr_obj)
-
-

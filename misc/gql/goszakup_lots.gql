@@ -1,0 +1,34 @@
+query getLots($from: String, $to: String, $limit: Int, $after: Int){
+          Lots(filter: {lastUpdateDate: [$from, $to]}, limit: $limit, after: $after) {
+            id
+            lot_number: lotNumber
+            ref_lot_status_id: refLotStatusId
+            last_update_date: lastUpdateDate
+            union_lots: unionLots
+            point_list: pointList
+            count
+            amount
+            name_ru: nameRu
+            name_kz: nameKz
+            description_ru: descriptionRu
+            description_kz: descriptionKz
+            customer_id: customerId
+            customer_bin: customerBin
+            trd_buy_number_anno: trdBuyNumberAnno
+            trd_buy_id: trdBuyId
+            dumping
+            ref_trade_methods_id: refTradeMethodsId
+            psd_sign: psdSign
+            consulting_services: consultingServices
+            point_list: pointList
+            singl_org_sign: singlOrgSign
+            is_light_industry: isLightIndustry
+            is_construction_work: isConstructionWork
+            disable_person_id: disablePersonId
+            customer_name_kz: customerNameKz
+            customer_name_ru: customerNameRu
+            ref_buy_trade_methods_id: refBuyTradeMethodsId
+            index_date: indexDate
+            system_id: systemId
+          }
+        }
