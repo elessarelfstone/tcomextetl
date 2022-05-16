@@ -1,22 +1,26 @@
+import fnmatch
 import gzip
 import os
 import shutil
 from datetime import datetime
+from os.path import basename
 from pathlib import Path
 from shutil import move
 from time import sleep
 
 import luigi
-from luigi.contrib.ftp import RemoteTarget
+from luigi.contrib.ftp import RemoteTarget, RemoteFileSystem
 from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
 
 from settings import (DATA_PATH, TEMP_PATH, FTP_PATH,
-                      FTP_PASS, FTP_HOST, FTP_USER)
+                      FTP_PASS, FTP_HOST, FTP_USER, FTP_EXPORT_PATH)
 
 from tcomextetl.extract.http_requests import Downloader
 from tcomextetl.common.arch import extract_by_wildcard
+from tcomextetl.common.exceptions import FtpFileError
+from tcomextetl.common.csv import CSV_SEP
 from tcomextetl.common.dates import yesterday
 from tcomextetl.common.utils import build_fpath, get_yaml_task_config
 from tcomextetl.transform import StructRegister
@@ -125,13 +129,18 @@ class ApiToCsv(CsvFileOutput):
         return self._file_path('.prs')
 
     def finalize(self):
-        move(self.stat_file_path, self.success_file_path)
+        if os.path.exists(self.stat_file_path):
+            move(self.stat_file_path, self.success_file_path)
 
     def complete(self):
         if not os.path.exists(self.success_file_path):
             return False
         else:
             return True
+
+    def ids_to_parse(self, src_ids):
+        if os.path.exists(self.parsed_ids_file_path):
+            prs_ids = open(self.parsed_ids_file_path).readlines()
 
 
 class FtpUploadedOutput(luigi.Task):
@@ -204,3 +213,41 @@ class Runner(luigi.WrapperTask):
         params['name'] = self.name
         params['date'] = self.date
         return params
+
+
+class ExternalFtpCsvDFInput(luigi.ExternalTask):
+
+    ftp_file_mask = luigi.Parameter()
+
+    @staticmethod
+    def df_last_file(files):
+        dates = []
+        for f in files:
+            fname = Path(f).stem
+            _dt = fname.split('_')[3]
+            dt = datetime.strptime(_dt, '%Y-%m-%d')
+            dates.append((dt, f))
+
+        dates.sort(key=lambda x: x[1])
+
+        return dates[-1][1]
+
+    def output(self):
+
+        rmfs = RemoteFileSystem(FTP_HOST, username=FTP_USER, password=FTP_PASS)
+
+        files = None
+
+        if rmfs.exists(FTP_EXPORT_PATH):
+            files = rmfs.listdir(FTP_EXPORT_PATH)
+            files = fnmatch.filter([basename(f) for f in files], self.ftp_file_mask)
+        else:
+            raise FtpFileError('Could not find directory')
+
+        if not files:
+            raise FtpFileError('Could not find any file')
+
+        bins_fpath = FTP_EXPORT_PATH + '/' + ExternalFtpCsvDFInput.df_last_file(files)
+        return RemoteTarget(bins_fpath, FTP_HOST,
+                            username=FTP_USER, password=FTP_PASS)
+

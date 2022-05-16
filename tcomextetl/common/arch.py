@@ -37,4 +37,3 @@ def extract_by_wildcard(arch_fpath: str, wildcard: str):
         extracted_files_list.append(f_path)
 
     return extracted_files_list
-

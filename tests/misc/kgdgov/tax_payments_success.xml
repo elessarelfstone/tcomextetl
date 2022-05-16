@@ -1,0 +1,33 @@
+<answer DateForm="2022-04-07T18:18:06.373+06:00" ReqID="d0bd94ca-6573-4c26-812d-3c661488ea9b" xmlns="http://xmlns.kztc-cits/sign" xmlns:ns2="http://www.w3.org/2000/09/xmldsig#">
+   <IIN_BIN>012345678901</IIN_BIN>
+   <NameRu>Fake Company</NameRu>
+   <NameKz>Fake Company</NameKz>
+   <payment>
+      <TaxOrgCode>451501</TaxOrgCode>
+      <NameTaxRu>UGD Astana Ru</NameTaxRu>
+      <NameTaxKz>UGD Astana Kz</NameTaxKz>
+      <KBK>103101</KBK>
+      <KBKNameRu>Social Tax Ru</KBKNameRu>
+      <KBKNameKz>Social Tax Kz</KBKNameKz>
+      <PayNum>2</PayNum>
+      <PayType>1</PayType>
+      <EntryType>1</EntryType>
+      <ReceiptDate>2022-01-01+06:00</ReceiptDate>
+      <WriteOffDate>2022-01-02+06:00</WriteOffDate>
+      <Summa>15646</Summa>
+   </payment>
+   <payment>
+      <TaxOrgCode>451501</TaxOrgCode>
+      <NameTaxRu>UGD Almaty Ru</NameTaxRu>
+      <NameTaxKz>UGD Almaty Kz</NameTaxKz>
+      <KBK>101201</KBK>
+      <KBKNameRu>Individual Tax Ru</KBKNameRu>
+      <KBKNameKz>Individual Tax Kz</KBKNameKz>
+      <PayNum>1</PayNum>
+      <PayType>1</PayType>
+      <EntryType>1</EntryType>
+      <ReceiptDate>2022-01-12+06:00</ReceiptDate>
+      <WriteOffDate>2022-01-12+06:00</WriteOffDate>
+      <Summa>17926</Summa>
+   </payment>
+</answer>

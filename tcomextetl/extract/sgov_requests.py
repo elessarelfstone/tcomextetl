@@ -45,7 +45,7 @@ class SgovApiRCutParser(HttpRequest):
         data = json.dumps({'conditions': [juridical_type_info, status_info],
                            'stringForMD5': 'string',
                            'cutId': self.rcuts_list[self.which_last]})
-        print(data)
+
         r = self.request(f'https://{sgov_host}/api/sbr/request', data=data)
 
         payload = r.json()
@@ -57,9 +57,13 @@ class SgovApiRCutParser(HttpRequest):
 
         return order_id
 
+    def check_head(self, url: str) -> bool:
+        r = self.head(url)
+        return True if r.status_code == 200 else False
+
     def check_state(self, order_id):
 
-        """ Check readiness of placed order for rcut.
+        """ Check status of placed order for rcut.
             If it's ready returns url.
         """
 
@@ -76,19 +80,15 @@ class SgovApiRCutParser(HttpRequest):
         # there are so many conditions
         # cause stat.gov.kz API do not work properly
         if success is True:
-            if state == 'Обработан':
+            if obj:
                 guid = obj.get('fileGuid')
-                self.stat_meta_info['guid'] = guid
-                return f'https://{sgov_host}/api/sbr/download?bucket=SBR&guid={guid}'
-            elif state in ('В обработке', 'Создается'):
-                if obj:
-                    guid = obj.get('fileGuid')
-                    if guid:
-                        return f'https://{sgov_host}/api/sbr/download?bucket=SBR&guid={guid}'
-                    else:
-                        return None
+                url = f'https://{sgov_host}/api/sbr/download?bucket=SBR&guid={guid}'
+                if self.check_head(url):
+                    self.stat_meta_info['guid'] = guid
+                    return url
                 else:
                     return None
-
+            else:
+                return None
         else:
             raise SgovApiException('Rcut file guid not available.')

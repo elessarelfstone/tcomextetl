@@ -1,0 +1,8 @@
+<answer DateForm="2022-04-07T18:18:06.373+06:00" ReqID="d0bd94ca-6573-4c26-812d-3c661488ea9b" xmlns="http://xmlns.kztc-cits/sign" xmlns:ns2="http://www.w3.org/2000/09/xmldsig#">
+   <err errorcode="10">
+      <error>Документы не найдены</error>
+   </err>
+   <IIN_BIN>012345678901</IIN_BIN>
+   <NameRu>Fake Company</NameRu>
+   <NameKz>Fake Company</NameKz>
+</answer>

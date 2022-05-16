@@ -98,6 +98,7 @@ class GoszakupGraphQLApiParser(ApiRequests):
         return ext['pageInfo']['lastId']
 
     def load(self, params):
+        # TODO move reading graphql body to __init__
         query = read_file(self.gql_fpath)
         variables = params
 

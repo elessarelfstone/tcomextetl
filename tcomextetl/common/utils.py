@@ -1,3 +1,4 @@
+import csv
 from pathlib import Path
 from collections import namedtuple
 
@@ -41,6 +42,14 @@ def read_file(fpath: str) -> str:
         data = f.read().rstrip('\r\n')
 
     return data
+
+
+def read_lines(fpath):
+    """ Return rows of file as list """
+    with open(fpath, "r", encoding="utf-8") as f:
+        lines = [b.rstrip() for b in f.readlines()]
+
+    return lines
 
 
 def append_file(fpath, data):
@@ -138,3 +147,13 @@ def flatten_data(d):
     flatten(d)
 
     return out
+
+# class CsvValuesHandler:
+#
+#     def __init__(self, source_fpath, parsed_fpath, sep=';', columns=None):
+#         source_vals = []
+#         with open(source_fpath) as csv_file:
+#             csv_reader = csv.reader(csv_file, delimiter=sep)
+#             for row in csv_reader:
+#                 if columns:
+#                     for c in columns:

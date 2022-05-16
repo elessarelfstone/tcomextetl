@@ -12,7 +12,10 @@ FTP_PATH = os.getenv('FTP_PATH')
 FTP_HOST = os.getenv('FTP_HOST')
 FTP_USER = os.getenv('FTP_USER')
 FTP_PASS = os.getenv('FTP_PASS')
+FTP_EXPORT_PATH = os.getenv('FTP_EXPORT_PATH')
 
 GOSZAKUP_API_HOST = os.getenv('GOSZAKUP_API_HOST')
 # GOSZAKUP_GRAPHQL_API_URL = os.getenv('GOSZAKUP_GRAPHQL_API_URL')
 GOSZAKUP_TOKEN = os.getenv('GOSZAKUP_TOKEN')
+
+KGD_SOAP_TOKEN = os.getenv('')

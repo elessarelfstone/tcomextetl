@@ -62,3 +62,4 @@ def dict_to_csvrow(p_dict, struct):
     attr_obj = struct(**d)
 
     return attr.astuple(attr_obj)
+

@@ -31,5 +31,11 @@ class InfobipRestApiParser(ApiRequests):
     def parse(self):
         return self._raw.get(self.entity)
 
+    def next_page_params(self):
+        params = self.params
+        if self._raw is None:
+            return params
 
-    def
+        if self.page:
+            pass
+

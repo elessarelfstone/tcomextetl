@@ -110,3 +110,5 @@ class TaxViolatorsRow:
     owner_rnn = attr.ib(default='')
     inspection_act_no = attr.ib(default='')
     inspection_date = attr.ib(default='')
+
+

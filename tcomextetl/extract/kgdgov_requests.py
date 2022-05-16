@@ -1,3 +1,4 @@
+from json import dumps, loads
 from xmltodict import parse
 from xml.parsers.expat import ExpatError
 
@@ -5,15 +6,31 @@ from tcomextetl.extract.http_requests import HttpRequest
 from tcomextetl.common.exceptions import ExternalSourceError
 
 
+class KgdGovKzSoapApiError(Exception):
+    pass
+
+
+class KgdGovKzSoapApiResponseError(Exception):
+    pass
+
+
 class KgdGovKzSoapApiParser(HttpRequest):
 
-    def __init__(self, url, request_form, bins_handler, **kwargs):
+    def __init__(self, url, request_form, **kwargs):
         super(KgdGovKzSoapApiParser, self).__init__(**kwargs)
         self.url = url
         self.request_form = request_form
         self._raw = None
         self._page = None
         self._parsed_count = 0
+
+    @property
+    def raw(self):
+        return self._raw
+
+    @raw.setter
+    def raw(self, val):
+        self._raw = val
 
     def load(self, params):
         request_xml = self.request_form.format(*params.values())
@@ -23,28 +40,31 @@ class KgdGovKzSoapApiParser(HttpRequest):
     def parse(self):
 
         if not self._raw:
-            raise ExternalSourceError('Empty response')
+            raise KgdGovKzSoapApiResponseError('Empty response')
         try:
-            d = parse(self._raw)
+            raw_json = loads(dumps(parse(self._raw)))
+            answer = raw_json['answer']
         except ExpatError:
-            raise ExternalSourceError('Not XML formatted')
+            raise KgdGovKzSoapApiResponseError('Not XML formatted')
 
-        if 'err' in d.keys():
-            errcode = d.err.errorcode
-            raise ExternalSourceError(f'Errorcode {errcode}')
+        if 'err' in answer.keys():
+            errcode = answer.err.errorcode
+            raise KgdGovKzSoapApiError(f'Errorcode {errcode}')
 
-        # we can get one payment as one dict
-        _data = d['payment'] if isinstance(d['payment'], list) else [d['payment']]
+        # we can get one payment as single dict
+        payments = answer['payment'] if isinstance(answer['payment'], list) else [answer['payment']]
 
         data = []
-        for d in _data:
+        for d in payments:
             # no BIN in response
             if d['Summa']:
-                d['bin'] = self.params['bin']
+                d['bin'] = answer['IIN_BIN']
 
             # skip payments without Summa
             if d.get('Summa') is not None:
                 data.append(d)
 
         return data
+
+
 
