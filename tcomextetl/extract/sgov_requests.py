@@ -50,7 +50,7 @@ class SgovApiRCutParser(HttpRequest):
 
         payload = r.json()
         order_id = payload.get('obj')
-        self.stat_meta_info['order_id'] = order_id
+        self._stat_meta_info['order_id'] = order_id
 
         if order_id is None:
             raise ExternalSourceError('Could not parse response.')
@@ -84,7 +84,7 @@ class SgovApiRCutParser(HttpRequest):
                 guid = obj.get('fileGuid')
                 url = f'https://{sgov_host}/api/sbr/download?bucket=SBR&guid={guid}'
                 if self.check_head(url):
-                    self.stat_meta_info['guid'] = guid
+                    self._stat_meta_info['guid'] = guid
                     return url
                 else:
                     return None
