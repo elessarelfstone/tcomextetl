@@ -32,7 +32,7 @@ class HttpRequest:
         if auth and auth.get('user'):
             self.auth = HTTPBasicAuth(auth.get('user'), auth.get('password'))
 
-        self.stat_meta_info = {}
+        self._stat_meta_info = {}
 
         self.timeout = timeout
         self.session = Session()
