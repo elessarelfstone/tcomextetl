@@ -112,3 +112,18 @@ class TaxViolatorsRow:
     inspection_date = attr.ib(default='')
 
 
+@attr.s
+class TaxPaymentsRow:
+    bin = attr.ib(default='')
+    taxorgcode = attr.ib(default='')
+    nametaxru = attr.ib(default='')
+    nametaxkz = attr.ib(default='')
+    kbk = attr.ib(default='')
+    kbknameru = attr.ib(default='')
+    kbknamekz = attr.ib(default='')
+    paynum = attr.ib( default='')
+    paytype = attr.ib(default='')
+    entrytype = attr.ib(default='')
+    receiptdate = attr.ib(default='')
+    writeoffdate = attr.ib(default='')
+    summa = attr.ib(default='')
