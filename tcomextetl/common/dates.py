@@ -22,4 +22,4 @@ def previous_month():
 
 def month_as_range(month):
     d = datetime.strptime(month, DEFAULT_MONTH_FORMAT)
-    return d.replace(day=1), date(d.year, d.month, monthrange(d.year, d.month)[1])
+    return d.date(), date(d.year, d.month, monthrange(d.year, d.month)[1])
