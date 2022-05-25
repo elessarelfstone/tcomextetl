@@ -41,6 +41,7 @@ StructRegister.add('kgd_jwaddress', JwaddressRow)
 StructRegister.add('kgd_pseudocompany', PseudocompanyRow)
 StructRegister.add('kgd_taxarrears150', TaxArrears150Row)
 StructRegister.add('kgd_taxviolators', TaxViolatorsRow)
+StructRegister.add('kgd_taxpayments', TaxPaymentsRow)
 
 # goszakup.gov.kz
 StructRegister.add('goszakup_companies', GoszakupCompanyRow)
