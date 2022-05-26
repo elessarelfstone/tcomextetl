@@ -8,6 +8,7 @@ from urllib3.exceptions import ProtocolError
 from requests.exceptions import HTTPError, ConnectionError, ReadTimeout
 
 from tcomextetl.extract.http_requests import HttpRequest
+from tcomextetl.common.utils import append_file
 from tcomextetl.common.exceptions import ExternalSourceError
 
 
@@ -50,8 +51,15 @@ class KgdGovKzSoapApiParser(HttpRequest):
     def raw(self, val):
         self._raw = val
 
+    @property
     def stat_meta_info(self):
-        return self._stat_meta_info
+        s = """
+Response errors: {} - response that can't be represented as xml
+Service errors: {} - internal KGD soap api errors(with codes)
+Availability errors: {} - connection issues, http, too much requests, etc  
+Successes: {} - success processed BINs
+""".format(*self._stat_meta_info.values())
+        return s
 
     @property
     def is_server_up(self):
@@ -67,20 +75,22 @@ class KgdGovKzSoapApiParser(HttpRequest):
 
     def parse(self):
 
+        answer = None
+
         if not self._raw:
-            self.stat_meta_info['re'] += 1
+            self._stat_meta_info['re'] += 1
             raise KgdGovKzSoapApiResponseError('Empty response')
         try:
             # parse xml to dict
             raw_json = loads(dumps(parse(self._raw)))
             answer = raw_json['answer']
-        except ExpatError:
+        except (ExpatError, KeyError):
             self._stat_meta_info['re'] += 1
             raise KgdGovKzSoapApiResponseError('Not XML formatted')
 
-        if 'err' in answer.keys():
+        if answer and 'err' in answer.keys():
             self._stat_meta_info['se'] += 1
-            errcode = answer.err.errorcode
+            errcode = answer['err']['@errorcode']
             raise KgdGovKzSoapApiError(f'Errorcode {errcode}')
 
         # we can get one payment as single dict, so we have wrap it in list
@@ -100,9 +110,11 @@ class KgdGovKzSoapApiParser(HttpRequest):
 
     def process_bin(self, _bin):
         params = {'bin': _bin, **self.params}
+        data = []
         try:
             self._raw = self.load(params)
-
+            data = self.parse()
+            # print(self._raw)
         except KgdGovKzSoapApiError:
             self._parsed_count += 1
             raise
@@ -117,7 +129,7 @@ class KgdGovKzSoapApiParser(HttpRequest):
             self._stat_meta_info['s'] += 1
             self._last_conn_errors_cnt = 0
 
-        return self.parse()
+        return data
 
 
 

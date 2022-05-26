@@ -1,11 +1,22 @@
+import gzip
 import os
+import shutil
 from collections import deque
+from datetime import datetime, timedelta
+from math import floor
+from pathlib import Path
+from time import sleep
 
 import luigi
+from luigi.contrib.ftp import RemoteTarget
+from luigi.util import requires
 
-from tasks.base import ApiToCsv, ExternalFtpCsvDFInput
-from tcomextetl.common.utils import read_file, read_lines, build_fpath
-from tcomextetl.extract.kgdgov_requests import KgdGovKzSoapApiParser
+from tasks.base import Runner, ApiToCsv, ExternalFtpCsvDFInput, FtpUploadedOutput
+from tcomextetl.common.csv import dict_to_csvrow, save_csvrows
+from tcomextetl.common.dates import previous_month, month_as_range
+from tcomextetl.common.utils import append_file, rewrite_file, read_file, read_lines, build_fpath
+from tcomextetl.extract.kgdgov_requests import (KgdGovKzSoapApiParser, KgdGovKzSoapApiError,
+                                                KgdGovKzSoapApiResponseError, KgdGovKzSoapApiNotAvailable)
 
 from settings import KGD_SOAP_TOKEN
 
@@ -45,66 +56,189 @@ class BinsManager:
             return all([c.isdigit() for c in bn])
 
     @property
-    def source_bids_count(self):
+    def total(self):
         return self._source_bins_count
 
     @property
-    def parsed_bids_count(self):
+    def parsed(self):
         return self._parsed_bins_count
 
-    def status_info(self, bid, is_reprocess=False, stat=None):
-        r = 'Reprocessing' if is_reprocess else ''
-        s = f'Total: {self.source_bids_count}. Parsed: {self.parsed_bids_count}.' + '\n'
-        s += f'Parsing payments on {bid} in {self.output_fpath}. {r}' + '\n'
+    def status_info(self, bid, stat=None):
+        s = f'Total: {self._source_bins_count}. Parsed: {self._parsed_bins_count}.' + '\n'
+        s += f'Parsing payments on {bid} in {self.output_fpath}.' + '\n'
         s += stat
         return s
 
 
 class KgdSoapApiTaxPaymentOutput(ApiToCsv):
 
-    start_date = luigi.Parameter()
+    begin_date = luigi.Parameter()
     end_date = luigi.Parameter()
     timeout = luigi.FloatParameter(default=1.5)
-    notaxes_fext = luigi.Parameter('notaxes')
+    notaxes_fext = luigi.Parameter('.notaxes')
+
+    @property
+    def request_form(self):
+        r_form_fpath = Path(__file__).parent.parent / 'misc' / 'kgd' / 'tax_payments_request_form.xml'
+        return read_file(r_form_fpath)
 
     @property
     def bins_fpath(self):
-        return build_fpath(self.directory, self.name, 'bins')
+        return build_fpath(self.directory, self.name, '.bins')
 
     @property
-    def notaxes_fpath(self):
-        return build_fpath(self.directory, self.name, self.notaxes_fext)
+    def failed_file_path(self):
+        return self._file_path('.failed')
+
+    @property
+    def notaxes_file_path(self):
+        return self._file_path(self.notaxes_fext)
 
     def requires(self):
         return ExternalFtpCsvDFInput(ftp_file_mask='export_kgdgovkz_bins_*.csv')
 
     def output(self):
         return [luigi.LocalTarget(self.parsed_ids_file_path),
-                luigi.LocalTarget(self.notaxes_fpath),
+                luigi.LocalTarget(self.notaxes_file_path),
                 super().output()
                 ]
 
     def run(self):
         # get bins
         if not os.path.exists(self.bins_fpath):
-            self.input().get(self.bins_fpath)
+            self.input().get(str(self.bins_fpath))
 
         url = url_template.format(KGD_SOAP_TOKEN)
-        r_form = read_file()
-        parser = KgdGovKzSoapApiParser(url, r_form)
+        params = {'begin_date': self.begin_date, 'end_date': self.end_date}
+        parser = KgdGovKzSoapApiParser(url, self.request_form,
+                                       params=params, headers=headers)
 
-        bins_queue = BinsManager(self.bins_fpath, self.output_path,
-                                 self.parsed_ids_file_path)
+        bins_manager = BinsManager(self.bins_fpath, self.output_path,
+                                   self.parsed_ids_file_path)
 
-        while bins_queue:
+        bins = bins_manager.bins
+        failed_bins = deque()
+        parsed = bins_manager.parsed
+        while bins:
+
+            if failed_bins:
+                _bin = failed_bins.popleft()
+            else:
+                _bin = bins.popleft()
+
+            try:
+
+                payments = parser.process_bin(_bin)
+
+            except KgdGovKzSoapApiResponseError as e:
+                failed_bins.append(_bin)
+                sleep(self.timeout)
+            except KgdGovKzSoapApiError as e:
+                append_file(self.parsed_ids_file_path, _bin)
+                parsed += 1
+                if str(e).endswith('10'):
+                    append_file(self.notaxes_file_path, _bin)
+                sleep(self.timeout)
+            except KgdGovKzSoapApiNotAvailable:
+                if not parser.is_server_up:
+                    print('Server is not available.')
+                    exit()
+                else:
+                    failed_bins.append(_bin)
+                    sleep(self.timeout)
+
+            except Exception as e:
+                raise
+
+            else:
+                data = []
+                for p in payments:
+                    row = dict_to_csvrow(p, self.struct)
+                    data.append(row)
+
+                if data:
+                    save_csvrows(self.output_path, data)
+
+                append_file(self.parsed_ids_file_path, _bin)
+                parsed += 1
+
+            s = f'Total: {bins_manager.total}. Parsed: {parsed}. BIN: {_bin}' + '\n'
+            rewrite_file(self.stat_file_path, s + parser.stat_meta_info)
+
+            p = floor((parsed * 100) / bins_manager.total)
+            self.set_status_info(s + parser.stat_meta_info, p)
+
+        self.finalize()
 
 
+@requires(KgdSoapApiTaxPaymentOutput)
+class KgdSoapApiTaxPaymentFtpUploadedOutput(FtpUploadedOutput):
+
+    def file_name(self, input_fpath):
+        tomorrow = datetime.today() + timedelta(days=1)
+        suff_tomorrow = '{date:%Y%m%d}'.format(date=tomorrow)
+        ext = Path(input_fpath).suffix
+        # have to break it down to pieces to get file name without date
+        pieces = Path(input_fpath).stem.split('_')
+        pieces.pop()
+        pieces.append(suff_tomorrow)
+        f_name = '_'.join(pieces)
+        return Path(f_name).with_suffix(ext + self.gzip_ext).name
+
+    def gzip_file(self, input_fpath):
+
+        gzip_fpath = os.path.join(os.path.dirname(os.path.abspath(input_fpath)),
+                                  self.file_name(input_fpath))
+
+        with open(input_fpath, 'rb') as src:
+            with gzip.open(gzip_fpath, 'wb') as dest:
+                shutil.copyfileobj(src, dest)
+
+        return gzip_fpath
+
+    def output(self):
+
+        os_sep = str(self.ftp_os_sep)
+        root = self.ftp_path
+
+        # use str.sep.join to avoid problems
+        # OS specific separator
+        if self.ftp_directory:
+            path = os_sep.join([root, self.ftp_directory])
+        else:
+            path = root
+
+        ftp_remote_targets = []
+        for fi in self.input():
+            ftp_fpath = os_sep.join([path, self.file_name(fi.path)])
+            ftp_remote_targets.append(RemoteTarget(ftp_fpath, self.ftp_host,
+                                                   username=self.ftp_user, password=self.ftp_pass))
+
+        return ftp_remote_targets
+
+    def run(self):
+        for i, fi in enumerate(self.input()):
+            fpath = self.gzip_file(fi.path)
+            self.output()[i].put(fpath, atomic=False)
 
 
+class KgdSoapApiTaxPaymentPrevMonth(Runner):
+
+    name = luigi.Parameter(default='kgd_taxpayments')
+    month = luigi.Parameter(default=previous_month())
+    date = luigi.Parameter(default=datetime.today().replace(day=1).date())
+
+    def requires(self):
+        begin_date, end_date = month_as_range(self.month)
+        return KgdSoapApiTaxPaymentFtpUploadedOutput(
+            begin_date=begin_date,
+            end_date=end_date,
+            **self.params
+        )
 
 
-
-
+if __name__ == '__main__':
+    luigi.run()
 
 
 
