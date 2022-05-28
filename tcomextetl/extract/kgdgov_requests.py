@@ -130,7 +130,3 @@ Successes: {} - success processed BINs
             self._last_conn_errors_cnt = 0
 
         return data
-
-
-
-

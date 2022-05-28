@@ -74,7 +74,9 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
 
     begin_date = luigi.Parameter()
     end_date = luigi.Parameter()
+    ftp_file_mask = luigi.Parameter()
     timeout = luigi.FloatParameter(default=1.5)
+    timeout_ban = luigi.FloatParameter(default=5)
     notaxes_fext = luigi.Parameter('.notaxes')
 
     @property
@@ -95,7 +97,7 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
         return self._file_path(self.notaxes_fext)
 
     def requires(self):
-        return ExternalFtpCsvDFInput(ftp_file_mask='export_kgdgovkz_bins_*.csv')
+        return ExternalFtpCsvDFInput(ftp_file_mask=self.ftp_file_mask)
 
     def output(self):
         return [luigi.LocalTarget(self.parsed_ids_file_path),
@@ -145,7 +147,7 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
                     exit()
                 else:
                     failed_bins.append(_bin)
-                    sleep(self.timeout)
+                    sleep(self.timeout_ban)
 
             except Exception as e:
                 raise
