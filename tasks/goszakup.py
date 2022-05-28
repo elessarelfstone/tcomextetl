@@ -9,7 +9,10 @@ from tcomextetl.extract.goszakup_requests import (GoszakupRestApiParser,
 from tcomextetl.common.csv import dict_to_csvrow, save_csvrows
 from tcomextetl.common.dates import yesterday
 from tcomextetl.common.utils import append_file, rewrite_file
-from settings import (GOSZAKUP_API_HOST, GOSZAKUP_TOKEN)
+from settings import GOSZAKUP_TOKEN
+
+
+host = 'https://ows.goszakup.gov.kz'
 
 
 class GoszakupOutput(ApiToCsv):
@@ -28,7 +31,9 @@ class GoszakupOutput(ApiToCsv):
             params['size'] = self.limit
         else:
             params['limit'] = self.limit
-            params['from'], params['to'] = self.from_to[0], self.from_to[1]
+
+            # params['from'], params['to'] = self.from_to[0], self.from_to[1]
+            params['from'], params['to'] = self.from_to
         return params
 
     @property
@@ -39,7 +44,7 @@ class GoszakupOutput(ApiToCsv):
         headers = dict()
         headers['Authorization'] = self.token
 
-        url = f'{GOSZAKUP_API_HOST}{self.endpoint}'
+        url = f'{host}{self.endpoint}'
 
         # goszakup.gov.kz provides Rest and GraphQl API services
         # Rest API doesn't retrieve data for specified period
