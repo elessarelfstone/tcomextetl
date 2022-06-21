@@ -82,7 +82,7 @@ class SgovApiRCutParser(HttpRequest):
         if success is True:
             if obj:
                 guid = obj.get('fileGuid')
-                url = f'https://{sgov_host}/api/sbr/download?bucket=SBR&guid={guid}'
+                url = f'https://{sgov_host}/api/sbr/download?bucket=SBR_UREQUEST&guid={guid}'
                 if self.check_head(url):
                     self._stat_meta_info['guid'] = guid
                     return url
