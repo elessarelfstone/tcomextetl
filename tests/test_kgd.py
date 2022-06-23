@@ -1,6 +1,6 @@
 import pytest
 
-from tcomextetl.extract.kgdgov_requests import KgdGovKzSoapApiParser
+from tcomextetl.extract.kgd_requests import KgdGovKzSoapApiParser
 from tests.fixtures.kgdgov import fixture_kgdgov_tax_payments_success
 
 

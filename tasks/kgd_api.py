@@ -15,8 +15,8 @@ from tasks.base import Runner, ApiToCsv, ExternalFtpCsvDFInput, FtpUploadedOutpu
 from tcomextetl.common.csv import dict_to_csvrow, save_csvrows
 from tcomextetl.common.dates import previous_month, month_as_range
 from tcomextetl.common.utils import append_file, rewrite_file, read_file, read_lines, build_fpath
-from tcomextetl.extract.kgdgov_requests import (KgdGovKzSoapApiParser, KgdGovKzSoapApiError,
-                                                KgdGovKzSoapApiResponseError, KgdGovKzSoapApiNotAvailable)
+from tcomextetl.extract.kgd_requests import (KgdGovKzSoapApiParser, KgdGovKzSoapApiError,
+                                             KgdGovKzSoapApiResponseError, KgdGovKzSoapApiNotAvailable)
 
 from settings import KGD_SOAP_TOKEN
 
