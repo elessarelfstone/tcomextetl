@@ -1,69 +1,69 @@
-import attr
+from attrs import define, field
 
 
-@attr.s
+@define
 class KatoRow:
-    te = attr.ib(default='')
-    ab = attr.ib(default='')
-    cd = attr.ib(default='')
-    ef = attr.ib(default='')
-    hij = attr.ib(default='')
-    k = attr.ib(default='')
-    name_kaz = attr.ib(default='')
-    name_rus = attr.ib(default='')
-    nn = attr.ib(default='')
+    te = field(default='')
+    ab = field(default='')
+    cd = field(default='')
+    ef = field(default='')
+    hij = field(default='')
+    k = field(default='')
+    name_kaz = field(default='')
+    name_rus = field(default='')
+    nn = field(default='')
 
 
-@attr.s
+@define
 class OkedRow:
-    code = attr.ib(default='')
-    namekz = attr.ib(default='')
-    nameru = attr.ib(default='')
-    lv0 = attr.ib(default='')
-    lv1 = attr.ib(default='')
-    lv2 = attr.ib(default='')
-    lv3 = attr.ib(default='')
+    code = field(default='')
+    namekz = field(default='')
+    nameru = field(default='')
+    lv0 = field(default='')
+    lv1 = field(default='')
+    lv2 = field(default='')
+    lv3 = field(default='')
 
 
-@attr.s
+@define
 class MkeisRow:
-    code = attr.ib(default='')
-    namekz = attr.ib(default='')
-    nameru = attr.ib(default='')
+    code = field(default='')
+    namekz = field(default='')
+    nameru = field(default='')
 
 
-@attr.s
+@define
 class KurkRow:
-    code = attr.ib(default='')
-    namekz = attr.ib(default='')
-    nameru = attr.ib(default='')
+    code = field(default='')
+    namekz = field(default='')
+    nameru = field(default='')
 
 
-@attr.s
+@define
 class KpvedRow:
-    code = attr.ib(default='')
-    namekz = attr.ib(default='')
-    nameru = attr.ib(default='')
+    code = field(default='')
+    namekz = field(default='')
+    nameru = field(default='')
 
 
-@attr.s
+@define
 class CompanieRow:
-    bin = attr.ib(default='')
-    full_name_kz = attr.ib(default='')
-    full_name_ru = attr.ib(default='')
-    registration_date = attr.ib(default='')
-    oked_1 = attr.ib(default='')
-    activity_kz = attr.ib(default='')
-    activity_ru = attr.ib(default='')
-    oked_2 = attr.ib(default='')
-    krp = attr.ib(default='')
-    krp_name_kz = attr.ib(default='')
-    krp_name_ru = attr.ib(default='')
-    kato = attr.ib(default='')
-    settlement_kz = attr.ib(default='')
-    settlement_ru = attr.ib(default='')
-    legal_address = attr.ib(default='')
-    head_fio = attr.ib(default='')
+    bin = field(default='')
+    full_name_kz = field(default='')
+    full_name_ru = field(default='')
+    registration_date = field(default='')
+    oked_1 = field(default='')
+    activity_kz = field(default='')
+    activity_ru = field(default='')
+    oked_2 = field(default='')
+    krp = field(default='')
+    krp_name_kz = field(default='')
+    krp_name_ru = field(default='')
+    kato = field(default='')
+    settlement_kz = field(default='')
+    settlement_ru = field(default='')
+    legal_address = field(default='')
+    head_fio = field(default='')
 
 
 def transform_oked(rows):
