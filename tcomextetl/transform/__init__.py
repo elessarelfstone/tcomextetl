@@ -1,6 +1,7 @@
 from tcomextetl.transform.sgov import *
 from tcomextetl.transform.kgd import *
 from tcomextetl.transform.goszakup import *
+from tcomextetl.transform.dgov import *
 
 
 class StructRegister:
@@ -52,6 +53,11 @@ StructRegister.add('goszakup_trd_buys', GoszakupTradeBuyRow)
 StructRegister.add('goszakup_plan_points', GoszakupPlanPointRow)
 StructRegister.add('goszakup_plans_kato', GoszakupPlanKatoRow)
 StructRegister.add('goszakup_contract_units', GoszakupContractUnitsRow)
+
+
+# data.egov.kz
+StructRegister.add('dgov_addrreg_spb', DgovAddrRegSPbRow)
+
 
 
 
