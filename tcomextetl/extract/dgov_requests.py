@@ -1,7 +1,10 @@
 import re
 from collections import deque
 from datetime import date, datetime
+from math import floor
+from time import sleep
 
+from tcomextetl.common.exceptions import ExternalSourceError
 from tcomextetl.extract.http_requests import HttpRequest
 
 from settings import DATAGOV_TOKEN
@@ -12,34 +15,40 @@ data_page_tmpl = '/api/v4/{}/{}?apiKey={}'
 detail_page_tmpl = '/api/detailed/{}/{}?apiKey={}'
 meta_page_tmpl = '/meta/{}/{}'
 
-headers = {'user-agent': 'Apache-HttpClient/4.1.1 (java 1.5)'}
-
 
 class DgovParser(HttpRequest):
-    def __init__(self, rep_name, rep_ver=None, parsed_chunks=None, chunk_size=10000,
-                 timeout=2, **kwargs):
+    def __init__(self, rep_name, rep_ver=None, parsed_chunks=None,
+                 chunk_size=10000, **kwargs):
 
         super(DgovParser, self).__init__(**kwargs)
         self.rep_name = rep_name
         self.rep_ver = rep_ver
         self.chunk_size = chunk_size
 
-        self._raw = self.load(url=self.detailed_url)
         self._from = 1
+        self._raw = self.load(url=self.detailed_url)
+        self._parsed_count = 0
         self._query = None
 
-        _chunks = deque(self._compute_chunks())
+        _chunks = self._compute_chunks()
         if parsed_chunks:
-            self._chunks = [ch for ch in _chunks if ch not in parsed_chunks]
+            self._chunks = [ch for ch in _chunks if str(ch) not in parsed_chunks]
+            self._parsed_count = len(parsed_chunks) * chunk_size
         else:
             self._chunks = _chunks
 
-    def _compute_chunks(self):
-        chunks, rem = divmod(self.total, self.chunk_size)
-        if rem:
-            chunks += 1
+        self._chunks = deque(self._chunks)
 
-        return [i * self.chunk_size + 1 for i in range(chunks)]
+    def _compute_chunks(self):
+        cnt, rem = divmod(self.total, self.chunk_size)
+        if rem:
+            cnt += 1
+
+        # _chunks = []
+        # for i in range(cnt):
+        #     if i == 0:
+
+        return [i * self.chunk_size + 1 for i in range(cnt)]
 
     @property
     def data_page_uri(self):
@@ -68,17 +77,19 @@ class DgovParser(HttpRequest):
         return self._raw['totalCount']
 
     @property
+    def curr_chunk(self):
+        return str(self._from)
+
+    @property
     def query(self):
 
         q = '"from":%s,"size":%s' % (self._from, self.chunk_size)
-        p = self.params
-        start = p.get('start')
-        end = p.get('end')
-        if start:
-            start = datetime.strptime(start, '%Y-%m-%d').strftime('%Y-%m-%d %H:%M:%S')
-            end = datetime.strptime(end, '%Y-%m-%d').replace(hour=23, minute=59, second=59)
-            end = end.strftime('%Y-%m-%d %H:%M:%S')
-            q += ', "query":{"range":{"modified":{"gte":"%s","lt":"%s"}}}' % (start, end)
+
+        if self._from == 1:
+            q = '"from":%s,"size":%s' % (0, self.chunk_size + 1)
+        if self.params:
+            params = self.params
+            q += ', "query":{"range":{"modified":{"gte":"%s","lt":"%s"}}}' % (params['from'], params['to'])
 
         return '{%s}' % q
 
@@ -112,13 +123,24 @@ class DgovParser(HttpRequest):
     def parse(self):
         return self._raw['data']
 
+    @property
+    def status_percent(self):
+        p = floor((self._parsed_count * 100) / self.total)
+        s = f'Total: {self.total}. Parsed: {self._parsed_count}. '
+        s += f'Chunk: {self._from}-{self._from + self.chunk_size - 1} ' + '\n'
+        if self.params:
+            p = self.params
+            f = p['from']
+            t = p['to']
+            s += f'From: {f} to: {t}'
+        return s, p
+
     def __iter__(self):
         while self._chunks:
             self._from = self._chunks.popleft()
             self._raw = self.load()
             data = self.parse()
-            yield data[:3]
-
-
+            self._parsed_count += len(data)
+            yield data
 
 
