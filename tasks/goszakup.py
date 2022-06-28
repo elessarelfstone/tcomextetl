@@ -8,7 +8,7 @@ from tcomextetl.extract.goszakup_requests import (GoszakupRestApiParser,
                                                   GoszakupGraphQLApiParser)
 from tcomextetl.common.csv import dict_to_csvrow, save_csvrows
 from tcomextetl.common.dates import yesterday
-from tcomextetl.common.utils import append_file, rewrite_file
+from tcomextetl.common.utils import rewrite_file
 from settings import GOSZAKUP_TOKEN
 
 
