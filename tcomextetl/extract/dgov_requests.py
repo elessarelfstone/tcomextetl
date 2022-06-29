@@ -125,7 +125,10 @@ class DgovParser(HttpRequest):
 
     @property
     def status_percent(self):
-        p = floor((self._parsed_count * 100) / self.total)
+        if self.total != 0:
+            p = floor((self._parsed_count * 100) / self.total)
+        else:
+            p = 100
         s = f'Total: {self.total}. Parsed: {self._parsed_count}. '
         s += f'Chunk: {self._from}-{self._from + self.chunk_size - 1} ' + '\n'
         if self.params:
