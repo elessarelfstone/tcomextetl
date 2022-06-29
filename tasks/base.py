@@ -113,6 +113,9 @@ class CsvFileOutput(Base):
     def output(self):
         return luigi.LocalTarget(self.output_path)
 
+    def run(self):
+        open(self.output().path, 'a', encoding="utf-8").close()
+
 
 class ApiToCsv(CsvFileOutput):
 
