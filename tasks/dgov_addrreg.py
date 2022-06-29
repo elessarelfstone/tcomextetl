@@ -22,6 +22,9 @@ class DgovAddrRegOutput(ApiToCsv):
     timeout = luigi.FloatParameter(default=2)
 
     def run(self):
+
+        super(ApiToCsv, self).run()
+
         chunks = None
         if os.path.exists(self.parsed_ids_file_path):
             chunks = read_lines(self.parsed_ids_file_path)
@@ -51,25 +54,44 @@ class DgovAddrRegFtpOutput(FtpUploadedOutput):
     pass
 
 
-class DgovAddrRegPrevMonthRunner(Runner):
+class DgovAddrRegRunner(Runner):
 
     month = luigi.Parameter(default=previous_month())
 
     def requires(self):
+        def date_as_datetime(dt):
+            return datetime(year=dt.year, month=dt.month, day=dt.day).strftime('%Y-%m-%d %H:%M:%S')
+
         params = self.params
         if self.period == 'month':
             from_to = month_as_range(self.month)
-            f = from_to[0]
-            t = from_to[1]
-            f = datetime(year=f.year, month=f.month, day=f.day).strftime('%Y-%m-%d %H:%M:%S')
-            t = datetime(year=t.year, month=t.month, day=t.day).strftime('%Y-%m-%d %H:%M:%S')
-            params['from_to'] = (f, t)
+            params['from_to'] = (date_as_datetime(from_to[0]), date_as_datetime(from_to[1]))
         return DgovAddrRegFtpOutput(**params)
 
 
-class DgovAddrregSpb(DgovAddrRegPrevMonthRunner):
+class DgovAddrregSPb(DgovAddrRegRunner):
 
     name = luigi.Parameter('dgov_addrreg_spb')
+
+
+class DgovAddrregSAts(DgovAddrRegRunner):
+
+    name = luigi.Parameter('dgov_addrreg_sats')
+
+
+class DgovAddrregSGeonims(DgovAddrRegRunner):
+
+    name = luigi.Parameter('dgov_addrreg_sgeonims')
+
+
+class DgovAddrregSGrounds(DgovAddrRegRunner):
+
+    name = luigi.Parameter('dgov_addrreg_sgrounds')
+
+
+class DgovAddrregSBuildings(DgovAddrRegRunner):
+
+    name = luigi.Parameter('dgov_addrreg_sbuildings')
 
 
 if __name__ == '__main__':
