@@ -56,6 +56,15 @@ StructRegister.add('goszakup_contract_units', GoszakupContractUnitsRow)
 
 
 # data.egov.kz
+StructRegister.add('dgov_addrreg_datstypes', DgovAddrRegDAtsTypes)
+StructRegister.add('dgov_addrreg_dbuildingspointers', DgovAddrRegDBuildingsPointers)
+StructRegister.add('dgov_addrreg_dgeonimstypes', DgovAddrRegDGeonimsTypes)
+StructRegister.add('dgov_addrreg_droomstypes', DgovAddrRegDRoomsTypes)
+
+StructRegister.add('dgov_addrreg_sats', DgovAddrRegSAtsRow)
+StructRegister.add('dgov_addrreg_sgeonims', DgovAddrRegSGeonimsRow)
+StructRegister.add('dgov_addrreg_sgrounds', DgovAddrRegSGroundsRow)
+StructRegister.add('dgov_addrreg_sbuildings', DgovAddrRegSBuildingsRow)
 StructRegister.add('dgov_addrreg_spb', DgovAddrRegSPbRow)
 
 
