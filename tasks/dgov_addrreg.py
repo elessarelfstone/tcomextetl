@@ -23,6 +23,7 @@ class DgovAddrRegOutput(ApiToCsv):
 
     def run(self):
 
+        # create empty output file if no data
         super(ApiToCsv, self).run()
 
         chunks = None
@@ -31,6 +32,7 @@ class DgovAddrRegOutput(ApiToCsv):
 
         params = None
 
+        # specify period for updates
         if self.from_to:
             params = dict()
             params['from'] = self.from_to[0]
@@ -39,10 +41,11 @@ class DgovAddrRegOutput(ApiToCsv):
         parser = DgovParser(self.rep_name, self.version, params=params,
                             parsed_chunks=chunks, headers=headers)
 
-        for dicts in parser:
-            data = [dict_to_csvrow(d, self.struct) for d in dicts]
-            save_csvrows(self.output_path, data)
+        for data in parser:
+            save_csvrows(self.output_path, [dict_to_csvrow(d, self.struct) for d in data])
             self.set_status_info(*parser.status_percent)
+
+            # log parsed chunks
             append_file(self.parsed_ids_file_path, parser.curr_chunk)
             sleep(self.timeout)
 
@@ -69,29 +72,49 @@ class DgovAddrRegRunner(Runner):
         return DgovAddrRegFtpOutput(**params)
 
 
-class DgovAddrregSPb(DgovAddrRegRunner):
+class DgovAddrRegSPb(DgovAddrRegRunner):
 
     name = luigi.Parameter('dgov_addrreg_spb')
 
 
-class DgovAddrregSAts(DgovAddrRegRunner):
+class DgovAddrRegSAts(DgovAddrRegRunner):
 
     name = luigi.Parameter('dgov_addrreg_sats')
 
 
-class DgovAddrregSGeonims(DgovAddrRegRunner):
+class DgovAddrRegSGeonims(DgovAddrRegRunner):
 
     name = luigi.Parameter('dgov_addrreg_sgeonims')
 
 
-class DgovAddrregSGrounds(DgovAddrRegRunner):
+class DgovAddrRegSGrounds(DgovAddrRegRunner):
 
     name = luigi.Parameter('dgov_addrreg_sgrounds')
 
 
-class DgovAddrregSBuildings(DgovAddrRegRunner):
+class DgovAddrRegSBuildings(DgovAddrRegRunner):
 
     name = luigi.Parameter('dgov_addrreg_sbuildings')
+
+
+class DgovAddrRegDAtsTypes(DgovAddrRegRunner):
+
+    name = luigi.Parameter('dgov_addrreg_dats_types')
+
+
+class DgovAddrRegDBuildingsPointers(DgovAddrRegRunner):
+
+    name = luigi.Parameter('dgov_addrreg_dbuildings_pointers')
+
+
+class DgovAddrRegDGeonimsTypes(DgovAddrRegRunner):
+
+    name = luigi.Parameter('dgov_addrreg_dgeonims_types')
+
+
+class DgovAddrRegDRoomsTypes(DgovAddrRegRunner):
+
+    name = luigi.Parameter('dgov_addrreg_drooms_types')
 
 
 if __name__ == '__main__':
