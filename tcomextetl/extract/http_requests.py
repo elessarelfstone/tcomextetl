@@ -3,7 +3,6 @@ import urllib3
 from requests import Session
 from requests.auth import HTTPBasicAuth
 
-from box import Box
 
 from tcomextetl.common.exceptions import ExternalSourceError
 from tcomextetl.common.utils import pretty_size, FILE_FORMATS
