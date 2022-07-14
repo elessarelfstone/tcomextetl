@@ -134,3 +134,5 @@ ssh.EXE.stackdump
 
 # luigi logs
 .logs/
+
+tasks_params.yml
