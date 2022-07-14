@@ -120,8 +120,8 @@ def build_fpath(directory: str, name: str, ext: str, suff: str = None):
     return d.joinpath(name).with_suffix(ext)
 
 
-def get_yaml_task_config(section):
-    with open(PARAMS_CONFIG_PATH) as c:
+def get_yaml_task_config(fpath, section):
+    with open(fpath) as c:
         config = load(c, Loader=Loader)
 
     return config[section]
