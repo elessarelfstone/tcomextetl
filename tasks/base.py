@@ -212,7 +212,8 @@ class Runner(luigi.WrapperTask):
         """
             Load configuration as dict and return section according given name.
         """
-        params = get_yaml_task_config(self.name)
+        params_fpath = Path(__file__).parent.parent / 'tasks_params.yml'
+        params = get_yaml_task_config(params_fpath, self.name)
         params['name'] = self.name
         params['date'] = self.date
         return params
