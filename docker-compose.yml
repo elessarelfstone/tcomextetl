@@ -1,0 +1,25 @@
+version: '3.8'
+
+networks:
+  luigi-net:
+
+services:
+  luigi:
+    container_name: scheduler
+    build: .
+    image: luigi
+    ports:
+      - "8082:8082"
+    restart: always
+    command: luigid
+    networks:
+      luigi-net:
+
+  worker:
+    image: luigi
+    volumes:
+      - '~/code:/code'
+
+    networks:
+      luigi-net:
+

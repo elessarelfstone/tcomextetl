@@ -1,0 +1,47 @@
+version: '3.8'
+
+networks:
+  luigi-net:
+
+services:
+  luigi:
+    container_name: scheduler
+    build: .
+    image: luigi
+    ports:
+      - "8082:8082"
+    restart: always
+    command: luigid
+    networks:
+      luigi-net:
+
+  worker:
+    image: luigi
+    networks:
+      luigi-net:
+    volumes:
+      - '~/config:/config'
+    environment:
+      FTP_IN_PATH: "/export"
+      FTP_PATH: "/"
+      FTP_HOST: ftpd
+      FTP_USER: ftpuser
+      FTP_PASS: ftpuser
+
+  ftp_server:
+    image: stilliard/pure-ftpd
+    container_name: ftpd
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    volumes:
+      - '~/ftp_volume:/ftp_data'
+    environment:
+      PUBLICHOST: "localhost"
+      FTP_USER_NAME: ftpuser
+      FTP_USER_PASS: ftpuser
+      FTP_USER_HOME: /ftp_data
+    restart: always
+
+    networks:
+      luigi-net:
