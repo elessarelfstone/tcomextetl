@@ -1,16 +1,26 @@
 FROM python:3.9-slim-buster
 
-WORKDIR /tcomextetl
 
-#ENV LUIGI_CONFIG_PARSER=toml
+COPY requirements.txt /tmp/
 
-COPY requirements.txt /code/requirements.txt
+RUN mkdir /code /data /temp /config
 
-RUN pip install -r requirements.txt
+WORKDIR /code
 
-COPY ./tasks ./tasks
-COPY ./tcomextdata ./tcomextdata
-COPY ./settings.py ./settings.py
+COPY tasks /code/tasks
+COPY tcomextetl /code/tcomextetl
+COPY misc /code/misc
+COPY settings.py /code/
+
+COPY conf/luigi.cfg /etc/luigi/luigi.cfg
+
+ENV PYTHONPATH="/code/:/code/tasks/:${PATH}"
+ENV DATA_PATH="/data"
+ENV TEMP_PATH="/temp"
+
+
 RUN mkdir /var/lib/luigi
+
+RUN pip install -r /tmp/requirements.txt
 
 EXPOSE 8082
