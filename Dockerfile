@@ -11,13 +11,14 @@ COPY tasks /code/tasks
 COPY tcomextetl /code/tcomextetl
 COPY misc /code/misc
 COPY settings.py /code/
+COPY tasks_params.yml /code/tasks_params.yml
 
 COPY conf/luigi.cfg /etc/luigi/luigi.cfg
+
 
 ENV PYTHONPATH="/code/:/code/tasks/:${PATH}"
 ENV DATA_PATH="/data"
 ENV TEMP_PATH="/temp"
-
 
 RUN mkdir /var/lib/luigi
 

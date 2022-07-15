@@ -1,0 +1,185 @@
+sgov_kato:
+  url: https://stat.gov.kz/api/getFile/?docId=ESTAT442785
+  files_count: !!int 2
+  wildcard: !!str "*.xls"
+  skiptop: !!int 1
+  usecolumns: A:I
+
+sgov_oked:
+  url: https://stat.gov.kz/api/getFile/?docId=ESTAT310324
+  skiptop: 3
+  usecolumns: A:C
+
+sgov_mkeis:
+  url: https://stat.gov.kz/api/getFile/?docId=ESTAT316776
+  skiptop: 4
+  usecolumns: A:C
+
+sgov_kurk:
+  url: https://stat.gov.kz/api/getFile/?docId=ESTAT249322
+  skiptop: 16
+  usecolumns: A:C
+
+sgov_kpved:
+  url: https://stat.gov.kz/api/getFile/?docId=ESTAT116569
+  skiptop: 3
+  usecolumns: A:C
+
+kgd_bankrupt:
+  url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/BANKRUPT/KZ_ALL/fileName/list_BANKRUPT_KZ_ALL.xlsx
+  skiptop: 3
+  usecolumns: A:J
+
+kgd_inactive:
+  url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/INACTIVE/KZ_ALL/fileName/list_INACTIVE_KZ_ALL.xlsx
+  skiptop: 3
+  usecolumns: A:J
+
+kgd_invregistration:
+  url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/INVALID_REGISTRATION/KZ_ALL/fileName/list_INVALID_REGISTRATION_KZ_ALL.xlsx
+  skiptop: 3
+  usecolumns: A:J
+
+
+kgd_wrongaddress:
+  url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/WRONG_ADDRESS/KZ_ALL/fileName/list_WRONG_ADDRESS_KZ_ALL.xlsx
+  skiptop: 3
+  usecolumns: A:J
+
+
+kgd_mrp:
+  url: http://kgd.gov.kz/reference/mrp
+  pattern: ("ref"\s*):(\s*\[\S+\])
+
+
+kgd_pseudocompany:
+  url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/PSEUDO_COMPANY/KZ_ALL/fileName/list_PSEUDO_COMPANY_KZ_ALL.xlsx
+  skiptop: 3
+  usecolumns: A:J
+
+
+kgd_taxarrears150:
+  url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/TAX_ARREARS_150/KZ_ALL/fileName/list_TAX_ARREARS_150_KZ_ALL.xlsx
+  skiptop: 6
+  usecolumns: A:W
+  sheets:
+    - !!int 0
+    - !!int 1
+
+kgd_taxviolators:
+  url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/VIOLATION_TAX_CODE/KZ_ALL/fileName/list_VIOLATION_TAX_CODE_KZ_ALL.xlsx
+  skiptop: 3
+  usecolumns: A:J
+
+
+kgd_taxpayments:
+  url: https://open.egov.kz/proxy2/culs_payments
+  timeout: !!float 1.5
+  timeout_ban: !!float 10
+
+
+sgov_companies:
+  url_params_link: https://stat.gov.kz/api/general/get
+  url_regions_link_tmpl: https://stat.gov.kz/api/klazz/{}/{}/ru
+  url_region_id_link_tmpl: https://stat.gov.kz/api/sbr/expPortalResult/{}/ru
+  url_region_download_link_tmpl: https://stat.gov.kz/api/sbr/download?bucket=SBR&guid={}
+  usecolumns: A:P
+
+sgov_foreign_branches:
+  juridical_type_id: !!int 742684
+  timeout: 90
+  skiptop: 1
+
+sgov_legal_entities:
+  juridical_type_id: !!int 742679
+  timeout: 90
+  skiptop: 1
+
+sgov_joint_ventures:
+  juridical_type_id: !!int 742687
+  timeout: 90
+  skiptop: 1
+
+sgov_entrepreneurs:
+  juridical_type_id: !!int 742681
+  timeout: 90
+  skiptop: 1
+
+sgov_legal_branches:
+  juridical_type_id: !!int 742680
+  timeout: 600
+  skiptop: 1
+
+goszakup_companies:
+  entity: Subjects
+  endpoint: /v3/subject/all
+  descr: Реестр участников
+
+goszakup_contracts:
+  entity: Contract
+  endpoint: /v3/contract/all
+  descr: 'Реестр договоров'
+
+goszakup_untrusted:
+  endpoint: /v3/rnu
+  descr: 'Реестр недобросовестных поставщиков'
+
+goszakup_lots:
+  entity: Lots
+  endpoint: /v3/lots
+  descr: 'Реестр лотов'
+
+goszakup_trd_buys:
+  entity: TrdBuy
+  endpoint: /v3/trd-buy/all
+  descr: 'Реестр объявлений'
+
+goszakup_plan_points:
+  entity: Plans
+  endpoint: /v3/plans/all
+  descr: 'Реестр пунктов плана'
+
+goszakup_plans_kato:
+  entity: Plans
+  endpoint: /v3/plans/kato
+  descr: 'Места поставки'
+
+goszakup_contract_units:
+  entity: Contract
+  endpoint: /v3/contract/{}/units
+  descr: 'Предметы договора'
+
+nb_rates:
+  url: https://nationalbank.kz/ru/exchangerates/ezhednevnye-oficialnye-rynochnye-kursy-valyut
+
+export_kgdgovkz_bins:
+  f_pattern: export_kgdgovkz_bins_*.csv
+
+
+dgov_addrreg_spb:
+  rep_name: s_pb
+
+dgov_addrreg_sats:
+  rep_name: s_ats
+
+dgov_addrreg_sgeonims:
+  rep_name: s_geonims
+
+dgov_addrreg_sgrounds:
+  rep_name: s_grounds
+
+dgov_addrreg_sbuildings:
+  rep_name: s_buildings
+
+dgov_addrreg_dbuildings_pointers:
+  rep_name: d_buildings_pointers
+
+dgov_addrreg_dats_types:
+  rep_name: d_ats_types
+
+dgov_addrreg_dgeonims_types:
+  rep_name: d_geonims_types
+
+dgov_addrreg_drooms_types:
+  rep_name: d_rooms_types
+
