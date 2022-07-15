@@ -21,6 +21,8 @@ services:
       luigi-net:
     volumes:
       - '~/config:/config'
+      - '~/data:/data'
+      - '~/temp:/temp'
     environment:
       FTP_IN_PATH: "/export"
       FTP_PATH: "/"
