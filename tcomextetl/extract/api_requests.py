@@ -48,7 +48,10 @@ class ApiRequests(ABC, HttpRequest):
 
     @property
     def status_percent(self):
-        p = floor((self._parsed_count * 100) / self.total)
+        if self.total == 0:
+            p = 0
+        else:
+            p = floor((self._parsed_count * 100) / self.total)
         return f'Total: {self.total}. Parsed: {self._parsed_count}', p
 
     def __iter__(self):
