@@ -43,3 +43,14 @@ class SamrukRestApiParser(ApiRequests):
             params = {}
 
         return params
+
+
+class SamrukPlansRestApiParser(SamrukRestApiParser):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    @property
+    def page(self):
+        return self._raw['number']
+

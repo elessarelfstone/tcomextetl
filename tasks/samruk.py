@@ -1,3 +1,4 @@
+import csv
 from datetime import datetime, timedelta
 
 import luigi
@@ -5,11 +6,31 @@ from luigi.util import requires
 
 from settings import SAMRUK_API_HOST, SAMRUK_USER, SAMRUK_PASSWORD, SAMRUK_API_COMPANY_ID
 
-from tasks.base import ApiToCsv, FtpUploadedOutput, Runner
+from tasks.base import ApiToCsv, FtpUploadedOutput, Runner, ExternalCsvLocalInput
 from tcomextetl.common.csv import save_csvrows, dict_to_csvrow
 from tcomextetl.common.dates import era
-from tcomextetl.extract.samruk_requests import SamrukRestApiParser
+from tcomextetl.extract.samruk_requests import SamrukRestApiParser, SamrukPlansRestApiParser
 from tcomextetl.common.utils import rewrite_file
+
+
+class SamrukParsersFabric:
+
+    _parsers = {}
+
+    @classmethod
+    def add(cls, name, parser):
+        cls._parsers[name] = parser
+
+    @classmethod
+    def get(cls, name):
+        try:
+            return cls._parsers[name]
+        except KeyError:
+            raise ValueError(name)
+
+
+SamrukParsersFabric.add('regular', SamrukRestApiParser)
+SamrukParsersFabric.add('plans', SamrukPlansRestApiParser)
 
 
 def yesterday():
@@ -52,8 +73,14 @@ class SamrukOutput(ApiToCsv):
     def run(self):
 
         auth = {'user': self.user, 'password': self.password}
-        parser = SamrukRestApiParser(self.url, params=self.params,
-                                     auth=auth, timeout=self.timeout)
+
+        samruk_parser = SamrukParsersFabric.get('regular')
+
+        if 'plan' in self.url:
+            samruk_parser = SamrukParsersFabric.get('plans')
+
+        parser = samruk_parser(self.url, params=self.params,
+                               auth=auth, timeout=self.timeout)
 
         for data in parser:
             save_csvrows(self.output_path,
@@ -135,7 +162,66 @@ class SamrukKztPlans(SamrukRunner):
                                company_id=SAMRUK_API_COMPANY_ID, **params)
 
 
+class SamrukKztPlanItemsOutput(SamrukOutput):
 
+    def requires(self):
+        return ExternalCsvLocalInput(name='samruk_kzt_plans')
+
+    def _plans_ids(self):
+        _ids = []
+        with open(self.input().path) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=self.sep)
+            for row in csv_reader:
+                _ids.append(row[0])
+
+        return _ids
+
+    def run(self):
+
+        auth = {'user': self.user, 'password': self.password}
+
+        p_ids = self._plans_ids()
+        parsed_plans_count = 0
+        for p_id in p_ids:
+
+            params = self.params
+            params['planId'] = p_id
+            self.set_progress_percentage(0)
+            parser = SamrukPlansRestApiParser(self.url, params=params,
+                                              auth=auth, timeout=self.timeout)
+
+            for data in parser:
+                _data = []
+                for d in data:
+                    _data.append({**d, **{'planId': p_id}})
+
+                save_csvrows(self.output_path,
+                             [dict_to_csvrow(d, self.struct) for d in _data],
+                             quoter='"')
+                parsed_plans_count += 1
+
+                s, p = parser.status_percent
+                status = f'Total plans IDs: {len(p_ids)}.  Plan ID: {p_id}. Parsed plans: {parsed_plans_count}'
+                status = f'{status} \n {s}'
+
+                self.set_status_info(status, p)
+                rewrite_file(self.stat_file_path, str(parser.stat))
+
+        self.finalize()
+
+
+@requires(SamrukKztPlanItemsOutput)
+class SamrukKztPlanItemsOutput(FtpUploadedOutput):
+    pass
+
+
+class SamrukKztPlansItems(SamrukRunner):
+
+    name = luigi.Parameter(default='samruk_kzt_plan_items')
+
+    def requires(self):
+        params = self.params
+        return SamrukKztPlanItemsOutput(after=self.range, **params)
 
 
 if __name__ == '__main__':
