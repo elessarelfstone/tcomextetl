@@ -2,7 +2,7 @@ import fnmatch
 import gzip
 import os
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta
 from os.path import basename
 from pathlib import Path
 from shutil import move
@@ -20,8 +20,6 @@ from settings import (DATA_PATH, TEMP_PATH, FTP_PATH,
 from tcomextetl.extract.http_requests import Downloader
 from tcomextetl.common.arch import extract_by_wildcard
 from tcomextetl.common.exceptions import FtpFileError
-from tcomextetl.common.csv import CSV_SEP
-from tcomextetl.common.dates import yesterday
 from tcomextetl.common.utils import build_fpath, get_yaml_task_config
 from tcomextetl.transform import StructRegister
 
@@ -203,9 +201,9 @@ class Runner(luigi.WrapperTask):
     period = luigi.Parameter(default='all')
     date = luigi.DateParameter(default=datetime.today())
 
-    @property
-    def yesterday(self):
-        return yesterday()
+    @staticmethod
+    def yesterday():
+        return datetime.today() - timedelta(days=1)
 
     @property
     def params(self):
@@ -254,4 +252,19 @@ class ExternalFtpCsvDFInput(luigi.ExternalTask):
         bins_fpath = FTP_EXPORT_PATH + '/' + ExternalFtpCsvDFInput.df_last_file(files)
         return RemoteTarget(bins_fpath, FTP_HOST,
                             username=FTP_USER, password=FTP_PASS)
+
+
+class ExternalCsvLocalInput(luigi.ExternalTask):
+
+    name = luigi.Parameter()
+    date = luigi.DateParameter(default=datetime.today(), visibility=ParameterVisibility.HIDDEN)
+    directory = luigi.Parameter(default=DATA_PATH, visibility=ParameterVisibility.HIDDEN)
+    ext = luigi.Parameter(default='.csv', visibility=ParameterVisibility.HIDDEN)
+    sep = luigi.Parameter(default=';', visibility=ParameterVisibility.HIDDEN)
+
+    def output(self):
+        fpath = build_fpath(self.directory, self.name, self.ext,
+                            suff='{date:%Y%m%d}'.format(date=self.date))
+
+        return luigi.LocalTarget(fpath)
 
