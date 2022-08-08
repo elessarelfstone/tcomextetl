@@ -2,6 +2,7 @@ from tcomextetl.transform.sgov import *
 from tcomextetl.transform.kgd import *
 from tcomextetl.transform.goszakup import *
 from tcomextetl.transform.dgov import *
+from tcomextetl.transform.samruk import *
 
 
 class StructRegister:
@@ -66,5 +67,15 @@ StructRegister.add('dgov_addrreg_sgeonims', DgovAddrRegSGeonimsRow)
 StructRegister.add('dgov_addrreg_sgrounds', DgovAddrRegSGroundsRow)
 StructRegister.add('dgov_addrreg_sbuildings', DgovAddrRegSBuildingsRow)
 StructRegister.add('dgov_addrreg_spb', DgovAddrRegSPbRow)
+
+# samruk
+StructRegister.add('samruk_suppliers', SamrukSupplierRow)
+StructRegister.add('samruk_bad_suppliers', SamrukBadSupplierRow)
+StructRegister.add('samruk_kzt_purchases', SamrukPurchaseRow)
+StructRegister.add('samruk_kzt_contracts', SamrukKztContractRow)
+StructRegister.add('samruk_kzt_contract_subjects', SamrukKztContractSubjectsRow)
+StructRegister.add('samruk_kzt_plans', SamrukKztPlanRow)
+StructRegister.add('samruk_kzt_plan_items', SamrukKztPlanItemRow)
+
 
 
