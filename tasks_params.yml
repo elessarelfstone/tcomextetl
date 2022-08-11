@@ -183,3 +183,30 @@ dgov_addrreg_dgeonims_types:
 dgov_addrreg_drooms_types:
   rep_name: d_rooms_types
 
+
+samruk_suppliers:
+  endpoint: data/suppliers/supplierList
+
+samruk_bad_suppliers:
+  endpoint: data/bad-supplier/badSupplierList
+
+samruk_certs:
+  endpoint: data/stkz-certificate/stkzCertificateList
+
+samruk_dicts:
+  endpoint: data/dictionary/dictionaryList
+
+samruk_kzt_purchases:
+  endpoint: data/purchases/purchaseList
+
+samruk_kzt_contracts:
+  endpoint: data/contract/contractList
+
+samruk_kzt_contract_subjects:
+  endpoint: data/contract/contractSubjectList
+
+samruk_kzt_plans:
+  endpoint: proxy/planproxy/esb-api/plan
+
+samruk_kzt_plan_items:
+  endpoint: proxy/planproxy/esb-api/plan-item
