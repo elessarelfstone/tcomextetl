@@ -2,6 +2,7 @@ import csv
 from datetime import datetime, timedelta
 
 import luigi
+from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
 from settings import SAMRUK_API_HOST, SAMRUK_USER, SAMRUK_PASSWORD, SAMRUK_API_COMPANY_ID
@@ -40,12 +41,12 @@ def yesterday():
 class SamrukOutput(ApiToCsv):
 
     endpoint = luigi.Parameter()
-    user = luigi.Parameter(default=SAMRUK_USER)
-    password = luigi.Parameter(default=SAMRUK_PASSWORD)
+    user = luigi.Parameter(default=SAMRUK_USER, visibility=ParameterVisibility.HIDDEN)
+    password = luigi.Parameter(default=SAMRUK_PASSWORD, visibility=ParameterVisibility.HIDDEN)
 
-    entity = luigi.Parameter(default='content')
+    entity = luigi.Parameter(default='content', visibility=ParameterVisibility.HIDDEN)
     after = luigi.DateParameter(default=None)
-    is_kzt = luigi.BoolParameter(default=False)
+    is_kzt = luigi.BoolParameter(default=False, visibility=ParameterVisibility.HIDDEN)
     company_id = luigi.IntParameter(default=0)
 
     limit = luigi.IntParameter(default=100)
@@ -150,6 +151,24 @@ class SamrukKztContractSubjects(SamrukRunner):
         params = self.params
         return SamrukFtpOutput(after=self.range, is_kzt=True,
                                company_id=SAMRUK_API_COMPANY_ID, **params)
+
+
+class SamrukCerts(SamrukRunner):
+
+    name = luigi.Parameter('samruk_certs')
+
+    def requires(self):
+        params = self.params
+        return SamrukFtpOutput(after=self.range, **params)
+
+
+class SamrukDicts(SamrukRunner):
+
+    name = luigi.Parameter('samruk_dicts')
+
+    def requires(self):
+        params = self.params
+        return SamrukFtpOutput(after=self.range, **params)
 
 
 class SamrukKztPlans(SamrukRunner):

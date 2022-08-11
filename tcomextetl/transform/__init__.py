@@ -76,6 +76,8 @@ StructRegister.add('samruk_kzt_contracts', SamrukKztContractRow)
 StructRegister.add('samruk_kzt_contract_subjects', SamrukKztContractSubjectsRow)
 StructRegister.add('samruk_kzt_plans', SamrukKztPlanRow)
 StructRegister.add('samruk_kzt_plan_items', SamrukKztPlanItemRow)
+StructRegister.add('samruk_certs', SamrukCertRow)
+StructRegister.add('samruk_dicts', SamrukDictRow)
 
 
 
