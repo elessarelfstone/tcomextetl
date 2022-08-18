@@ -9,7 +9,6 @@ from settings import SAMRUK_API_HOST, SAMRUK_USER, SAMRUK_PASSWORD, SAMRUK_API_C
 
 from tasks.base import ApiToCsv, FtpUploadedOutput, Runner, ExternalCsvLocalInput
 from tcomextetl.common.csv import save_csvrows, dict_to_csvrow
-from tcomextetl.common.dates import era
 from tcomextetl.extract.samruk_requests import SamrukRestApiParser, SamrukPlansRestApiParser
 from tcomextetl.common.utils import rewrite_file
 
