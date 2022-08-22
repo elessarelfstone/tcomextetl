@@ -74,13 +74,20 @@ class SamrukOutput(ApiToCsv):
 
         auth = {'user': self.user, 'password': self.password}
 
-        samruk_parser = SamrukParsersFabric.get('regular')
+        # samruk_parser = SamrukParsersFabric.get('regular')
+        #
+        # if 'plan' in self.url:
+        #     samruk_parser = SamrukParsersFabric.get('plans')
+        #
+        # parser = samruk_parser(self.url, params=self.params,
+        #                        auth=auth, timeout=self.timeout)
+
+        parser = SamrukRestApiParser(self.url, params=self.params,
+                                     auth=auth, timeout=self.timeout)
 
         if 'plan' in self.url:
-            samruk_parser = SamrukParsersFabric.get('plans')
-
-        parser = samruk_parser(self.url, params=self.params,
-                               auth=auth, timeout=self.timeout)
+            parser = SamrukPlansRestApiParser(self.url, params=self.params,
+                                              auth=auth, timeout=self.timeout)
 
         for data in parser:
             save_csvrows(self.output_path,
