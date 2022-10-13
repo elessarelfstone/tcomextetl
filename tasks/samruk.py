@@ -74,14 +74,6 @@ class SamrukOutput(ApiToCsv):
 
         auth = {'user': self.user, 'password': self.password}
 
-        # samruk_parser = SamrukParsersFabric.get('regular')
-        #
-        # if 'plan' in self.url:
-        #     samruk_parser = SamrukParsersFabric.get('plans')
-        #
-        # parser = samruk_parser(self.url, params=self.params,
-        #                        auth=auth, timeout=self.timeout)
-
         parser = SamrukRestApiParser(self.url, params=self.params,
                                      auth=auth, timeout=self.timeout)
 
@@ -223,14 +215,15 @@ class SamrukKztPlanItemsOutput(SamrukOutput):
                 save_csvrows(self.output_path,
                              [dict_to_csvrow(d, self.struct) for d in _data],
                              quoter='"')
-                parsed_plans_count += 1
 
                 s, p = parser.status_percent
-                status = f'Total plans IDs: {len(p_ids)}.  Plan ID: {p_id}. Parsed plans: {parsed_plans_count}'
+                status = f'Total plans: {len(p_ids)}.  Plan ID: {p_id}. Parsed plans: {parsed_plans_count}'
                 status = f'{status} \n {s}'
 
                 self.set_status_info(status, p)
                 rewrite_file(self.stat_file_path, str(parser.stat))
+
+            parsed_plans_count += 1
 
         self.finalize()
 

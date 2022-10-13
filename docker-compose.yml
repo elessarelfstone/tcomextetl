@@ -17,6 +17,8 @@ services:
 
   worker:
     image: luigi
+    depends_on:
+      - luigi
     volumes:
       - '~/code:/code'
 

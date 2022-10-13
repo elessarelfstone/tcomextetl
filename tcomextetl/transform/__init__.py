@@ -3,6 +3,7 @@ from tcomextetl.transform.kgd import *
 from tcomextetl.transform.goszakup import *
 from tcomextetl.transform.dgov import *
 from tcomextetl.transform.samruk import *
+from tcomextetl.transform.infobip import *
 
 
 class StructRegister:
@@ -80,4 +81,10 @@ StructRegister.add('samruk_certs', SamrukCertRow)
 StructRegister.add('samruk_dicts', SamrukDictRow)
 
 
+# infobip
+StructRegister.add('infobip_agents', InfobipAgentRow)
+StructRegister.add('infobip_queues', InfobipQueueRow)
+StructRegister.add('infobip_conversations', InfobipConversationRow)
+StructRegister.add('infobip_messages', InfobipConvMessagesRow)
+StructRegister.add('infobip_tags', InfobipConvTagsRow)
 

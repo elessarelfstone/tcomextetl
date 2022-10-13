@@ -19,6 +19,7 @@ from settings import (DATA_PATH, TEMP_PATH, FTP_PATH,
 
 from tcomextetl.extract.http_requests import Downloader
 from tcomextetl.common.arch import extract_by_wildcard
+from tcomextetl.common.dates import DEFAULT_FORMAT
 from tcomextetl.common.exceptions import FtpFileError
 from tcomextetl.common.utils import build_fpath, get_yaml_task_config
 from tcomextetl.transform import StructRegister
@@ -202,8 +203,9 @@ class Runner(luigi.WrapperTask):
     date = luigi.DateParameter(default=datetime.today())
 
     @staticmethod
-    def yesterday():
-        return datetime.today() - timedelta(days=1)
+    def yesterday(frmt=DEFAULT_FORMAT):
+        y = datetime.today() - timedelta(days=1)
+        return y.strftime(frmt)
 
     @property
     def params(self):

@@ -22,7 +22,7 @@ class InfobipRestApiParser(ApiRequests):
     @property
     def size(self):
         pagination = self._raw.get('pagination')
-        return pagination['size']
+        return pagination['limit']
 
     def load(self, params):
         r = self.request(self.url, params=params)
@@ -31,11 +31,23 @@ class InfobipRestApiParser(ApiRequests):
     def parse(self):
         return self._raw.get(self.entity)
 
+    @property
     def next_page_params(self):
         params = self.params
+
         if self._raw is None:
             return params
 
-        if self.page:
-            pass
+        if self._raw[self.entity]:
+            params['page'] = self.page + 1
+
+            # prevent next request
+            if ((self.page + 1) * self.size) >= self.total:
+                params = {}
+
+        else:
+            params = {}
+
+        return params
+
 

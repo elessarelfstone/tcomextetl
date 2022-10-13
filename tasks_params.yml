@@ -210,3 +210,19 @@ samruk_kzt_plans:
 
 samruk_kzt_plan_items:
   endpoint: proxy/planproxy/esb-api/plan-item
+
+
+infobip_agents:
+  endpoint: agents
+
+infobip_queues:
+  endpoint: queues
+
+infobip_conversations:
+  endpoint: conversations
+
+infobip_messages:
+  endpoint: messages
+
+infobip_tags:
+  endpoint: tags

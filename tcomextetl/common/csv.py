@@ -26,6 +26,7 @@ def save_csvrows(fpath: str, recs, sep=None, quoter=None):
         _sep = sep
 
     _q = ''
+
     if quoter:
         _q = quoter
 
