@@ -78,12 +78,12 @@ class GoszakupRunner(Runner):
 
     def requires(self):
         params = self.params
-        if self.period == 'all':
-            params.pop('entity', None)
-            params.pop('anchor_key', None)
-        else:
+        if self.period == 'interval':
             params.pop('endpoint')
             params['from_to'] = (self.start_date, self.end_date)
+        else:
+            params.pop('entity', None)
+            params.pop('anchor_key', None)
 
         return GoszakupFtpOutput(**params)
 
@@ -101,6 +101,7 @@ class GoszakupContracts(GoszakupRunner):
 class GoszakupUntrusted(GoszakupRunner):
     # don't run for a day
     name = luigi.Parameter('goszakup_untrusted')
+    period = luigi.Parameter('all')
 
 
 class GoszakupLots(GoszakupRunner):

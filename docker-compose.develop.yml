@@ -8,7 +8,7 @@ networks:
 
 x-airflow-common:
   &airflow-common
-  image: apache/airflow:2.2.5
+  image: apache/airflow:2.3.3
   environment:
     - AIRFLOW__CORE__EXECUTOR=LocalExecutor
     - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@db:5432/airflow
@@ -18,10 +18,10 @@ x-airflow-common:
     - AIRFLOW__CORE__HOME=/opt/airflow/
   volumes:
     - ./dags:/opt/airflow/dags
-    - ~/airflow-data/logs:/opt/airflow/logs
+    - ~/airflow_data/logs:/opt/airflow/logs
     - ./config:/opt/airflow/config
-#    - ~/airflow-data/plugins:/opt/airflow/plugins
-    - ~/airflow-data:/opt/airflow
+    - ~/airflow_data/plugins:/opt/airflow/plugins
+    - ~/airflow_data:/opt/airflow
 
 services:
 
@@ -71,32 +71,18 @@ services:
       - airflow-init
 
   luigi:
-    container_name: scheduler
-    build: .
-    image: luigi
+    container_name: luigi_dispatcher
+#    build: .
+    image: elessarelfstone/luigid
+    build:
+      context: .
+      dockerfile: Dockerfile.luigid
     ports:
       - "8082:8082"
     restart: always
     command: luigid
     networks:
       luigi-net:
-
-  worker:
-    image: luigi
-    networks:
-      luigi-net:
-#    extra_hosts:
-#      - "host.docker.internal:host-gateway"
-    volumes:
-      - '~/config:/config'
-      - '~/data:/data'
-      - '~/temp:/temp'
-    environment:
-      FTP_IN_PATH: "/export"
-      FTP_PATH: "/"
-      FTP_HOST: ftpd
-      FTP_USER: ftpuser
-      FTP_PASS: ftpuser
 
   ftp_server:
     image: stilliard/pure-ftpd

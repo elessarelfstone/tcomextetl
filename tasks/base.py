@@ -199,7 +199,7 @@ class Runner(luigi.WrapperTask):
     all input parameters and run tasks with main functionality.
     """
     name = luigi.Parameter()
-    period = luigi.Parameter(default='all')
+    period = luigi.Parameter(default='interval')
     date = luigi.DateParameter(default=datetime.today())
 
     @staticmethod

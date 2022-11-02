@@ -1,30 +1,72 @@
+import json
+import logging
 from datetime import datetime
+
+from common import run_params
 
 from airflow.models import DAG
 from airflow.models import Variable
-from airflow.operators.docker_operator import DockerOperator
+from airflow.providers.docker.operators.docker import DockerOperator
 
 
-test_dag = DAG(
-    "test_dag",
-    start_date=datetime(2022, 8, 14),
-)
+class MyDockerOperator(DockerOperator):
+    def __init__(self, module, luigi_task, **kwargs):
+        raw = " {{ dag_run.conf }} "
+        # with open('/opt/airflow/dags/test.txt', mode='w') as f:
+        #     f.write(raw)
 
-host = 'host.docker.internal'
+        # dag_run = json.loads(raw)
+        # print(dag_run)
+        period = " {{ dag_run.conf['period'] }} "
+        # period = kwargs['ti'].dag_run.conf['period']
+        # with open('/opt/airflow/dags/test.txt', mode='w') as f:
+        #     f.write(period)
 
-docker_operator = DockerOperator(
-    task_id="docker_command",
-    image="elessarelfstone/tcomextetl",
-    # command="/bin/sleep 5",
-    command="luigi --module dgov_addrreg DgovAddrRegDGeonimsTypes",
-    auto_remove=True,
-    dag=test_dag,
-    network_mode='tcomextetl_luigi-net',
-    environment={'FTP_HOST': Variable.get('_FTP_HOST'), 'FTP_USER': Variable.get('_FTP_USER'),
-                 'FTP_PASS': Variable.get('_FTP_PASS'), 'FTP_PATH': Variable.get('_FTP_PATH')},
-    # docker_url='unix://var/run/docker.sock'
-    docker_url=f'tcp://{host}:2375'
-)
+        # period = kwargs["dag_run"].conf.get('period')
+        c = f'luigi --module {module} {luigi_task} --period {period}'
+        super().__init__(command=c, **kwargs)
 
 
-docker_operator
+with DAG(dag_id='dgov_addrreg',
+         catchup=False,
+         start_date=datetime(2022, 1, 1)
+         ) as dag:
+
+    period = "{{ dag_run.conf['period'] }}"
+
+    with open('/opt/airflow/dags/test.txt', mode='w') as f:
+        f.write(period)
+    #
+    # docker_operator = DockerOperator(**run_params,
+    #                                  command='luigi --module dgov_addrreg DgovAddrRegDGeonimsTypes --period ' + period)
+
+    docker_operator = MyDockerOperator(module='dgov_addrreg', luigi_task='DgovAddrRegDGeonimsTypes', **run_params)
+
+    docker_operator
+
+# test_dag = DAG(
+#     "test_dag",
+#     catchup=False,
+#     start_date=datetime(2022, 1, 1),
+# )
+#
+# host = 'host.docker.internal'
+#
+# docker_operator = DockerOperator(
+#     task_id="docker_command",
+#     image="elessarelfstone/tcomextetl",
+#     command="luigi --module dgov_addrreg DgovAddrRegDGeonimsTypes",
+#     auto_remove=True,
+#     dag=test_dag,
+#     # network_mode='etl_luigi-net',
+#     network_mode='tcomextetl_luigi-net',
+#     environment={'FTP_HOST': Variable.get('FTP_HOST'), 'FTP_USER': Variable.get('FTP_USER'),
+#                  'FTP_PASS': Variable.get('FTP_PASS'), 'FTP_PATH': Variable.get('FTP_PATH')},
+#     # docker_url='unix://var/run/docker.sock'
+#     docker_url=f'tcp://{host}:2375'
+# )
+
+
+# docker_operator
+
+

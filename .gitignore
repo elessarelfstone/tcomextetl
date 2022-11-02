@@ -126,11 +126,14 @@ ssh.EXE.stackdump
 
 # luigi events logs(success, failures) and
 # configs storage
-.postgres/
+postgres/
 
 # temp data of pipelines
-.data/
-.bigdata/
+data/
+bigdata/
 
-# luigi logs
-.logs/
+# luigi or airflow logs
+logs/
+
+
+
