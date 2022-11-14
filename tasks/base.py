@@ -2,6 +2,7 @@ import fnmatch
 import gzip
 import os
 import shutil
+import sys
 from datetime import datetime, timedelta
 from os.path import basename
 from pathlib import Path
@@ -37,6 +38,10 @@ class Base(luigi.Task):
     @property
     def struct(self):
         return StructRegister.get(self.name)
+
+    @luigi.Task.event_handler(luigi.Event.FAILURE)
+    def exit_message(self):
+        sys.exit(40)
 
 
 class WebDataFileInput(Base):

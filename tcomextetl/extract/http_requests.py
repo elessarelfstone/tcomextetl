@@ -46,8 +46,6 @@ class HttpRequest:
 
         if params:
             p = {**self.params, **params}
-        print(url)
-        print(params)
         return self.session.request(method, url, params=p,
                                     data=data, json=json, headers=self.headers,
                                     auth=self.auth, stream=stream,

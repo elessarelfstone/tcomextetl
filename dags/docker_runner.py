@@ -5,7 +5,7 @@ from airflow.providers.docker.operators.docker import DockerOperator
 
 
 class ExternalEtlDockerRunner(DockerOperator):
-    def __init__(self, luigi_module, luigi_task, env_vars=None, **kwargs):
+    def __init__(self, task_id, luigi_module, luigi_task, env_vars=None, **kwargs):
 
         _vars = {'FTP_HOST': Variable.get('FTP_HOST'), 'FTP_USER': Variable.get('FTP_USER'),
                  'FTP_PASS': Variable.get('FTP_PASS'), 'FTP_PATH': Variable.get('FTP_PATH')}
@@ -27,7 +27,7 @@ class ExternalEtlDockerRunner(DockerOperator):
         command = f'luigi --module {luigi_module} {luigi_task} ' + "{{ dag_run.conf.get('command_args', '') }}"
 
         super().__init__(
-                         task_id='etl_runner',
+                         task_id=task_id,
                          image=image,
                          auto_remove=True,
                          network_mode=network_mode,

@@ -1,9 +1,13 @@
+import sys
 from pathlib import Path
 
 import luigi
 
-from luigi.util import requires
+from luigi.cmdline import luigi_run
+from luigi.retcodes import retcode
 from tasks.base import ApiToCsv, FtpUploadedOutput, Runner
+from luigi.util import requires
+
 from tcomextetl.extract.goszakup_requests import (GoszakupRestApiParser,
                                                   GoszakupGraphQLApiParser)
 from tcomextetl.common.csv import dict_to_csvrow, save_csvrows
@@ -47,7 +51,7 @@ class GoszakupOutput(ApiToCsv):
         url = f'{host}{self.endpoint}'
 
         # goszakup.gov.kz provides Rest and GraphQl API services
-        # Rest API doesn't retrieve data for specified period
+        # Rest API can't retrieve data for specified period
         if not self.from_to:
             parser = GoszakupRestApiParser(url, params=self.params,
                                            headers=headers, timeout=self.timeout)
@@ -130,4 +134,6 @@ class GoszakupContractUnits(GoszakupRunner):
 
 
 if __name__ == '__main__':
-    luigi.run()
+    code = luigi_run()
+
+    sys.exit(40)

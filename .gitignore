@@ -135,5 +135,4 @@ bigdata/
 # luigi or airflow logs
 logs/
 
-
-
+luigi.cfg

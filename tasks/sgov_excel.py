@@ -102,7 +102,7 @@ class SgovKpved(Runner):
         return SgovKpvedFtpOutput(**self.params)
 
 
-class SgovRcutCompaniesLinkOutput(Base):
+class SgovRcutJuridicalLinkOutput(Base):
 
     name = luigi.Parameter()
     juridical_type_id = luigi.IntParameter()
@@ -114,7 +114,7 @@ class SgovRcutCompaniesLinkOutput(Base):
         return build_fpath(TEMP_PATH, name, '.url')
 
     def output(self):
-        return luigi.LocalTarget(SgovRcutCompaniesLinkOutput.build_fpath(self.name))
+        return luigi.LocalTarget(SgovRcutJuridicalLinkOutput.build_fpath(self.name))
 
     def run(self):
         p = SgovApiRCutParser(self.juridical_type_id, self.prev_period_index)
@@ -135,39 +135,39 @@ class SgovRcutCompaniesLinkOutput(Base):
         self.set_status_info(status_info, 100)
 
 
-class SgovRcutCompaniesLinkRunner(Runner):
+class SgovRcutJuridicalLinkRunner(Runner):
 
     def requires(self):
         params = self.params
         params.pop('date')
         params.pop('skiptop')
-        return SgovRcutCompaniesLinkOutput(**params)
+        return SgovRcutJuridicalLinkOutput(**params)
 
 
 class SgovRcutsPrepared(luigi.WrapperTask):
 
     def requires(self):
-        yield SgovRcutCompaniesLinkRunner(name=f'sgov_{rcut_legal_entities}')
-        yield SgovRcutCompaniesLinkRunner(name=f'sgov_{rcut_joint_ventures}')
-        yield SgovRcutCompaniesLinkRunner(name=f'sgov_{rcut_legal_branches}')
-        yield SgovRcutCompaniesLinkRunner(name=f'sgov_{rcut_foreign_branches}')
-        yield SgovRcutCompaniesLinkRunner(name=f'sgov_{rcut_entrepreneurs}')
+        yield SgovRcutJuridicalLinkRunner(name=f'sgov_{rcut_legal_entities}')
+        yield SgovRcutJuridicalLinkRunner(name=f'sgov_{rcut_joint_ventures}')
+        yield SgovRcutJuridicalLinkRunner(name=f'sgov_{rcut_legal_branches}')
+        yield SgovRcutJuridicalLinkRunner(name=f'sgov_{rcut_foreign_branches}')
+        yield SgovRcutJuridicalLinkRunner(name=f'sgov_{rcut_entrepreneurs}')
 
 
-class SgovRcutCompaniesOutput(ArchivedWebExcelFileParsingToCsv):
+class SgovRcutJuridicalOutput(ArchivedWebExcelFileParsingToCsv):
     pass
 
 
-@requires(SgovRcutCompaniesOutput)
-class SgovRcutCompaniesFtpOutput(FtpUploadedOutput):
+@requires(SgovRcutJuridicalOutput)
+class SgovRcutJuridicalFtpOutput(FtpUploadedOutput):
     pass
 
 
-class SgovRcutCompaniesRunner(Runner):
+class SgovRcutJuridicalRunner(Runner):
 
     def requires(self):
 
-        link_task_class = SgovRcutCompaniesLinkOutput
+        link_task_class = SgovRcutJuridicalLinkOutput
 
         params = self.params
         del params['juridical_type_id']
@@ -176,16 +176,16 @@ class SgovRcutCompaniesRunner(Runner):
         params['url'] = read_file(link_task_class.build_fpath(self.name))
         params['wildcard'] = '*.xlsx'
 
-        return SgovRcutCompaniesFtpOutput(**params)
+        return SgovRcutJuridicalFtpOutput(**params)
 
 
-class SgovRcutsCompanies(luigi.WrapperTask):
+class SgovRcutsJuridical(luigi.WrapperTask):
     def requires(self):
-        yield SgovRcutCompaniesRunner(name=f'sgov_{rcut_legal_entities}')
-        yield SgovRcutCompaniesRunner(name=f'sgov_{rcut_joint_ventures}')
-        yield SgovRcutCompaniesRunner(name=f'sgov_{rcut_legal_branches}')
-        yield SgovRcutCompaniesRunner(name=f'sgov_{rcut_foreign_branches}')
-        yield SgovRcutCompaniesRunner(name=f'sgov_{rcut_entrepreneurs}')
+        yield SgovRcutJuridicalRunner(name=f'sgov_{rcut_legal_entities}')
+        yield SgovRcutJuridicalRunner(name=f'sgov_{rcut_joint_ventures}')
+        yield SgovRcutJuridicalRunner(name=f'sgov_{rcut_legal_branches}')
+        yield SgovRcutJuridicalRunner(name=f'sgov_{rcut_foreign_branches}')
+        yield SgovRcutJuridicalRunner(name=f'sgov_{rcut_entrepreneurs}')
 
 
 if __name__ == '__main__':
