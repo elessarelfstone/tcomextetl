@@ -22,6 +22,7 @@ x-airflow-common:
     - ./config:/opt/airflow/config
     - ~/airflow_data/plugins:/opt/airflow/plugins
     - ~/airflow_data:/opt/airflow
+    - ~/tmp:/tmp
 
 services:
 

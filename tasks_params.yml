@@ -107,7 +107,7 @@ sgov_entrepreneurs:
 
 sgov_legal_branches:
   juridical_type_id: !!int 742680
-  timeout: 600
+  timeout: 90
   skiptop: 1
 
 goszakup_companies:
