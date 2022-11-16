@@ -24,4 +24,7 @@ RUN mkdir /var/lib/luigi
 
 RUN pip install -r /tmp/requirements.txt && rm /tmp/requirements.txt
 
+VOLUME /tmp
+VOLUME /data
+
 EXPOSE 8082

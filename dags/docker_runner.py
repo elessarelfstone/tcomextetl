@@ -19,8 +19,7 @@ class ExternalEtlDockerRunner(DockerOperator):
         # if _env == 'prod':
         mounts = Mount(
             source='/tmp/',
-            target='/tmp/',
-            type='bind'
+            target='/tmp/'
         )
 
         if _env == 'dev' or _platform == 'windows':
@@ -43,7 +42,7 @@ class ExternalEtlDockerRunner(DockerOperator):
                          network_mode=network_mode,
                          docker_url=docker_url,
                          environment=_vars,
-                         # mounts=[mounts],
+                         mounts=[mounts],
                          mount_tmp_dir=False,
                          command=command, **kwargs
         )
