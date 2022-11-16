@@ -44,5 +44,6 @@ class ExternalEtlDockerRunner(DockerOperator):
                          docker_url=docker_url,
                          environment=_vars,
                          mounts=[mounts],
+                         mount_tmp_dir=False,
                          command=command, **kwargs
         )
