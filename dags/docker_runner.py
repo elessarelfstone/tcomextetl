@@ -42,6 +42,7 @@ class ExternalEtlDockerRunner(DockerOperator):
                          auto_remove=True,
                          network_mode=network_mode,
                          docker_url=docker_url,
+                         environment=_vars,
                          mounts=[mounts],
                          command=command, **kwargs
         )
