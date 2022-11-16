@@ -19,7 +19,8 @@ class ExternalEtlDockerRunner(DockerOperator):
         # if _env == 'prod':
         mounts = Mount(
             source='/tmp/',
-            target='/tmp/'
+            target='/tmp/',
+            type='bind'
         )
 
         if _env == 'dev' or _platform == 'windows':
