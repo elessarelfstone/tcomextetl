@@ -19,7 +19,7 @@ class ExternalEtlDockerRunner(DockerOperator):
         # if _env == 'prod':
         mounts = Mount(
             source='~/temp',
-            target='temp',
+            target='/temp',
             type="bind"
         )
 
