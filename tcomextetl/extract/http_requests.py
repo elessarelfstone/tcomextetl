@@ -52,7 +52,8 @@ class HttpRequest:
                                     verify=self.verify_cert)
 
     def head(self, url, params=None):
-        return self.session.head(url, params=params)
+        return self.session.head(url, params=params, headers=self.headers,
+                                 verify=self.verify_cert)
 
 
 class Downloader(HttpRequest):
@@ -110,6 +111,20 @@ class Downloader(HttpRequest):
                     file_format = _format.pop()
 
         return file_format
+
+    def download(self, fpath):
+        """ Download file using stream """
+
+        with self.request(self.url, stream=True) as r:
+            r.raise_for_status()
+            f_size = 0
+            with open(fpath, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    if chunk:
+                        f.write(chunk)
+                        f_size += len(chunk)
+
+        return f_size
 
     def __iter__(self):
 

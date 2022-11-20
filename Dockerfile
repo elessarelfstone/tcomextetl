@@ -13,18 +13,18 @@ COPY misc /code/misc
 COPY settings.py /code/
 COPY tasks_params.yml /code/tasks_params.yml
 
-COPY conf/luigi.cfg /etc/luigi/luigi.cfg
+COPY conf/worker.cfg /etc/luigi/luigi.cfg
 
 
 ENV PYTHONPATH="/code/:/code/tasks/:${PATH}"
 ENV DATA_PATH="/data"
-ENV TEMP_PATH="/tmp"
+ENV TEMP_PATH="/temp"
 
 RUN mkdir /var/lib/luigi
 
 RUN pip install -r /tmp/requirements.txt && rm /tmp/requirements.txt
 
-VOLUME /tmp
+VOLUME /temp
 VOLUME /data
 
 EXPOSE 8082

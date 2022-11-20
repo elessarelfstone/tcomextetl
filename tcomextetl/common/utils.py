@@ -148,12 +148,3 @@ def flatten_data(d):
 
     return out
 
-# class CsvValuesHandler:
-#
-#     def __init__(self, source_fpath, parsed_fpath, sep=';', columns=None):
-#         source_vals = []
-#         with open(source_fpath) as csv_file:
-#             csv_reader = csv.reader(csv_file, delimiter=sep)
-#             for row in csv_reader:
-#                 if columns:
-#                     for c in columns:

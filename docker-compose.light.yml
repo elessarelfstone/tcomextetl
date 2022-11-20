@@ -1,0 +1,43 @@
+version: '3.8'
+
+
+networks:
+  luigi-net:
+
+
+services:
+
+  cronical:
+    container_name: scheduler
+    image: cronicle/cronicle:edge
+    environment:
+      - CRONICLE_manager=1
+    command: manager
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 3012:3012
+
+  luigi:
+    container_name: luigi_dispatcher
+#    build: .
+    image: elessarelfstone/luigid
+    build:
+      context: .
+      dockerfile: Dockerfile.luigid
+    ports:
+      - "8082:8082"
+    restart: always
+    command: luigid
+    networks:
+      luigi-net:
+
+  runner:
+    container_name: job_runner
+    image: elessarelfstone/tcomextetl
+    volumes:
+      - ~/temp:/temp
+      - ~/data:/data
+      - ~/.env:/code/.env
+    networks:
+      luigi-net:

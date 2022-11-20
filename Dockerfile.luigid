@@ -1,6 +1,6 @@
 FROM python:3.9-slim-buster
 
-COPY conf/luigi.cfg /etc/luigi/luigi.cfg
+COPY conf/worker.cfg /etc/luigi/luigi.cfg
 
 RUN mkdir /var/lib/luigi
 

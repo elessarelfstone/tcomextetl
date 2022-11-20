@@ -15,11 +15,15 @@ class ExternalEtlDockerRunner(DockerOperator):
         _platform = platform.system().lower()
         image = Variable.get('IMAGE')
 
-        # mounts = None
-        # if _env == 'prod':
-        mounts = Mount(
-            source='/temp',
+        temp_mount_point = Mount(
+            source=Variable.get('HOST_TEMP_DIR'),
             target='/temp',
+            type="bind"
+        )
+
+        data_mount_point = Mount(
+            source=Variable.get('HOST_DATA_DIR'),
+            target='/data',
             type="bind"
         )
 
@@ -43,7 +47,7 @@ class ExternalEtlDockerRunner(DockerOperator):
                          network_mode=network_mode,
                          docker_url=docker_url,
                          environment=_vars,
-                         mounts=[mounts],
+                         mounts=[temp_mount_point, data_mount_point],
                          mount_tmp_dir=False,
                          command=command, **kwargs
         )
