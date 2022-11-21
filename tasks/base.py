@@ -65,10 +65,11 @@ class WebDataFileInput(Base):
 
     def run(self):
         p = self.output().path
-        with open(p, 'wb') as f:
-            for ch in self.downloader:
-                f.write(ch)
-                self.set_status_info(self.status + self.downloader.status)
+        self.downloader.download(p)
+        # with open(p, 'wb') as f:
+        #     for ch in self.downloader:
+        #         f.write(ch)
+        #         self.set_status_info(self.status + self.downloader.status)
 
 
 @requires(WebDataFileInput)
