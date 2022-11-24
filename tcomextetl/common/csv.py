@@ -1,45 +1,39 @@
 import attr
 
-CSV_SEP = ';'
-CSV_SEP_REPLACEMENT = ' '
+CSV_DELIMITER = ';'
+CSV_DELIMITER_REPLACEMENT = ' '
+CSV_QUOTECHAR = '"'
 
 
-def clean(value: str):
-
-    # remove separator
-    v = str(value).replace(CSV_SEP, CSV_SEP_REPLACEMENT)
-
-    # remove trailing newline
-    v = v.strip().replace('\n', '').replace('\r', '')
-
-    # remove double quotes
-    v = v.replace('"', "'")
-
-    return v
-
-
-def save_csvrows(fpath: str, recs, sep=None, quoter=None):
+def save_csvrows(fpath: str, rows, delimiter=None, quotechar=CSV_QUOTECHAR):
     """ Save list of tuples as csv rows to file """
 
-    _sep = CSV_SEP
-    if sep:
-        _sep = sep
+    def prepare(value):
+        val = value
 
-    _q = ''
+        if type(value) == str:
+            # clean new-line and carriage returns
+            val = ''.join(filter(lambda ch: ch not in "\n\r", val))
+            # quote if delimiter found
+            if d in val:
+                val = f'{quotechar}{val}{quotechar}'
 
-    if quoter:
-        _q = quoter
+        return val
+
+    d = CSV_DELIMITER
+
+    if delimiter:
+        d = delimiter
 
     with open(fpath, 'a+', encoding="utf-8") as f:
-        for rec in recs:
-            # clean
-            _rec = [clean(v) for v in rec]
-            # quoting
-            _rec = [f'{_q}{v}{_q}' for v in _rec]
-            row = _sep.join(_rec)
-            f.write(row + '\n')
+        for row in rows:
+            _row = []
+            for v in row:
+                _row.append(prepare(v))
+            csv_row = d.join(f'{value}' for value in _row)
+            f.write(csv_row + '\n')
 
-    return len(recs)
+    return len(rows)
 
 
 def dict_to_csvrow(p_dict, struct):
@@ -63,4 +57,3 @@ def dict_to_csvrow(p_dict, struct):
     attr_obj = struct(**d)
 
     return attr.astuple(attr_obj)
-
