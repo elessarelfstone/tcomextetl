@@ -5,7 +5,7 @@ from urllib.parse import parse_qsl
 
 from tcomextetl.extract.api_requests import ApiRequests
 from tcomextetl.common.exceptions import ExternalSourceError
-from tcomextetl.common.utils import read_file, flatten_data
+from tcomextetl.common.utils import read_file, flatten_dict
 
 
 def unnest(wrapper_entity: str, data: list):
@@ -128,7 +128,7 @@ class GoszakupGraphQLApiParser(ApiRequests):
         data = self._raw['data'][self.entity]
 
         # level up nested data
-        normalized_data = [flatten_data(d) for d in data]
+        normalized_data = [flatten_dict(d) for d in data]
 
         #
         return [clean(d) for d in normalized_data if '_' not in d.keys()]

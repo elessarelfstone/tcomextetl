@@ -127,7 +127,7 @@ def get_yaml_task_config(fpath, section):
     return config[section]
 
 
-def flatten_data(d):
+def flatten_dict(d):
     """ """
 
     out = {}
@@ -135,14 +135,18 @@ def flatten_data(d):
     def flatten(x, name=''):
         if type(x) is dict:
             for a in x:
-                flatten(x[a], name + a + '_')
+                flatten(x[a], a)
         elif type(x) is list:
             i = 0
-            for a in x:
-                flatten(a, name + str(i) + '_')
-                i += 1
+            _x = [True if type(i) in [list, dict] else False for i in x]
+            if all(_x):
+                for a in x:
+                    flatten(a, name + str(i) + '_')
+                    i += 1
+            else:
+                out[name] = x
         else:
-            out[name[:-1]] = x
+            out[name] = x
 
     flatten(d)
 

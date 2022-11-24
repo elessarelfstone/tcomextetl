@@ -84,7 +84,7 @@ class SamrukOutput(ApiToCsv):
         for data in parser:
             save_csvrows(self.output_path,
                          [dict_to_csvrow(d, self.struct) for d in data],
-                         quoter='"')
+                         quotechar='"')
             self.set_status_info(*parser.status_percent)
             rewrite_file(self.stat_file_path, str(parser.stat))
 
@@ -214,7 +214,7 @@ class SamrukKztPlanItemsOutput(SamrukOutput):
 
                 save_csvrows(self.output_path,
                              [dict_to_csvrow(d, self.struct) for d in _data],
-                             quoter='"')
+                             quotechar='"')
 
                 s, p = parser.status_percent
                 status = f'Total plans: {len(p_ids)}.  Plan ID: {p_id}. Parsed plans: {parsed_plans_count}'
