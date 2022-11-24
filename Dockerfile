@@ -13,7 +13,7 @@ COPY misc /code/misc
 COPY settings.py /code/
 COPY tasks_params.yml /code/tasks_params.yml
 
-COPY conf/worker.cfg /etc/luigi/luigi.cfg
+COPY conf/luigi_worker.cfg /etc/luigi/luigi.cfg
 
 
 ENV PYTHONPATH="/code/:/code/tasks/:${PATH}"
