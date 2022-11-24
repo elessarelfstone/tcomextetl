@@ -73,7 +73,6 @@ services:
 
   luigi:
     container_name: luigi_dispatcher
-#    build: .
     image: elessarelfstone/luigid
     build:
       context: .
