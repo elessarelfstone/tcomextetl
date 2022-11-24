@@ -98,6 +98,7 @@ class ArchivedWebDataFileInput(luigi.Task):
 
 
 class CsvFileOutput(Base):
+
     date = luigi.DateParameter(default=datetime.today(), visibility=ParameterVisibility.HIDDEN)
     directory = luigi.Parameter(default=DATA_PATH, visibility=ParameterVisibility.HIDDEN)
     ext = luigi.Parameter(default='.csv', visibility=ParameterVisibility.HIDDEN)
@@ -153,10 +154,8 @@ class ApiToCsv(CsvFileOutput):
 
 class FtpUploadedOutput(luigi.Task):
 
-    ftp_directory = luigi.Parameter(default=None)
-
+    ftp_directory = luigi.Parameter(default='')
     gzip_ext = luigi.Parameter(default='.gzip')
-
     ftp_host = luigi.Parameter(default=FTP_HOST, visibility=ParameterVisibility.HIDDEN)
     ftp_user = luigi.Parameter(default=FTP_USER, visibility=ParameterVisibility.HIDDEN)
     ftp_pass = luigi.Parameter(default=FTP_PASS, visibility=ParameterVisibility.HIDDEN)
@@ -205,7 +204,7 @@ class Runner(luigi.WrapperTask):
     all input parameters and run tasks with main functionality.
     """
     name = luigi.Parameter()
-    period = luigi.Parameter(default='interval')
+    all_data = luigi.BoolParameter(default=False)
     date = luigi.DateParameter(default=datetime.today())
 
     @staticmethod
