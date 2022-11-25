@@ -75,7 +75,7 @@ class GoszakupGraphQLApiParser(ApiRequests):
         super(GoszakupGraphQLApiParser, self).__init__(**kwargs)
         self.url = url
         self.entity = entity
-        self.gql_fpath = gql_fpath
+        self.graphql_script = read_file(gql_fpath)
 
     @property
     def total(self):
@@ -98,15 +98,14 @@ class GoszakupGraphQLApiParser(ApiRequests):
         return ext['pageInfo']['lastId']
 
     def load(self, params):
-        # TODO move reading graphql body to __init__
-        query = read_file(self.gql_fpath)
+
         variables = params
 
         if self._raw:
             # pagination
             variables['after'] = self.last_id
 
-        json = {'query': query, 'variables': variables}
+        json = {'query': self.graphql_script, 'variables': variables}
         r = self.request(self.url, params=params, json=json)
 
         return r.json()

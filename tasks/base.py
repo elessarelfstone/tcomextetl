@@ -39,10 +39,6 @@ class Base(luigi.Task):
     def struct(self):
         return StructRegister.get(self.name)
 
-    @luigi.Task.event_handler(luigi.Event.FAILURE)
-    def exit_message(self):
-        sys.exit(40)
-
 
 class WebDataFileInput(Base):
 
@@ -66,10 +62,6 @@ class WebDataFileInput(Base):
     def run(self):
         p = self.output().path
         self.downloader.download(p)
-        # with open(p, 'wb') as f:
-        #     for ch in self.downloader:
-        #         f.write(ch)
-        #         self.set_status_info(self.status + self.downloader.status)
 
 
 @requires(WebDataFileInput)
@@ -116,6 +108,10 @@ class CsvFileOutput(Base):
     def output_path(self):
         return self._file_path(self.ext)
 
+    def clean_output(self):
+        if os.path.exists(self.output_path):
+            os.remove(self.output_path)
+
     def output(self):
         return luigi.LocalTarget(self.output_path)
 
@@ -124,6 +120,8 @@ class CsvFileOutput(Base):
 
 
 class ApiToCsv(CsvFileOutput):
+
+    no_resume = luigi.BoolParameter(default=False)
 
     @property
     def stat_file_path(self):
@@ -137,12 +135,27 @@ class ApiToCsv(CsvFileOutput):
     def parsed_ids_file_path(self):
         return self._file_path('.prs')
 
+    def erase_files(self):
+        if os.path.exists(self.output_path):
+            os.remove(self.output_path)
+
+        if os.path.exists(self.parsed_ids_file_path):
+            os.remove(self.parsed_ids_file_path)
+
+        if os.path.exists(self.stat_file_path):
+            os.remove(self.stat_file_path)
+
     def finalize(self):
         if os.path.exists(self.stat_file_path):
             move(self.stat_file_path, self.success_file_path)
 
     def complete(self):
         if not os.path.exists(self.success_file_path):
+            # start all over from scratch
+            if self.no_resume:
+                # erase all the files we already have
+                self.erase_files()
+
             return False
         else:
             return True
@@ -206,6 +219,7 @@ class Runner(luigi.WrapperTask):
     name = luigi.Parameter()
     all_data = luigi.BoolParameter(default=False)
     date = luigi.DateParameter(default=datetime.today())
+    no_resume = luigi.BoolParameter(default=False)
 
     @staticmethod
     def yesterday(frmt=DEFAULT_FORMAT):

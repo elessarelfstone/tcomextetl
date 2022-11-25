@@ -86,6 +86,7 @@ class GoszakupRunner(Runner):
     def requires(self):
         params = self.params
         params['use_rest'] = self.use_rest
+        params['no_resume'] = self.no_resume
 
         if not self.use_rest:
             params.pop('endpoint')
