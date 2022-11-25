@@ -27,10 +27,10 @@ class ExternalEtlDockerRunner(DockerOperator):
             type="bind"
         )
 
-        if _env == 'dev' or _platform == 'windows':
+        docker_url = 'unix://var/run/docker.sock'
+
+        if _env == 'dev' and _platform == 'windows':
             docker_url = 'tcp://host.docker.internal:2375'
-        else:
-            docker_url = 'unix://var/run/docker.sock'
 
         network_mode = '{}_{}'.format(Variable.get('PROJECT_NAME'), Variable.get('DOCKER_NETWORK'))
 
