@@ -4,6 +4,6 @@ COPY conf/luigi_dispatcher.cfg /etc/luigi/luigi.cfg
 
 RUN mkdir /var/lib/luigi
 
-RUN pip install luigi
+RUN pip --no-cache-dir install luigi
 
 EXPOSE 8082

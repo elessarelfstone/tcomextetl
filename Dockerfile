@@ -22,7 +22,7 @@ ENV TEMP_PATH="/temp"
 
 RUN mkdir /var/lib/luigi
 
-RUN pip install -r /tmp/requirements.txt && rm /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt && rm /tmp/requirements.txt
 
 VOLUME /temp
 VOLUME /data
