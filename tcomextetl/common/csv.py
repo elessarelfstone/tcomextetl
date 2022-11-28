@@ -16,7 +16,8 @@ def save_csvrows(fpath: str, rows, delimiter=None, quotechar=CSV_QUOTECHAR):
             val = ''.join(filter(lambda ch: ch not in "\n\r", val))
             # quote if delimiter found
             if d in val:
-                val = f'{quotechar}{val}{quotechar}'
+                clean_val = val.strip(CSV_QUOTECHAR).replace('"', "'")
+                val = f'{quotechar}{clean_val}{quotechar}'
 
         return val
 
@@ -36,24 +37,24 @@ def save_csvrows(fpath: str, rows, delimiter=None, quotechar=CSV_QUOTECHAR):
     return len(rows)
 
 
-def dict_to_csvrow(p_dict, struct):
+def dict_to_row(p_dict, data_class):
     """ Convert given dict into tuple using
-    given structure(attr class). """
+    given data class(attr class). """
 
     # cast each keys's name of dict to lower case
-    src_dict = {k.lower(): v for k, v in p_dict.items() if k.lower()}
+    _dict = {k.lower(): v for k, v in p_dict.items() if k.lower()}
 
     # get fields of structure
-    keys = [a.name for a in attr.fields(struct)]
+    keys = [a.name for a in attr.fields(data_class)]
 
     d = {}
 
-    # build new dict with fields specified in struct
+    # build new dict with fields specified in data class
     for k in keys:
-        if k in src_dict.keys():
-            d[k] = src_dict[k]
+        if k in _dict.keys():
+            d[k] = _dict[k]
 
-    # wrap in struct
-    attr_obj = struct(**d)
+    # wrap in data class
+    attr_instance = data_class(**d)
 
-    return attr.astuple(attr_obj)
+    return attr.astuple(attr_instance)

@@ -20,7 +20,3 @@ def save_test_data_in_excel(excel_fpath):
             ws_active = wb.create_sheet(title=str(sheet_num))
 
     wb.save(filename=excel_fpath)
-
-
-save_test_data_in_excel("C:\\Users\\elessar\\excel_test.xlsx")
-

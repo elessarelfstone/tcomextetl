@@ -12,7 +12,7 @@ from luigi.contrib.ftp import RemoteTarget
 from luigi.util import requires
 
 from tasks.base import Runner, ApiToCsv, ExternalFtpCsvDFInput, FtpUploadedOutput
-from tcomextetl.common.csv import dict_to_csvrow, save_csvrows
+from tcomextetl.common.csv import dict_to_row, save_csvrows
 from tcomextetl.common.dates import previous_month, month_as_range
 from tcomextetl.common.utils import append_file, rewrite_file, read_file, read_lines, build_fpath
 from tcomextetl.extract.kgd_requests import (KgdGovKzSoapApiParser, KgdGovKzSoapApiError,
@@ -105,6 +105,8 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
                 super().output()
                 ]
 
+    # TODO add complete method
+
     def run(self):
         # get bins
         if not os.path.exists(self.bins_fpath):
@@ -155,7 +157,7 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
             else:
                 data = []
                 for p in payments:
-                    row = dict_to_csvrow(p, self.struct)
+                    row = dict_to_row(p, self.struct)
                     data.append(row)
 
                 if data:

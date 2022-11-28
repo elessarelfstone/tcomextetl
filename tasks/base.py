@@ -121,7 +121,7 @@ class CsvFileOutput(Base):
 
 class ApiToCsv(CsvFileOutput):
 
-    no_resume = luigi.BoolParameter(default=False)
+    no_resume = luigi.BoolParameter(default=False)  # use carefully
 
     @property
     def stat_file_path(self):
@@ -135,7 +135,7 @@ class ApiToCsv(CsvFileOutput):
     def parsed_ids_file_path(self):
         return self._file_path('.prs')
 
-    def erase_files(self):
+    def _clean(self):
         if os.path.exists(self.output_path):
             os.remove(self.output_path)
 
@@ -154,7 +154,7 @@ class ApiToCsv(CsvFileOutput):
             # start all over from scratch
             if self.no_resume:
                 # erase all the files we already have
-                self.erase_files()
+                self._clean()
 
             return False
         else:

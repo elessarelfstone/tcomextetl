@@ -9,7 +9,7 @@ from settings import (INFOBIP_URL, INFOBIP_USER,
                       INFOBIP_PASSWORD, INFOBIP_TIMEOUT)
 
 from tasks.base import ApiToCsv, FtpUploadedOutput, Runner, ExternalCsvLocalInput
-from tcomextetl.common.csv import save_csvrows, dict_to_csvrow
+from tcomextetl.common.csv import save_csvrows, dict_to_row
 from tcomextetl.common.dates import DEFAULT_FORMAT
 
 from tcomextetl.extract.infobip_requests import InfobipRestApiParser
@@ -53,7 +53,7 @@ class InfobipOutput(ApiToCsv):
 
         for data in parser:
             save_csvrows(self.output_path,
-                         [dict_to_csvrow(d, self.struct) for d in data], quotechar='"')
+                         [dict_to_row(d, self.struct) for d in data], quotechar='"')
             self.set_status_info(*parser.status_percent)
             rewrite_file(self.stat_file_path, str(parser.stat))
 
@@ -148,7 +148,7 @@ class InfobipConversationDetailsOutput(InfobipOutput):
                 for d in data:
                     _data.append({**d, **{'conversationid': conv_id}})
                 save_csvrows(self.output_path,
-                             [dict_to_csvrow(d, self.struct) for d in _data], quotechar='"')
+                             [dict_to_row(d, self.struct) for d in _data], quotechar='"')
 
                 s, p = parser.status_percent
                 status = f'Total conversations: {len(conv_ids)}. Conversation ID: {conv_id}. Parsed conversations: {parsed_convs_count}'

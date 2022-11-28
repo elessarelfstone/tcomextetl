@@ -5,7 +5,7 @@ from time import sleep
 import luigi
 
 from luigi.util import requires
-from tcomextetl.common.csv import dict_to_csvrow, save_csvrows
+from tcomextetl.common.csv import dict_to_row, save_csvrows
 from tcomextetl.common.dates import month_as_range, previous_month, yesterday
 from tcomextetl.common.utils import read_lines, append_file, rewrite_file
 from tcomextetl.extract.dgov_requests import DgovParser
@@ -42,7 +42,7 @@ class DgovAddrRegOutput(ApiToCsv):
                             parsed_chunks=chunks, headers=headers)
 
         for data in parser:
-            save_csvrows(self.output_path, [dict_to_csvrow(d, self.struct) for d in data])
+            save_csvrows(self.output_path, [dict_to_row(d, self.struct) for d in data])
             self.set_status_info(*parser.status_percent)
 
             # log parsed chunks

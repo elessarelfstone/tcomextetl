@@ -10,7 +10,7 @@ from luigi.util import requires
 
 from tcomextetl.extract.goszakup_requests import (GoszakupRestApiParser,
                                                   GoszakupGraphQLApiParser)
-from tcomextetl.common.csv import dict_to_csvrow, save_csvrows
+from tcomextetl.common.csv import dict_to_row, save_csvrows
 from tcomextetl.common.dates import yesterday
 from tcomextetl.common.utils import rewrite_file
 from settings import GOSZAKUP_TOKEN
@@ -63,7 +63,7 @@ class GoszakupOutput(ApiToCsv):
                                               params=self.params, headers=headers, timeout=self.timeout)
 
         for rows in parser:
-            data = [dict_to_csvrow(d, self.struct) for d in rows]
+            data = [dict_to_row(d, self.struct) for d in rows]
             save_csvrows(self.output_path, data)
             self.set_status_info(*parser.status_percent)
             rewrite_file(self.stat_file_path, str(parser.stat))

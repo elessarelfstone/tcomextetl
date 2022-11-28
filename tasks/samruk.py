@@ -8,7 +8,7 @@ from luigi.util import requires
 from settings import SAMRUK_API_HOST, SAMRUK_USER, SAMRUK_PASSWORD, SAMRUK_API_COMPANY_ID
 
 from tasks.base import ApiToCsv, FtpUploadedOutput, Runner, ExternalCsvLocalInput
-from tcomextetl.common.csv import save_csvrows, dict_to_csvrow
+from tcomextetl.common.csv import save_csvrows, dict_to_row
 from tcomextetl.extract.samruk_requests import SamrukRestApiParser, SamrukPlansRestApiParser
 from tcomextetl.common.utils import rewrite_file
 
@@ -83,7 +83,7 @@ class SamrukOutput(ApiToCsv):
 
         for data in parser:
             save_csvrows(self.output_path,
-                         [dict_to_csvrow(d, self.struct) for d in data],
+                         [dict_to_row(d, self.struct) for d in data],
                          quotechar='"')
             self.set_status_info(*parser.status_percent)
             rewrite_file(self.stat_file_path, str(parser.stat))
@@ -213,7 +213,7 @@ class SamrukKztPlanItemsOutput(SamrukOutput):
                     _data.append({**d, **{'planId': p_id}})
 
                 save_csvrows(self.output_path,
-                             [dict_to_csvrow(d, self.struct) for d in _data],
+                             [dict_to_row(d, self.struct) for d in _data],
                              quotechar='"')
 
                 s, p = parser.status_percent
