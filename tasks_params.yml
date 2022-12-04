@@ -19,6 +19,7 @@ sgov_kurk:
   url: https://stat.gov.kz/api/getFile/?docId=ESTAT249322
   skiptop: 16
   usecolumns: A:C
+  skipbottom: 4
 
 sgov_kpved:
   url: https://stat.gov.kz/api/getFile/?docId=ESTAT116569
@@ -39,7 +40,6 @@ kgd_invregistration:
   url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/INVALID_REGISTRATION/KZ_ALL/fileName/list_INVALID_REGISTRATION_KZ_ALL.xlsx
   skiptop: 3
   usecolumns: A:J
-
 
 kgd_wrongaddress:
   url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/WRONG_ADDRESS/KZ_ALL/fileName/list_WRONG_ADDRESS_KZ_ALL.xlsx
