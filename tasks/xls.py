@@ -11,13 +11,13 @@ from tcomextetl.common.csv import save_csvrows
 class WebExcelFileParsingToCsv(CsvFileOutput):
 
     skiptop = luigi.IntParameter(default=None)
-    skipbottom = luigi.IntParameter(default=None)
+    skipbottom = luigi.IntParameter(default=0)
     usecolumns = luigi.Parameter(default=None)
     sheets = luigi.Parameter(default=None)
 
     def run(self):
         super().run()
-        xl = SimpleExcelDataReader(self.input().path, sheet_indexes=self.sheets,
+        xl = SimpleExcelDataReader(self.input().path, ws_indexes=self.sheets,
                                    skip_rows=self.skiptop, use_cols=self.usecolumns)
 
         total = 0
@@ -34,7 +34,7 @@ class WebExcelFileParsingToCsv(CsvFileOutput):
 class ArchivedWebExcelFileParsingToCsv(CsvFileOutput):
 
     skiptop = luigi.IntParameter(default=None)
-    skipbottom = luigi.IntParameter(default=None)
+    skipbottom = luigi.IntParameter(default=0)
     usecolumns = luigi.Parameter(default=None)
     sheets = luigi.Parameter(default=None)
 
@@ -42,7 +42,7 @@ class ArchivedWebExcelFileParsingToCsv(CsvFileOutput):
         super().run()
         for f_in in self.input():
 
-            xl = SimpleExcelDataReader(f_in.path, sheet_indexes=self.sheets,
+            xl = SimpleExcelDataReader(f_in.path, ws_indexes=self.sheets,
                                        skip_rows=self.skiptop, use_cols=self.usecolumns)
 
             total = 0

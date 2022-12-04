@@ -1,7 +1,8 @@
 import os
 import fnmatch
-
+import shutil
 from zipfile import ZipFile
+
 from rarfile import RarFile
 
 from tcomextetl.common.utils import identify_file_format

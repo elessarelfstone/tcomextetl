@@ -10,11 +10,19 @@ class SimpleExcelDataReader:
 
     """ Parse data by reading Excel file sheet by sheet. """
 
-    def __init__(self, excel_fpath, sheet_indexes=None,
-                 skip_rows=None, use_cols=None):
+    def __init__(
+        self,
+        excel_fpath: str,
+        ws_indexes=None,
+        skip_rows: int = None,
+        skip_footer: int = 0,
+        use_cols: str = None,
 
-        self.parsed_sheets = 0
-        self.parsed_rows = 0
+    ):
+
+        # parsed sheets and rows
+        self._ws_parsed_cnt = 0
+        self._parsed_cnt = 0
 
         self.excel_fpath = excel_fpath
 
@@ -28,51 +36,47 @@ class SimpleExcelDataReader:
         else:
             raise TypeError('Wrong format for Excel parsing.')
 
-        self.sheet_names = pd.ExcelFile(excel_fpath, engine=engine).sheet_names
+        self._ws_names = pd.ExcelFile(excel_fpath, engine=engine).sheet_names
 
         # read only specified sheets
-        self.sheet_indexes = sheet_indexes
+        self._ws_indexes = ws_indexes
 
-        if not sheet_indexes:
-            self.sheet_indexes = [i for i, _ in enumerate(self.sheet_names)]
+        if not ws_indexes:
+            self._ws_indexes = [i for i, _ in enumerate(self._ws_names)]
 
-        # skip specified number of rows from top
-        self.skip_rows = skip_rows
+        # number of rows to skip
+        self._skip_rows = skip_rows
+        self.skip_footer = skip_footer
 
-        if not skip_rows:
-            self.skip_rows = [0 for i in self.sheet_names]
-        else:
-            self.skip_rows = [skip_rows for i in self.sheet_names]
-
-        # use X:X like range
         self.use_cols = use_cols
 
     @property
     def percent_done(self):
-        total = len(self.sheet_names)
-        return floor((self.parsed_sheets * 100)/total)
+        total = len(self._ws_names)
+        return floor((self._ws_parsed_cnt * 100) / total)
 
     @property
     def status(self):
-        s = f'Total: {len(self.sheet_names)}'
-        s += f'Parsed: {self.parsed_rows} rows, {self.parsed_sheets} sheets.'
+        s = f'Total: {len(self._ws_names)}'
+        s += f'Parsed: {self._parsed_cnt} rows, {self._ws_parsed_cnt} sheets.'
         return
 
     def __iter__(self):
 
-        for sh_i in self.sheet_indexes:
-            df = pd.read_excel(self.excel_fpath,
-                               sheet_name=self.sheet_names[sh_i],
-                               skiprows=self.skip_rows[sh_i],
-                               usecols=self.use_cols,
-                               index_col=None,
-                               dtype=str,
-                               header=None
-                               )
+        for sh_i in self._ws_indexes:
+            df = pd.read_excel(
+                self.excel_fpath,
+                sheet_name=self._ws_names[sh_i],
+                skiprows=self._skip_rows,
+                skipfooter=self.skip_footer,
+                usecols=self.use_cols,
+                index_col=None,
+                dtype=str,
+                header=None,
+                na_filter=False
+                )
 
-            # convert Excel's empty cells to empty string
-            data = df.replace(np.nan, '', regex=True)
-            data.dropna(inplace=True)
-            self.parsed_sheets += 1
-            self.parsed_rows += len(data.values)
-            yield data.values
+            self._ws_parsed_cnt += 1
+            self._parsed_cnt += len(df.values)
+
+            yield [tuple(r) for r in df.to_numpy().tolist()]
