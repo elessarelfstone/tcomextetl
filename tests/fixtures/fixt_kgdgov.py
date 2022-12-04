@@ -10,7 +10,8 @@ response_xml_dir = Path(__file__).parent.parent / 'misc' / 'kgdgov'
 @pytest.fixture()
 def fixture_kgdgov_tax_payments_success():
     xml = read_file(response_xml_dir / 'tax_payments_success.xml')
-    data = [{
+    data = [
+        {
             'bin': '012345678901',
             'TaxOrgCode': '451501',
             'NameTaxRu': 'UGD Astana Ru',
@@ -23,7 +24,8 @@ def fixture_kgdgov_tax_payments_success():
             'EntryType': '1',
             'ReceiptDate': '2022-01-01+06:00',
             'WriteOffDate': '2022-01-02+06:00',
-            'Summa': '15646'}
+            'Summa': '15646'
+        }
         ,
         {
             'bin': '012345678901',
@@ -40,6 +42,6 @@ def fixture_kgdgov_tax_payments_success():
             'WriteOffDate': '2022-01-12+06:00',
             'Summa': '17926'
         }
-        ]
+    ]
 
     return xml, data
