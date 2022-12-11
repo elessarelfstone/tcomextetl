@@ -44,7 +44,7 @@ def read_file(fpath: str) -> str:
     return data
 
 
-def read_lines(fpath):
+def read_lines(fpath: str) -> list[str]:
     """ Return rows of file as list """
     with open(fpath, "r", encoding="utf-8") as f:
         lines = [b.rstrip() for b in f.readlines()]
@@ -52,7 +52,7 @@ def read_lines(fpath):
     return lines
 
 
-def append_file(fpath, data):
+def append_file(fpath: str, data: str):
     with open(fpath, 'a+', encoding="utf8") as f:
         f.write(data + '\n')
 
@@ -62,7 +62,7 @@ def rewrite_file(fpath, data):
         f.write(data + '\n')
 
 
-def pretty_size(p_bytes):
+def pretty_size(p_bytes: int) -> str:
     """ Get human-readable file sizes. """
 
     factor, suffix = None, None
@@ -114,20 +114,20 @@ def identify_file_format(fpath: str) -> str:
     return None
 
 
-def build_fpath(directory: str, name: str, ext: str, suff: str = None):
+def build_fpath(directory: str, name: str, ext: str, suff: str = None) -> str:
     d = Path(directory)
     name = '_'.join([name, suff]) if suff else name
     return d.joinpath(name).with_suffix(ext)
 
 
-def get_yaml_task_config(fpath, section):
+def get_yaml_task_config(fpath, section) -> dict:
     with open(fpath) as c:
         config = load(c, Loader=Loader)
 
     return config[section]
 
 
-def flatten_dict(d):
+def flatten_dict(d: dict) -> dict:
     """ """
 
     out = {}

@@ -1,2 +1,4 @@
 pytest
 apache-airflow
+docker
+apache-airflow-providers-docker

@@ -7,7 +7,8 @@ from docker_runner import ExternalEtlDockerRunner
 
 with DAG(dag_id='sgov_juridical',
          catchup=False,
-         start_date=datetime(2022, 1, 1)
+         start_date=datetime(2022, 1, 1),
+         schedule_interval='@monthly'
          ) as dag:
 
     sgov_links_prepare = ExternalEtlDockerRunner(

@@ -38,6 +38,7 @@ class GoszakupOutput(ApiToCsv):
         else:
             params['limit'] = self.limit
             if self.from_to:
+                # if from-to not specified pr
                 params['from'], params['to'] = self.from_to
 
         return params

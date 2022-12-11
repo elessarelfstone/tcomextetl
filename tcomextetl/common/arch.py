@@ -9,7 +9,7 @@ from tcomextetl.common.utils import identify_file_format
 from tcomextetl.common.exceptions import ExternalSourceError
 
 
-def extract_by_wildcard(arch_fpath: str, wildcard: str):
+def extract_by_wildcard(arch_fpath: str, wildcard: str) -> list[str]:
 
     """ Extract files from archive. Supports only zip and rar formats. """
 

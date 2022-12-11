@@ -95,6 +95,7 @@ class CsvFileOutput(Base):
     directory = luigi.Parameter(default=DATA_PATH, visibility=ParameterVisibility.HIDDEN)
     ext = luigi.Parameter(default='.csv', visibility=ParameterVisibility.HIDDEN)
     sep = luigi.Parameter(default=';', visibility=ParameterVisibility.HIDDEN)
+    no_resume = luigi.BoolParameter(default=False)  # use carefully
 
     @property
     def file_date(self):
@@ -108,7 +109,7 @@ class CsvFileOutput(Base):
     def output_path(self):
         return self._file_path(self.ext)
 
-    def clean_output(self):
+    def _clean(self):
         if os.path.exists(self.output_path):
             os.remove(self.output_path)
 
@@ -120,8 +121,6 @@ class CsvFileOutput(Base):
 
 
 class ApiToCsv(CsvFileOutput):
-
-    no_resume = luigi.BoolParameter(default=False)  # use carefully
 
     @property
     def stat_file_path(self):
@@ -136,14 +135,17 @@ class ApiToCsv(CsvFileOutput):
         return self._file_path('.prs')
 
     def _clean(self):
-        if os.path.exists(self.output_path):
-            os.remove(self.output_path)
+
+        super(ApiToCsv, self)._clean()
 
         if os.path.exists(self.parsed_ids_file_path):
             os.remove(self.parsed_ids_file_path)
 
         if os.path.exists(self.stat_file_path):
             os.remove(self.stat_file_path)
+
+        if os.path.exists(self.success_file_path):
+            os.remove(self.success_file_path)
 
     def finalize(self):
         if os.path.exists(self.stat_file_path):

@@ -13,7 +13,7 @@ class SimpleExcelDataReader:
     def __init__(
         self,
         excel_fpath: str,
-        ws_indexes=None,
+        ws_indexes: list[int] = None,
         skip_rows: int = None,
         skip_footer: int = 0,
         use_cols: str = None,

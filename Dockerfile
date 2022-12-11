@@ -24,7 +24,7 @@ COPY misc /code/misc
 COPY settings.py /code/
 COPY tasks_params.yml /code/tasks_params.yml
 
-COPY conf/luigi_worker.cfg /etc/luigi/luigi.cfg
+COPY conf/luigi.cfg /etc/luigi/luigi.cfg
 
 #COPY misc/unrar /usr/bin/unrar
 

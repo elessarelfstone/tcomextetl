@@ -8,7 +8,8 @@ from docker_runner import ExternalEtlDockerRunner
 
 with DAG(dag_id='goszakup_companies',
          catchup=False,
-         start_date=datetime(2022, 1, 1)
+         start_date=datetime(2022, 12, 11),
+         # schedule_interval='50 18 * * *'
          ) as dag:
 
     goszakup_companies = ExternalEtlDockerRunner(
