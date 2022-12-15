@@ -1,5 +1,6 @@
 import fnmatch
 import gzip
+import json
 import os
 import shutil
 import sys
@@ -20,9 +21,9 @@ from settings import (DATA_PATH, TEMP_PATH, FTP_PATH,
 
 from tcomextetl.extract.http_requests import Downloader
 from tcomextetl.common.arch import extract_by_wildcard
-from tcomextetl.common.dates import DEFAULT_FORMAT
+from tcomextetl.common.dates import DEFAULT_FORMAT, today
 from tcomextetl.common.exceptions import FtpFileError
-from tcomextetl.common.utils import build_fpath, get_yaml_task_config
+from tcomextetl.common.utils import build_fpath, get_yaml_task_config, read_file
 from tcomextetl.transform import StructRegister
 
 
@@ -123,16 +124,23 @@ class CsvFileOutput(Base):
 class ApiToCsv(CsvFileOutput):
 
     @property
-    def stat_file_path(self):
+    def stat_file_path(self) -> str:
         return self._file_path('.stat')
 
     @property
-    def success_file_path(self):
+    def success_file_path(self) -> str:
         return self._file_path('.scs')
 
     @property
-    def parsed_ids_file_path(self):
+    def parsed_ids_file_path(self) -> str:
         return self._file_path('.prs')
+
+    @property
+    def stat(self) -> dict:
+        if os.path.exists(self.stat_file_path):
+            return json.loads(read_file(self.stat_file_path))
+        else:
+            return {}
 
     def _clean(self):
 
@@ -220,7 +228,7 @@ class Runner(luigi.WrapperTask):
     """
     name = luigi.Parameter()
     all_data = luigi.BoolParameter(default=False)
-    date = luigi.DateParameter(default=datetime.today())
+    date = luigi.DateParameter(default=today())
     no_resume = luigi.BoolParameter(default=False)
 
     @staticmethod

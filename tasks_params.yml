@@ -41,11 +41,10 @@ kgd_invregistration:
   skiptop: 3
   usecolumns: A:J
 
-kgd_wrongaddress:
+kgd_jwrongaddress:
   url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/WRONG_ADDRESS/KZ_ALL/fileName/list_WRONG_ADDRESS_KZ_ALL.xlsx
   skiptop: 3
   usecolumns: A:J
-
 
 kgd_mrp:
   url: http://kgd.gov.kz/reference/mrp

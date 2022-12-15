@@ -1,5 +1,8 @@
+from datetime import datetime
 from math import floor
 from time import sleep
+
+import humanize
 
 from tcomextetl.extract.http_requests import HttpRequest
 from abc import ABC, abstractmethod
@@ -12,6 +15,11 @@ class ApiRequests(ABC, HttpRequest):
         self._raw = None
         self._page = None
         self._parsed_count = 0
+        self._start_date: datetime = None
+        self._end_date: datetime = None
+
+    def set_parsed_count(self, count: int):
+        self._parsed_count = count
 
     @property
     @abstractmethod
@@ -42,9 +50,15 @@ class ApiRequests(ABC, HttpRequest):
         pass
 
     @property
-    def stat(self):
-        return {'total': self.total, 'parsed': self._parsed_count,
-                'page_params': self.next_page_params}
+    def stat(self) -> dict:
+        return {
+            'start': self._start_date.ctime(),
+            'end': self._end_date.ctime(),
+            'duration': humanize.precisedelta(self._end_date - self._start_date),
+            'total': self.total,
+            'parsed': self._parsed_count,
+            'page_params': self.next_page_params
+        }
 
     @property
     def status_percent(self):
@@ -56,9 +70,11 @@ class ApiRequests(ABC, HttpRequest):
 
     def __iter__(self):
 
+        self._start_date = datetime.now()
         while self.next_page_params:
             self._raw = self.load(self.next_page_params)
             data = self.parse()
             self._parsed_count += len(data)
+            self._end_date = datetime.now()
             yield data
             sleep(self.timeout)

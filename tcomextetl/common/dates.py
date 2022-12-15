@@ -5,13 +5,22 @@ DEFAULT_FORMAT = '%Y-%m-%d'
 DEFAULT_MONTH_FORMAT = '%Y-%m'
 
 
-def today(frmt=DEFAULT_FORMAT):
-    return datetime.today().strftime(frmt)
+def today():
+    return datetime.today()
+
+
+def first_day_of_month() -> date:
+    _date = datetime.today()
+    return _date.replace(day=1)
 
 
 def yesterday(frmt=DEFAULT_FORMAT):
     y = datetime.today() - timedelta(days=1)
     return y.strftime(frmt)
+
+
+def n_days_ago(n: int = 1):
+    return datetime.today() - timedelta(days=n)
 
 
 def previous_month():

@@ -17,12 +17,15 @@ class WebExcelFileParsingToCsv(CsvFileOutput):
 
     def run(self):
         super().run()
-        xl = SimpleExcelDataReader(self.input().path, ws_indexes=self.sheets,
-                                   skip_rows=self.skiptop, use_cols=self.usecolumns)
+        xl = SimpleExcelDataReader(
+            self.input().path,
+            ws_indexes=self.sheets,
+            skip_rows=self.skiptop,
+            skip_footer=self.skipbottom,
+            use_cols=self.usecolumns
+        )
 
-        total = 0
         wrapper = self.struct
-
         for chunk in xl:
             # wrap in struct, transform
             rows = [attr.astuple(wrapper(*row)) for row in chunk]
@@ -42,16 +45,17 @@ class ArchivedWebExcelFileParsingToCsv(CsvFileOutput):
         super().run()
         for f_in in self.input():
 
-            xl = SimpleExcelDataReader(f_in.path, ws_indexes=self.sheets,
-                                       skip_rows=self.skiptop, use_cols=self.usecolumns)
+            xl = SimpleExcelDataReader(
+                f_in.path,
+                ws_indexes=self.sheets,
+                skip_rows=self.skiptop,
+                skip_footer=self.skipbottom,
+                use_cols=self.usecolumns
+            )
 
-            total = 0
             wrapper = self.struct
-
             for chunk in xl:
                 # wrap in struct, transform
                 rows = [attr.astuple(wrapper(*row)) for row in chunk]
                 save_csvrows(self.output().path, rows)
                 self.set_status_info(xl.status, xl.percent_done)
-
-

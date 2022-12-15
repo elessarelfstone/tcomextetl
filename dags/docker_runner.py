@@ -6,7 +6,15 @@ from docker.types import Mount
 
 
 class ExternalEtlDockerRunner(DockerOperator):
-    def __init__(self, task_id, luigi_module, luigi_task, env_vars=None, **kwargs):
+    def __init__(
+        self,
+        task_id: str,
+        luigi_module: str,
+        luigi_task: str,
+        luigi_params=None,
+        env_vars=None,
+        **kwargs
+    ):
 
         _vars = {'FTP_HOST': Variable.get('FTP_HOST'), 'FTP_USER': Variable.get('FTP_USER'),
                  'FTP_PASS': Variable.get('FTP_PASS'), 'FTP_PATH': Variable.get('FTP_PATH')}
@@ -37,17 +45,22 @@ class ExternalEtlDockerRunner(DockerOperator):
         if env_vars:
             _vars.update(env_vars)
 
-        command = f'luigi --module {luigi_module} {luigi_task} ' + "{{ dag_run.conf.get('command_args', '') }}"
+        _luigi_params = "{{ dag_run.conf.get('command_args', '') }}"
+        if not _luigi_params and luigi_params:
+            _luigi_params = ' '.join(luigi_params)
+
+        command = f'luigi --module {luigi_module} {luigi_task} ' + _luigi_params
 
         super().__init__(
-                         task_id=task_id,
-                         container_name=task_id,
-                         image=image,
-                         auto_remove=True,
-                         network_mode=network_mode,
-                         docker_url=docker_url,
-                         environment=_vars,
-                         mounts=[temp_mount_point, data_mount_point],
-                         mount_tmp_dir=False,
-                         command=command, **kwargs
+             task_id=task_id,
+             container_name=task_id,
+             image=image,
+             auto_remove=True,
+             network_mode=network_mode,
+             docker_url=docker_url,
+             environment=_vars,
+             mounts=[temp_mount_point, data_mount_point],
+             mount_tmp_dir=False,
+             command=command,
+             **kwargs
         )

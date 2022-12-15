@@ -13,8 +13,14 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class HttpRequest:
-    def __init__(self, params=None, headers=None, auth=None,
-                 timeout=None, verify_cert=False):
+    def __init__(
+        self,
+        params=None,
+        headers=None,
+        auth=None,
+        timeout=None,
+        verify_cert=False
+    ):
 
         # verify always set in False
         # specifically for our company
@@ -36,7 +42,14 @@ class HttpRequest:
         self.timeout = timeout
         self.session = Session()
 
-    def request(self, url: str, data=None, json=None, params=None, stream=False):
+    def request(
+        self,
+        url: str,
+        data=None,
+        json=None,
+        params=None,
+        stream=False
+    ):
         if data or json:
             method = 'POST'
         else:
@@ -46,20 +59,38 @@ class HttpRequest:
 
         if params:
             p = {**self.params, **params}
-        return self.session.request(method, url, params=p,
-                                    data=data, json=json, headers=self.headers,
-                                    auth=self.auth, stream=stream,
-                                    verify=self.verify_cert)
+        return self.session.request(
+            method,
+            url,
+            params=p,
+            data=data,
+            json=json,
+            headers=self.headers,
+            auth=self.auth,
+            stream=stream,
+            verify=self.verify_cert
+        )
 
     def head(self, url, params=None):
-        return self.session.head(url, params=params, headers=self.headers,
-                                 verify=self.verify_cert)
+        return self.session.head(
+            url,
+            params=params,
+            headers=self.headers,
+            verify=self.verify_cert
+        )
 
 
 class Downloader(HttpRequest):
 
-    def __init__(self, url, params=None, headers=None, auth=None,
-                 timeout=None, chunk_size=8192):
+    def __init__(
+        self,
+        url,
+        params=None,
+        headers=None,
+        auth=None,
+        timeout=None,
+        chunk_size=8192
+    ):
         super().__init__(params, headers, auth, timeout)
         self.url = url
         self.chunk_size = chunk_size

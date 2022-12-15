@@ -1,8 +1,14 @@
 import luigi
 from luigi.util import requires
 
+from tcomextetl.common.dates import first_day_of_month
 from tasks.base import Runner, FtpUploadedOutput
 from tasks.xls import WebExcelFileParsingToCsv
+
+
+class KgdExcelRunner(Runner):
+
+    date = luigi.DateParameter(default=first_day_of_month())
 
 
 class KgdBankruptOutput(WebExcelFileParsingToCsv):
@@ -14,7 +20,7 @@ class KgdBankruptFtpOutput(FtpUploadedOutput):
     pass
 
 
-class KgdBankrupt(Runner):
+class KgdBankrupt(KgdExcelRunner):
 
     name = luigi.Parameter(default='kgd_bankrupt')
 
@@ -31,7 +37,7 @@ class KgdInactiveFtpOutput(FtpUploadedOutput):
     pass
 
 
-class KgdInactive(Runner):
+class KgdInactive(KgdExcelRunner):
 
     name = luigi.Parameter(default='kgd_inactive')
 
@@ -48,7 +54,7 @@ class KgdInvregistrationFtpOutput(FtpUploadedOutput):
     pass
 
 
-class KgdInvregistration(Runner):
+class KgdInvregistration(KgdExcelRunner):
 
     name = luigi.Parameter(default='kgd_invregistration')
 
@@ -65,9 +71,9 @@ class KgdWrongAddressFtpOutput(FtpUploadedOutput):
     pass
 
 
-class KgdWrongAddress(Runner):
+class KgdWrongAddress(KgdExcelRunner):
 
-    name = luigi.Parameter(default='kgd_wrongaddress')
+    name = luigi.Parameter(default='kgd_jwrongaddress')
 
     def requires(self):
         return KgdWrongAddressFtpOutput(**self.params)
@@ -82,7 +88,7 @@ class KgdPseudoCompanyFtpOutput(FtpUploadedOutput):
     pass
 
 
-class KgdPseudoCompany(Runner):
+class KgdPseudoCompany(KgdExcelRunner):
 
     name = luigi.Parameter(default='kgd_pseudocompany')
 
@@ -99,7 +105,7 @@ class KgdTaxArrears150FtpOutput(FtpUploadedOutput):
     pass
 
 
-class KgdTaxArrears150(Runner):
+class KgdTaxArrears150(KgdExcelRunner):
 
     name = luigi.Parameter(default='kgd_taxarrears150')
 
@@ -116,7 +122,7 @@ class KgdTaxViolatorsFtpOutput(FtpUploadedOutput):
     pass
 
 
-class KgdTaxViolators(Runner):
+class KgdTaxViolators(KgdExcelRunner):
 
     name = luigi.Parameter(default='kgd_taxviolators')
 

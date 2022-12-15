@@ -6,7 +6,7 @@ from luigi.util import requires
 from tasks.base import Base, FtpUploadedOutput, Runner
 from tasks.xls import WebExcelFileParsingToCsv, ArchivedWebExcelFileParsingToCsv
 from tcomextetl.extract.sgov_requests import SgovApiRCutParser
-from tcomextetl.common.exceptions import ExternalSourceError
+from tcomextetl.common.dates import first_day_of_month
 from tcomextetl.common.utils import build_fpath, append_file, read_file
 from settings import TEMP_PATH
 
@@ -15,6 +15,11 @@ rcut_legal_branches = 'legal_branches'
 rcut_joint_ventures = 'joint_ventures'
 rcut_foreign_branches = 'foreign_branches'
 rcut_entrepreneurs = 'entrepreneurs'
+
+
+class SgovExcelRunner(Runner):
+
+    date = luigi.DateParameter(default=first_day_of_month())
 
 
 class SgovKatoOutput(ArchivedWebExcelFileParsingToCsv):
@@ -26,7 +31,7 @@ class SgovKatoFtpOutput(FtpUploadedOutput):
     pass
 
 
-class SgovKato(Runner):
+class SgovKato(SgovExcelRunner):
 
     name = luigi.Parameter(default='sgov_kato')
 
@@ -43,7 +48,7 @@ class SgovOkedFtpOutput(FtpUploadedOutput):
     pass
 
 
-class SgovOked(Runner):
+class SgovOked(SgovExcelRunner):
 
     name = luigi.Parameter(default='sgov_oked')
 
@@ -60,7 +65,7 @@ class SgovMkeisFtpOutput(FtpUploadedOutput):
     pass
 
 
-class SgovMkeis(Runner):
+class SgovMkeis(SgovExcelRunner):
 
     name = luigi.Parameter(default='sgov_mkeis')
 
@@ -77,7 +82,7 @@ class SgovKurkFtpOutput(FtpUploadedOutput):
     pass
 
 
-class SgovKurk(Runner):
+class SgovKurk(SgovExcelRunner):
 
     name = luigi.Parameter(default='sgov_kurk')
 
@@ -94,7 +99,7 @@ class SgovKpvedFtpOutput(FtpUploadedOutput):
     pass
 
 
-class SgovKpved(Runner):
+class SgovKpved(SgovExcelRunner):
 
     name = luigi.Parameter(default='sgov_kpved')
 
