@@ -72,12 +72,16 @@ class BinsManager:
 
 class KgdSoapApiTaxPaymentOutput(ApiToCsv):
 
-    begin_date = luigi.Parameter()
+    start_date = luigi.Parameter()
     end_date = luigi.Parameter()
     ftp_file_mask = luigi.Parameter()
     timeout = luigi.FloatParameter(default=1.5)
     timeout_ban = luigi.FloatParameter(default=5)
     notaxes_fext = luigi.Parameter('.notaxes')
+
+    @property
+    def url(self):
+        return url_template.format(KGD_SOAP_TOKEN)
 
     @property
     def request_form(self):
@@ -89,19 +93,19 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
         return build_fpath(self.directory, self.name, '.bins')
 
     @property
-    def failed_file_path(self):
+    def failed_fpath(self):
         return self._file_path('.failed')
 
     @property
-    def notaxes_file_path(self):
+    def notaxes_fpath(self):
         return self._file_path(self.notaxes_fext)
 
     def requires(self):
         return ExternalFtpCsvDFInput(ftp_file_mask=self.ftp_file_mask)
 
     def output(self):
-        return [luigi.LocalTarget(self.parsed_ids_file_path),
-                luigi.LocalTarget(self.notaxes_file_path),
+        return [luigi.LocalTarget(self.parsed_ids_fpath),
+                luigi.LocalTarget(self.notaxes_fpath),
                 super().output()
                 ]
 
@@ -112,17 +116,23 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
         if not os.path.exists(self.bins_fpath):
             self.input().get(str(self.bins_fpath))
 
-        url = url_template.format(KGD_SOAP_TOKEN)
-        params = {'begin_date': self.begin_date, 'end_date': self.end_date}
-        parser = KgdGovKzSoapApiParser(url, self.request_form,
-                                       params=params, headers=headers)
+        params = {'begin_date': self.start_date, 'end_date': self.end_date}
+        parser = KgdGovKzSoapApiParser(
+            self.url,
+            self.request_form,
+            params=params,
+            headers=headers
+        )
 
-        bins_manager = BinsManager(self.bins_fpath, self.output_path,
-                                   self.parsed_ids_file_path)
+        bins_manager = BinsManager(
+            self.bins_fpath,
+            self.output_fpath,
+            self.parsed_ids_fpath
+        )
 
         bins = bins_manager.bins
         failed_bins = deque()
-        parsed = bins_manager.parsed
+        parsed_cnt = bins_manager.parsed
         while bins:
 
             if failed_bins:
@@ -138,10 +148,10 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
                 failed_bins.append(_bin)
                 sleep(self.timeout)
             except KgdGovKzSoapApiError as e:
-                append_file(self.parsed_ids_file_path, _bin)
-                parsed += 1
+                append_file(self.parsed_ids_fpath, _bin)
+                parsed_cnt += 1
                 if str(e).endswith('10'):
-                    append_file(self.notaxes_file_path, _bin)
+                    append_file(self.notaxes_fpath, _bin)
                 sleep(self.timeout)
             except KgdGovKzSoapApiNotAvailable:
                 if not parser.is_server_up:
@@ -161,15 +171,15 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
                     data.append(row)
 
                 if data:
-                    save_csvrows(self.output_path, data)
+                    save_csvrows(self.output_fpath, data)
 
-                append_file(self.parsed_ids_file_path, _bin)
-                parsed += 1
+                append_file(self.parsed_ids_fpath, _bin)
+                parsed_cnt += 1
 
-            s = f'Total: {bins_manager.total}. Parsed: {parsed}. BIN: {_bin}' + '\n'
-            rewrite_file(self.stat_file_path, s + parser.stat_meta_info)
+            s = f'Total: {bins_manager.total}. Parsed: {parsed_cnt}. BIN: {_bin}' + '\n'
+            rewrite_file(self.stat_fpath, s + parser.stat_meta_info)
 
-            p = floor((parsed * 100) / bins_manager.total)
+            p = floor((parsed_cnt * 100) / bins_manager.total)
             self.set_status_info(s + parser.stat_meta_info, p)
 
         self.finalize()
@@ -182,6 +192,7 @@ class KgdSoapApiTaxPaymentFtpUploadedOutput(FtpUploadedOutput):
         tomorrow = datetime.today() + timedelta(days=1)
         suff_tomorrow = '{date:%Y%m%d}'.format(date=tomorrow)
         ext = Path(input_fpath).suffix
+
         # have to break it down to pieces to get file name without date
         pieces = Path(input_fpath).stem.split('_')
         pieces.pop()
@@ -226,7 +237,7 @@ class KgdSoapApiTaxPaymentFtpUploadedOutput(FtpUploadedOutput):
             self.output()[i].put(fpath, atomic=False)
 
 
-class KgdSoapApiTaxPaymentPrevMonth(Runner):
+class KgdSoapApiTaxPayments(Runner):
 
     name = luigi.Parameter(default='kgd_taxpayments')
     month = luigi.Parameter(default=previous_month())
@@ -243,21 +254,3 @@ class KgdSoapApiTaxPaymentPrevMonth(Runner):
 
 if __name__ == '__main__':
     luigi.run()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

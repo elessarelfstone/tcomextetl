@@ -21,7 +21,7 @@ from settings import (DATA_PATH, TEMP_PATH, FTP_PATH,
 
 from tcomextetl.extract.http_requests import Downloader
 from tcomextetl.common.arch import extract_by_wildcard
-from tcomextetl.common.dates import DEFAULT_FORMAT, today
+from tcomextetl.common.dates import DEFAULT_FORMAT, DEFAULT_DATETIME_FORMAT, today
 from tcomextetl.common.exceptions import FtpFileError
 from tcomextetl.common.utils import build_fpath, get_yaml_task_config, read_file
 from tcomextetl.transform import StructRegister
@@ -106,16 +106,24 @@ class CsvFileOutput(Base):
         return build_fpath(self.directory, self.name,
                            ext, suff=self.file_date)
 
+    @staticmethod
+    def get_file_path(directory, name, ext, dt):
+        return build_fpath(directory, name, ext, suff=dt)
+
     @property
-    def output_path(self):
+    def output_fpath(self):
         return self._file_path(self.ext)
 
     def _clean(self):
-        if os.path.exists(self.output_path):
-            os.remove(self.output_path)
+        if os.path.exists(self.output_fpath):
+            os.remove(self.output_fpath)
 
     def output(self):
-        return luigi.LocalTarget(self.output_path)
+        return luigi.LocalTarget(self.output_fpath)
+
+    @property
+    def success_fpath(self) -> str:
+        return self._file_path('.scs')
 
     def run(self):
         open(self.output().path, 'a', encoding="utf-8").close()
@@ -124,21 +132,17 @@ class CsvFileOutput(Base):
 class ApiToCsv(CsvFileOutput):
 
     @property
-    def stat_file_path(self) -> str:
+    def stat_fpath(self) -> str:
         return self._file_path('.stat')
 
     @property
-    def success_file_path(self) -> str:
-        return self._file_path('.scs')
-
-    @property
-    def parsed_ids_file_path(self) -> str:
+    def parsed_ids_fpath(self) -> str:
         return self._file_path('.prs')
 
     @property
     def stat(self) -> dict:
-        if os.path.exists(self.stat_file_path):
-            return json.loads(read_file(self.stat_file_path))
+        if os.path.exists(self.stat_fpath):
+            return json.loads(read_file(self.stat_fpath))
         else:
             return {}
 
@@ -146,21 +150,21 @@ class ApiToCsv(CsvFileOutput):
 
         super(ApiToCsv, self)._clean()
 
-        if os.path.exists(self.parsed_ids_file_path):
-            os.remove(self.parsed_ids_file_path)
+        if os.path.exists(self.parsed_ids_fpath):
+            os.remove(self.parsed_ids_fpath)
 
-        if os.path.exists(self.stat_file_path):
-            os.remove(self.stat_file_path)
+        if os.path.exists(self.stat_fpath):
+            os.remove(self.stat_fpath)
 
-        if os.path.exists(self.success_file_path):
-            os.remove(self.success_file_path)
+        if os.path.exists(self.success_fpath):
+            os.remove(self.success_fpath)
 
     def finalize(self):
-        if os.path.exists(self.stat_file_path):
-            move(self.stat_file_path, self.success_file_path)
+        if os.path.exists(self.stat_fpath):
+            move(self.stat_fpath, self.success_fpath)
 
     def complete(self):
-        if not os.path.exists(self.success_file_path):
+        if not os.path.exists(self.success_fpath):
             # start all over from scratch
             if self.no_resume:
                 # erase all the files we already have
@@ -171,8 +175,8 @@ class ApiToCsv(CsvFileOutput):
             return True
 
     def ids_to_parse(self, src_ids):
-        if os.path.exists(self.parsed_ids_file_path):
-            prs_ids = open(self.parsed_ids_file_path).readlines()
+        if os.path.exists(self.parsed_ids_fpath):
+            prs_ids = open(self.parsed_ids_fpath).readlines()
 
 
 class FtpUploadedOutput(luigi.Task):
@@ -237,15 +241,41 @@ class Runner(luigi.WrapperTask):
         return y.strftime(frmt)
 
     @property
-    def params(self):
+    def params(self) -> dict:
         """
-            Load configuration as dict and return section according given name.
+        Load configuration as dict and return section according given name.
         """
         params_fpath = Path(__file__).parent.parent / 'tasks_params.yml'
         params = get_yaml_task_config(params_fpath, self.name)
         params['name'] = self.name
         params['date'] = self.date
         return params
+
+    @property
+    def params_for_report(self) -> dict:
+        params = self.params
+        params['date'] = self.date.strftime(DEFAULT_DATETIME_FORMAT)
+
+        p = dict()
+        p['name'] = self.params['name']
+        p['date'] = self.params['date']
+        t = CsvFileOutput(**p)
+
+        if os.path.exists(t.success_fpath):
+            p = json.loads(read_file(t.success_fpath))
+            params.update(p)
+
+        return params
+
+
+@Runner.event_handler(luigi.Event.SUCCESS)
+def success_runner_handler(task):
+    print(task.params_for_report)
+
+
+@Runner.event_handler(luigi.Event.FAILURE)
+def failure_runner_handler(task, exception):
+    print(task.params_for_report)
 
 
 class ExternalFtpCsvDFInput(luigi.ExternalTask):
@@ -298,4 +328,3 @@ class ExternalCsvLocalInput(luigi.ExternalTask):
                             suff='{date:%Y%m%d}'.format(date=self.date))
 
         return luigi.LocalTarget(fpath)
-

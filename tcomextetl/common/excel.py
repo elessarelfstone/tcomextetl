@@ -16,12 +16,12 @@ class SimpleExcelDataReader:
         skip_rows: int = None,
         skip_footer: int = 0,
         use_cols: str = None,
-
+        parsed_cnt: int = 0
     ):
 
         # parsed sheets and rows
         self._ws_parsed_cnt = 0
-        self._parsed_cnt = 0
+        self._parsed_cnt = parsed_cnt
 
         self.excel_fpath = excel_fpath
 
@@ -59,6 +59,10 @@ class SimpleExcelDataReader:
         s = f'Total: {len(self._ws_names)}'
         s += f'Parsed: {self._parsed_cnt} rows, {self._ws_parsed_cnt} sheets.'
         return
+
+    @property
+    def stat(self):
+        return {'Parsed': self._parsed_cnt}
 
     def __iter__(self):
 

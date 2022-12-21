@@ -27,8 +27,8 @@ class DgovAddrRegOutput(ApiToCsv):
         super(ApiToCsv, self).run()
 
         chunks = None
-        if os.path.exists(self.parsed_ids_file_path):
-            chunks = read_lines(self.parsed_ids_file_path)
+        if os.path.exists(self.parsed_ids_fpath):
+            chunks = read_lines(self.parsed_ids_fpath)
 
         params = None
 
@@ -42,14 +42,14 @@ class DgovAddrRegOutput(ApiToCsv):
                             parsed_chunks=chunks, headers=headers)
 
         for data in parser:
-            save_csvrows(self.output_path, [dict_to_row(d, self.struct) for d in data])
+            save_csvrows(self.output_fpath, [dict_to_row(d, self.struct) for d in data])
             self.set_status_info(*parser.status_percent)
 
             # log parsed chunks
-            append_file(self.parsed_ids_file_path, parser.curr_chunk)
+            append_file(self.parsed_ids_fpath, parser.curr_chunk)
             sleep(self.timeout)
 
-        rewrite_file(self.success_file_path, parser.status_percent[0])
+        rewrite_file(self.success_fpath, parser.status_percent[0])
 
 
 @requires(DgovAddrRegOutput)

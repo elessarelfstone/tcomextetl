@@ -52,10 +52,10 @@ class InfobipOutput(ApiToCsv):
         #     pass
 
         for data in parser:
-            save_csvrows(self.output_path,
+            save_csvrows(self.output_fpath,
                          [dict_to_row(d, self.struct) for d in data], quotechar='"')
             self.set_status_info(*parser.status_percent)
-            rewrite_file(self.stat_file_path, str(parser.stat))
+            rewrite_file(self.stat_fpath, str(parser.stat))
 
         self.finalize()
 
@@ -147,7 +147,7 @@ class InfobipConversationDetailsOutput(InfobipOutput):
                 _data = []
                 for d in data:
                     _data.append({**d, **{'conversationid': conv_id}})
-                save_csvrows(self.output_path,
+                save_csvrows(self.output_fpath,
                              [dict_to_row(d, self.struct) for d in _data], quotechar='"')
 
                 s, p = parser.status_percent
@@ -155,7 +155,7 @@ class InfobipConversationDetailsOutput(InfobipOutput):
                 status = f'{status} \n {s}'
 
                 self.set_status_info(status, p)
-                rewrite_file(self.stat_file_path, str(parser.stat))
+                rewrite_file(self.stat_fpath, str(parser.stat))
 
             parsed_convs_count += 1
 

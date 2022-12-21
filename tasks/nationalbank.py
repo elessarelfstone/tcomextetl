@@ -10,7 +10,7 @@ class NBRatesOutput(CsvFileOutput):
 
     def run(self):
         rates = NbRatesParser().get_rates()
-        save_csvrows(self.output_path, rates)
+        save_csvrows(self.output_fpath, rates)
 
 
 @requires(NBRatesOutput)

@@ -1,10 +1,12 @@
 import attr
+import json
 import luigi
 from luigi.util import requires
 
 from tasks.base import CsvFileOutput, WebDataFileInput, ArchivedWebDataFileInput
 from tcomextetl.common.excel import SimpleExcelDataReader
 from tcomextetl.common.csv import save_csvrows
+from tcomextetl.common.utils import rewrite_file
 
 
 @requires(WebDataFileInput)
@@ -17,7 +19,7 @@ class WebExcelFileParsingToCsv(CsvFileOutput):
 
     def run(self):
         super().run()
-        xl = SimpleExcelDataReader(
+        excel_reader = SimpleExcelDataReader(
             self.input().path,
             ws_indexes=self.sheets,
             skip_rows=self.skiptop,
@@ -26,11 +28,16 @@ class WebExcelFileParsingToCsv(CsvFileOutput):
         )
 
         wrapper = self.struct
-        for chunk in xl:
+        for chunk in excel_reader:
             # wrap in struct, transform
             rows = [attr.astuple(wrapper(*row)) for row in chunk]
             save_csvrows(self.output().path, rows)
-            self.set_status_info(xl.status, xl.percent_done)
+            self.set_status_info(excel_reader.status, excel_reader.percent_done)
+
+        rewrite_file(
+            self.success_fpath,
+            json.dumps(excel_reader.stat)
+        )
 
 
 @requires(ArchivedWebDataFileInput)
@@ -43,19 +50,27 @@ class ArchivedWebExcelFileParsingToCsv(CsvFileOutput):
 
     def run(self):
         super().run()
+        parsed_cnt = 0
         for f_in in self.input():
 
-            xl = SimpleExcelDataReader(
+            excel_reader = SimpleExcelDataReader(
                 f_in.path,
                 ws_indexes=self.sheets,
                 skip_rows=self.skiptop,
                 skip_footer=self.skipbottom,
-                use_cols=self.usecolumns
+                use_cols=self.usecolumns,
+                parsed_cnt=parsed_cnt
             )
 
             wrapper = self.struct
-            for chunk in xl:
+            for chunk in excel_reader:
                 # wrap in struct, transform
                 rows = [attr.astuple(wrapper(*row)) for row in chunk]
                 save_csvrows(self.output().path, rows)
-                self.set_status_info(xl.status, xl.percent_done)
+                parsed_cnt += len(rows)
+                self.set_status_info(excel_reader.status, excel_reader.percent_done)
+
+            rewrite_file(
+                self.success_fpath,
+                json.dumps(excel_reader.stat)
+            )

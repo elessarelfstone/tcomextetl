@@ -1,11 +1,12 @@
+from abc import ABC, abstractmethod
 from datetime import datetime
 from math import floor
 from time import sleep
 
 import humanize
 
+from tcomextetl.common.dates import DEFAULT_DATETIME_FORMAT
 from tcomextetl.extract.http_requests import HttpRequest
-from abc import ABC, abstractmethod
 
 
 class ApiRequests(ABC, HttpRequest):
@@ -52,8 +53,8 @@ class ApiRequests(ABC, HttpRequest):
     @property
     def stat(self) -> dict:
         return {
-            'start': self._start_date.ctime(),
-            'end': self._end_date.ctime(),
+            'start': self._start_date.strftime(DEFAULT_DATETIME_FORMAT),
+            'end': self._end_date.strftime(DEFAULT_DATETIME_FORMAT),
             'duration': humanize.precisedelta(self._end_date - self._start_date),
             'total': self.total,
             'parsed': self._parsed_count,

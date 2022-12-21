@@ -2,6 +2,7 @@ from calendar import monthrange
 from datetime import date, datetime, timedelta
 
 DEFAULT_FORMAT = '%Y-%m-%d'
+DEFAULT_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 DEFAULT_MONTH_FORMAT = '%Y-%m'
 
 

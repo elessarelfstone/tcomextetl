@@ -8,7 +8,6 @@ from urllib3.exceptions import ProtocolError
 from requests.exceptions import HTTPError, ConnectionError, ReadTimeout
 
 from tcomextetl.extract.http_requests import HttpRequest
-from tcomextetl.common.utils import append_file
 from tcomextetl.common.exceptions import ExternalSourceError
 
 
@@ -75,8 +74,6 @@ Successes: {} - success processed BINs
 
     def parse(self):
 
-        answer = None
-
         if not self._raw:
             self._stat_meta_info['re'] += 1
             raise KgdGovKzSoapApiResponseError('Empty response')
@@ -110,7 +107,6 @@ Successes: {} - success processed BINs
 
     def process_bin(self, _bin):
         params = {'bin': _bin, **self.params}
-        data = []
         try:
             self._raw = self.load(params)
             data = self.parse()
@@ -123,7 +119,7 @@ Successes: {} - success processed BINs
             self._stat_meta_info['ce'] += 1
             self._last_conn_errors_cnt += 1
             raise KgdGovKzSoapApiNotAvailable
-        except Exception as e:
+        except Exception:
             raise
         else:
             self._stat_meta_info['s'] += 1

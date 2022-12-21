@@ -41,7 +41,7 @@ class GoszakupOutput(ApiToCsv):
                 params['from'], params['to'] = self.from_to
 
         # resume if there were fails
-        if not self.no_resume and os.path.exists(self.stat_file_path):
+        if not self.no_resume and os.path.exists(self.stat_fpath):
             next_page_params = self.stat['page_params']
             params.update(next_page_params)
 
@@ -81,9 +81,9 @@ class GoszakupOutput(ApiToCsv):
 
         for rows in parser:
             data = [dict_to_row(d, self.struct) for d in rows]
-            save_csvrows(self.output_path, data)
+            save_csvrows(self.output_fpath, data)
             self.set_status_info(*parser.status_percent)
-            rewrite_file(self.stat_file_path, json.dumps(parser.stat))
+            rewrite_file(self.stat_fpath, json.dumps(parser.stat))
 
         self.finalize()
 
