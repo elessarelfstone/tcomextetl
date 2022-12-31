@@ -72,7 +72,8 @@ kgd_taxviolators:
 
 
 kgd_taxpayments:
-  url: https://open.egov.kz/proxy2/culs_payments
+#  url: https://open.egov.kz/proxy2/culs_payments
+  ftp_file_mask: export_kgdgovkz_bins_statgovkz_companies_bins_for_export_*.csv
   timeout: !!float 1.5
   timeout_ban: !!float 10
 

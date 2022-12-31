@@ -57,7 +57,7 @@ class GoszakupOutput(ApiToCsv):
 
         url = f'{host}{self.endpoint}'
 
-        # goszakup.gov.kz provides Rest and GraphQl API services
+        # goszakup_dags.gov.kz provides Rest and GraphQl API services
         # Rest API can't retrieve data for specified period
         if self.use_rest:
             parser = GoszakupRestApiParser(
@@ -83,7 +83,9 @@ class GoszakupOutput(ApiToCsv):
             data = [dict_to_row(d, self.struct) for d in rows]
             save_csvrows(self.output_fpath, data)
             self.set_status_info(*parser.status_percent)
-            rewrite_file(self.stat_fpath, json.dumps(parser.stat))
+            stat = parser.stat
+            stat.update(self.request_params)
+            rewrite_file(self.stat_fpath, json.dumps(stat))
 
         self.finalize()
 

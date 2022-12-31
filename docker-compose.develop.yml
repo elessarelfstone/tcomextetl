@@ -40,7 +40,6 @@ services:
     ports:
       - 5432:5432
 
-
   airflow-init:
     <<: *airflow-common
     container_name: airflow_init

@@ -1,4 +1,5 @@
 import gzip
+import json
 import os
 import shutil
 from collections import deque
@@ -177,7 +178,10 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
                 parsed_cnt += 1
 
             s = f'Total: {bins_manager.total}. Parsed: {parsed_cnt}. BIN: {_bin}' + '\n'
-            rewrite_file(self.stat_fpath, s + parser.stat_meta_info)
+
+            stat = parser.stat
+            stat['Total'] = bins_manager.total
+            rewrite_file(self.stat_fpath, json.dumps(stat))
 
             p = floor((parsed_cnt * 100) / bins_manager.total)
             self.set_status_info(s + parser.stat_meta_info, p)
@@ -226,8 +230,12 @@ class KgdSoapApiTaxPaymentFtpUploadedOutput(FtpUploadedOutput):
         ftp_remote_targets = []
         for fi in self.input():
             ftp_fpath = os_sep.join([path, self.file_name(fi.path)])
-            ftp_remote_targets.append(RemoteTarget(ftp_fpath, self.ftp_host,
-                                                   username=self.ftp_user, password=self.ftp_pass))
+            ftp_remote_targets.append(RemoteTarget(
+                ftp_fpath,
+                self.ftp_host,
+                username=self.ftp_user,
+                password=self.ftp_pass)
+            )
 
         return ftp_remote_targets
 
@@ -241,14 +249,14 @@ class KgdSoapApiTaxPayments(Runner):
 
     name = luigi.Parameter(default='kgd_taxpayments')
     month = luigi.Parameter(default=previous_month())
-    date = luigi.Parameter(default=datetime.today().replace(day=1).date())
+    date = luigi.DateParameter(default=datetime.today().replace(day=1).date())
 
     def requires(self):
-        begin_date, end_date = month_as_range(self.month)
+        from_to = dict(zip(('start_date', 'end_date'), month_as_range(self.month)))
+        params = self.params
+        params.update(from_to)
         return KgdSoapApiTaxPaymentFtpUploadedOutput(
-            begin_date=begin_date,
-            end_date=end_date,
-            **self.params
+            **params
         )
 
 

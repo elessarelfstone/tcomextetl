@@ -287,7 +287,7 @@ class ExternalFtpCsvDFInput(luigi.ExternalTask):
         dates = []
         for f in files:
             fname = Path(f).stem
-            _dt = fname.split('_')[3]
+            _dt = fname.split('.')[0].split('_')[-2]
             dt = datetime.strptime(_dt, '%Y-%m-%d')
             dates.append((dt, f))
 

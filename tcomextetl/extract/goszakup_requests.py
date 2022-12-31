@@ -104,6 +104,7 @@ class GoszakupGraphQLApiParser(ApiRequests):
         if self._raw:
             # pagination
             variables['after'] = self.last_id
+            print(self.last_id)
 
         json = {'query': self.graphql_script, 'variables': variables}
         r = self.request(self.url, params=params, json=json)

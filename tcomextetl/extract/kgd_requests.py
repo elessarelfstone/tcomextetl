@@ -31,13 +31,13 @@ class KgdGovKzSoapApiParser(HttpRequest):
         self.request_form = request_form
         self._raw = None
         self._page = None
-        self._parsed_count = 0
+        self._parsed_cnt = 0
         self._stat_meta_info = Counter()
         # re - response error
         # se - service error(xml tag <error> in response)
         # ce - connection error(Http, Connection, etc)
         # s - success
-        for s in ['re', 'se', 'ce', 's']:
+        for s in ['re', 'se', 'ce', 's', 'p']:
             self._stat_meta_info.setdefault(s, 0)
 
         self._last_conn_errors_cnt = 0
@@ -59,6 +59,16 @@ Availability errors: {} - connection issues, http, too much requests, etc
 Successes: {} - success processed BINs
 """.format(*self._stat_meta_info.values())
         return s
+
+    @property
+    def stat(self):
+        stat = dict()
+        stat['Parsed'] = self._parsed_cnt
+        stat['Response errors'] = self._stat_meta_info['re']
+        stat['Service errors'] = self._stat_meta_info['se']
+        stat['Availability errors'] = self._stat_meta_info['ce']
+        stat['Successes'] = self._stat_meta_info['s']
+        return stat
 
     @property
     def is_server_up(self):
@@ -86,7 +96,6 @@ Successes: {} - success processed BINs
             raise KgdGovKzSoapApiResponseError('Not XML formatted')
 
         if answer and 'err' in answer.keys():
-            self._stat_meta_info['se'] += 1
             errcode = answer['err']['@errorcode']
             raise KgdGovKzSoapApiError(f'Errorcode {errcode}')
 
@@ -110,9 +119,8 @@ Successes: {} - success processed BINs
         try:
             self._raw = self.load(params)
             data = self.parse()
-            # print(self._raw)
         except KgdGovKzSoapApiError:
-            self._parsed_count += 1
+            self._stat_meta_info['se'] += 1
             raise
         except (ConnectionError, ProtocolError, HTTPError,
                 ReadTimeout, RemoteDisconnected):
@@ -125,4 +133,5 @@ Successes: {} - success processed BINs
             self._stat_meta_info['s'] += 1
             self._last_conn_errors_cnt = 0
 
+        self._parsed_cnt += 1
         return data

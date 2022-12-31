@@ -1,4 +1,6 @@
+import logging
 import platform
+from datetime import date, timedelta
 
 from airflow.models import Variable
 from airflow.providers.docker.operators.docker import DockerOperator
@@ -6,18 +8,26 @@ from docker.types import Mount
 
 
 class ExternalEtlDockerRunner(DockerOperator):
+
+    template_fields = ("luigi_params",) + DockerOperator.template_fields
+
     def __init__(
         self,
         task_id: str,
         luigi_module: str,
         luigi_task: str,
-        luigi_params=None,
+        luigi_params: str = None,
         env_vars=None,
         **kwargs
     ):
 
-        _vars = {'FTP_HOST': Variable.get('FTP_HOST'), 'FTP_USER': Variable.get('FTP_USER'),
-                 'FTP_PASS': Variable.get('FTP_PASS'), 'FTP_PATH': Variable.get('FTP_PATH')}
+        _vars = {
+            'FTP_HOST': Variable.get('FTP_HOST'),
+            'FTP_USER': Variable.get('FTP_USER'),
+            'FTP_PASS': Variable.get('FTP_PASS'),
+            'FTP_PATH': Variable.get('FTP_PATH'),
+            'FTP_EXPORT_PATH': Variable.get('FTP_EXPORT_PATH')
+        }
 
         _env = Variable.get('ENVIRONMENT')
         _platform = platform.system().lower()
@@ -45,11 +55,8 @@ class ExternalEtlDockerRunner(DockerOperator):
         if env_vars:
             _vars.update(env_vars)
 
-        _luigi_params = "{{ dag_run.conf.get('command_args', '') }}"
-        if not _luigi_params and luigi_params:
-            _luigi_params = ' '.join(luigi_params)
-
-        command = f'luigi --module {luigi_module} {luigi_task} ' + _luigi_params
+        self.luigi_params = luigi_params
+        command = f'luigi --module {luigi_module} {luigi_task} ' + self.luigi_params
 
         super().__init__(
              task_id=task_id,
@@ -64,3 +71,19 @@ class ExternalEtlDockerRunner(DockerOperator):
              command=command,
              **kwargs
         )
+
+    @staticmethod
+    def previous_month() -> str:
+        t = date.today()
+        ld = date(t.year, t.month, 1) - timedelta(days=1)
+        return '{}-{:02}'.format(ld.year, ld.month)
+
+    @staticmethod
+    def n_days_delta_period(
+            n_days: int = 1,
+            frmt: str = '%Y-%m-%d'
+    ):
+        d = date.today()
+        d1 = d - timedelta(n_days)
+        d2 = d - timedelta(1)
+        return d1.strftime(frmt), d2.strftime(frmt)
