@@ -16,7 +16,7 @@ class ExternalEtlDockerRunner(DockerOperator):
         task_id: str,
         luigi_module: str,
         luigi_task: str,
-        luigi_params: str = None,
+        luigi_params: str = "",
         env_vars=None,
         **kwargs
     ):

@@ -10,7 +10,7 @@ with DAG(dag_id='kgd_dicts',
          start_date=datetime(2022, 1, 1)
          ) as dag:
 
-    luigi_params = ['--no-resume']
+    luigi_params = '--no-resume'
 
     kgd_bnkrp = ExternalEtlDockerRunner(
         task_id='kgd_bankrupt',

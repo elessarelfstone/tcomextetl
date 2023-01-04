@@ -15,7 +15,7 @@ with DAG(dag_id='kgd_taxpayments',
         task_id='kgd_taxpayments',
         luigi_module='kgd_api',
         luigi_task='KgdSoapApiTaxPayments',
-        luigi_params=[f'--month {Runner.previous_month()}'],
+        luigi_params=f'--month {Runner.previous_month()}',
         env_vars={'KGD_SOAP_TOKEN': Variable.get('KGD_SOAP_TOKEN')}
     )
 

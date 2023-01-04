@@ -10,7 +10,7 @@ with DAG(dag_id='sgov_dicts',
          start_date=datetime(2022, 1, 1)
          ) as dag:
 
-    luigi_params = ['--no-resume']
+    luigi_params = '--no-resume'
 
     sgov_kurk = ExternalEtlDockerRunner(
         task_id='sgov_kurk',
