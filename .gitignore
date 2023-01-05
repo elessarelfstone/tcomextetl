@@ -121,3 +121,4 @@ venv.bak/
 #mingw
 ssh.EXE.stackdump
 
+tasks_params.yml
