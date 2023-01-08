@@ -146,6 +146,7 @@ class SgovRcutJuridicalLinkRunner(Runner):
         params = self.params
         params.pop('date')
         params.pop('skiptop')
+        params.pop('ftp_directory')
         return SgovRcutJuridicalLinkOutput(**params)
 
 

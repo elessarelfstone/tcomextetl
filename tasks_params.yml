@@ -4,57 +4,68 @@ sgov_kato:
   wildcard: !!str "*.xls"
   skiptop: !!int 1
   usecolumns: A:I
+  ftp_directory: sgov
 
 sgov_oked:
   url: https://stat.gov.kz/api/getFile/?docId=ESTAT310324
   skiptop: 3
   usecolumns: A:C
+  ftp_directory: sgov
 
 sgov_mkeis:
   url: https://stat.gov.kz/api/getFile/?docId=ESTAT316776
   skiptop: 4
   usecolumns: A:C
+  ftp_directory: sgov
 
 sgov_kurk:
   url: https://stat.gov.kz/api/getFile/?docId=ESTAT249322
   skiptop: 16
   usecolumns: A:C
   skipbottom: 4
+  ftp_directory: sgov
 
 sgov_kpved:
   url: https://stat.gov.kz/api/getFile/?docId=ESTAT116569
   skiptop: 3
   usecolumns: A:C
+  ftp_directory: sgov
 
 kgd_bankrupt:
   url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/BANKRUPT/KZ_ALL/fileName/list_BANKRUPT_KZ_ALL.xlsx
   skiptop: 3
   usecolumns: A:J
+  ftp_directory: kgd
 
 kgd_inactive:
   url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/INACTIVE/KZ_ALL/fileName/list_INACTIVE_KZ_ALL.xlsx
   skiptop: 3
   usecolumns: A:J
+  ftp_directory: kgd
 
 kgd_invregistration:
   url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/INVALID_REGISTRATION/KZ_ALL/fileName/list_INVALID_REGISTRATION_KZ_ALL.xlsx
   skiptop: 3
   usecolumns: A:J
+  ftp_directory: kgd
 
 kgd_jwrongaddress:
   url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/WRONG_ADDRESS/KZ_ALL/fileName/list_WRONG_ADDRESS_KZ_ALL.xlsx
   skiptop: 3
   usecolumns: A:J
+  ftp_directory: kgd
 
 kgd_mrp:
   url: http://kgd.gov.kz/reference/mrp
   pattern: ("ref"\s*):(\s*\[\S+\])
+  ftp_directory: kgd
 
 
 kgd_pseudocompany:
   url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/PSEUDO_COMPANY/KZ_ALL/fileName/list_PSEUDO_COMPANY_KZ_ALL.xlsx
   skiptop: 3
   usecolumns: A:J
+  ftp_directory: kgd
 
 
 kgd_taxarrears150:
@@ -64,11 +75,13 @@ kgd_taxarrears150:
   sheets:
     - !!int 0
     - !!int 1
+  ftp_directory: kgd
 
 kgd_taxviolators:
   url: http://kgd.gov.kz/mobile_api/services/taxpayers_unreliable_exportexcel/VIOLATION_TAX_CODE/KZ_ALL/fileName/list_VIOLATION_TAX_CODE_KZ_ALL.xlsx
   skiptop: 3
   usecolumns: A:J
+  ftp_directory: kgd
 
 
 kgd_taxpayments:
@@ -76,6 +89,7 @@ kgd_taxpayments:
   ftp_file_mask: export_kgdgovkz_bins_statgovkz_companies_bins_for_export_*.csv
   timeout: !!float 1.5
   timeout_ban: !!float 10
+  ftp_directory: kgd
 
 
 sgov_companies:
@@ -84,73 +98,88 @@ sgov_companies:
   url_region_id_link_tmpl: https://stat.gov.kz/api/sbr/expPortalResult/{}/ru
   url_region_download_link_tmpl: https://stat.gov.kz/api/sbr/download?bucket=SBR&guid={}
   usecolumns: A:P
+  ftp_directory: sgov
 
 sgov_foreign_branches:
   juridical_type_id: !!int 742684
   timeout: 90
   skiptop: 1
+  ftp_directory: sgov
 
 sgov_legal_entities:
   juridical_type_id: !!int 742679
   timeout: 90
   skiptop: 1
+  ftp_directory: sgov
 
 sgov_joint_ventures:
   juridical_type_id: !!int 742687
   timeout: 90
   skiptop: 1
+  ftp_directory: sgov
 
 sgov_entrepreneurs:
   juridical_type_id: !!int 742681
   timeout: 90
   skiptop: 1
+  ftp_directory: sgov
 
 sgov_legal_branches:
   juridical_type_id: !!int 742680
   timeout: 90
   skiptop: 1
+  ftp_directory: sgov
 
 goszakup_companies:
   entity: Subjects
   endpoint: /v3/subject/all
   descr: Реестр участников
+  ftp_directory: goszakup
 
 goszakup_contracts:
   entity: Contract
   endpoint: /v3/contract/all
   descr: 'Реестр договоров'
+  ftp_directory: goszakup
 
 goszakup_untrusted:
   endpoint: /v3/rnu
   descr: 'Реестр недобросовестных поставщиков'
+  ftp_directory: goszakup
 
 goszakup_lots:
   entity: Lots
   endpoint: /v3/lots
   descr: 'Реестр лотов'
+  ftp_directory: goszakup
 
 goszakup_trd_buys:
   entity: TrdBuy
   endpoint: /v3/trd-buy/all
   descr: 'Реестр объявлений'
+  ftp_directory: goszakup
 
 goszakup_plan_points:
   entity: Plans
   endpoint: /v3/plans/all
   descr: 'Реестр пунктов плана'
+  ftp_directory: goszakup
 
 goszakup_plans_kato:
   entity: Plans
   endpoint: /v3/plans/kato
   descr: 'Места поставки'
+  ftp_directory: goszakup
 
 goszakup_contract_units:
   entity: Contract
   endpoint: /v3/contract/{}/units
   descr: 'Предметы договора'
+  ftp_directory: goszakup
 
 nb_rates:
   url: https://nationalbank.kz/ru/exchangerates/ezhednevnye-oficialnye-rynochnye-kursy-valyut
+  ftp_directory: nb
 
 export_kgdgovkz_bins:
   f_pattern: export_kgdgovkz_bins_*.csv
@@ -158,71 +187,94 @@ export_kgdgovkz_bins:
 
 dgov_addrreg_spb:
   rep_name: s_pb
+  ftp_directory: dgov
 
 dgov_addrreg_sats:
   rep_name: s_ats
+  ftp_directory: dgov
 
 dgov_addrreg_sgeonims:
   rep_name: s_geonims
+  ftp_directory: dgov
 
 dgov_addrreg_sgrounds:
   rep_name: s_grounds
+  ftp_directory: dgov
 
 dgov_addrreg_sbuildings:
   rep_name: s_buildings
+  ftp_directory: dgov
 
 dgov_addrreg_dbuildings_pointers:
   rep_name: d_buildings_pointers
+  ftp_directory: dgov
 
 dgov_addrreg_dats_types:
   rep_name: d_ats_types
+  ftp_directory: dgov
 
 dgov_addrreg_dgeonims_types:
   rep_name: d_geonims_types
+  ftp_directory: dgov
 
 dgov_addrreg_drooms_types:
   rep_name: d_rooms_types
+  ftp_directory: dgov
 
 
 samruk_suppliers:
   endpoint: data/suppliers/supplierList
+  ftp_directory: samruk
 
 samruk_bad_suppliers:
   endpoint: data/bad-supplier/badSupplierList
+  ftp_directory: samruk
 
 samruk_certs:
   endpoint: data/stkz-certificate/stkzCertificateList
+  ftp_directory: samruk
 
 samruk_dicts:
   endpoint: data/dictionary/dictionaryList
+  ftp_directory: samruk
 
 samruk_kzt_purchases:
   endpoint: data/purchases/purchaseList
+  ftp_directory: samruk
 
 samruk_kzt_contracts:
   endpoint: data/contract/contractList
+  ftp_directory: samruk
 
 samruk_kzt_contract_subjects:
   endpoint: data/contract/contractSubjectList
+  ftp_directory: samruk
 
 samruk_kzt_plans:
   endpoint: proxy/planproxy/esb-api/plan
+  ftp_directory: samruk
 
 samruk_kzt_plan_items:
   endpoint: proxy/planproxy/esb-api/plan-item
+  ftp_directory: samruk
 
 
 infobip_agents:
   endpoint: agents
+  ftp_directory: infobip
 
 infobip_queues:
   endpoint: queues
+  ftp_directory: infobip
 
 infobip_conversations:
   endpoint: conversations
+  ftp_directory: infobip
 
 infobip_messages:
   endpoint: messages
+  ftp_directory: infobip
 
 infobip_tags:
   endpoint: tags
+  ftp_directory: infobip

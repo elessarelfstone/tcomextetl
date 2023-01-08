@@ -76,7 +76,7 @@ services:
 
   luigi:
     container_name: luigi_dispatcher
-    image: elessarelfstone/tcomextetl
+    image: elessarelfstone/luigid
     ports:
       - "8082:8082"
     restart: always
