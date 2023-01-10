@@ -14,7 +14,7 @@ with DAG(
         dag_id='goszakup_lots',
         catchup=False,
         start_date=datetime.today() - timedelta(1),
-        schedule_interval='0 6 * * *',
+        schedule_interval='@daily',
         tags=['goszakup']
      ) as dag:
 
@@ -31,6 +31,7 @@ with DAG(
         luigi_task='GoszakupLots',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
         env_vars={'GOSZAKUP_TOKEN': Variable.get('GOSZAKUP_TOKEN')},
+        pool='goszakup',
         do_xcom_push=False
     )
 

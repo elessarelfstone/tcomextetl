@@ -11,7 +11,7 @@ from dags.docker_runner import ExternalEtlDockerRunner as Runner
 from dags.goszakup_dags.goszakup_common import prepare_command_args
 
 with DAG(
-        dag_id='goszakup_trdbuys',
+        dag_id='goszakup_contract_units',
         catchup=False,
         start_date=datetime.today() - timedelta(1),
         schedule_interval='@daily',
@@ -25,14 +25,14 @@ with DAG(
         do_xcom_push=False
     )
 
-    goszakup_trdbuys = Runner(
-        task_id='goszakup_trdbuys',
+    goszakup_contract_units = Runner(
+        task_id='goszakup_contract_units',
         luigi_module='goszakup',
-        luigi_task='GoszakupTrdBuys',
+        luigi_task='GoszakupContractUnits',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
         env_vars={'GOSZAKUP_TOKEN': Variable.get('GOSZAKUP_TOKEN')},
         pool='goszakup',
         do_xcom_push=False
     )
 
-command_args >> goszakup_trdbuys
+    command_args >> goszakup_contract_units

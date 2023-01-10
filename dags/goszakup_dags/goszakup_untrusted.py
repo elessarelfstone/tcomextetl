@@ -14,7 +14,7 @@ with DAG(
         dag_id='goszakup_untrusted',
         catchup=False,
         start_date=datetime.today() - timedelta(1),
-        schedule_interval='0 6 * * *',
+        schedule_interval='@daily',
         tags=['goszakup']
      ) as dag:
 

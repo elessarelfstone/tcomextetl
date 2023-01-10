@@ -1,14 +1,18 @@
-from datetime import datetime
+import sys
+from datetime import datetime, timedelta
 
 from airflow.models import DAG
 
-from docker_runner import ExternalEtlDockerRunner
+sys.path.append('.')
+
+from dags.docker_runner import ExternalEtlDockerRunner
 
 
 with DAG(dag_id='sgov_juridical',
          catchup=False,
-         start_date=datetime(2022, 1, 1),
-         schedule_interval='@monthly'
+         start_date=datetime.today() - timedelta(1),
+         schedule_interval='0 6 13 * *',
+         tags=['statgov']
          ) as dag:
 
     sgov_links_prepare = ExternalEtlDockerRunner(
