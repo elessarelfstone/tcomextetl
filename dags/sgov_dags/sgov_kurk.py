@@ -22,7 +22,8 @@ with DAG(dag_id='sgov_kurk',
         luigi_module='sgov_excel',
         luigi_task='SgovKurk',
         luigi_params=luigi_params,
-        pool='sgov'
+        pool='sgov',
+        do_xcom_push=False
     )
 
     sgov_kurk

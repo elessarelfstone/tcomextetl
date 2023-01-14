@@ -22,7 +22,8 @@ with DAG(dag_id='sgov_kpved',
         luigi_module='sgov_excel',
         luigi_task='SgovKpved',
         luigi_params=luigi_params,
-        pool='sgov'
+        pool='sgov',
+        do_xcom_push=False
     )
 
     sgov_kpved

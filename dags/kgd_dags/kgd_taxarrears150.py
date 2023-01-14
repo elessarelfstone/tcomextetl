@@ -22,7 +22,8 @@ with DAG(dag_id='kgd_taxarrears150',
         luigi_module='kgd_excel',
         luigi_task='KgdTaxArrears150',
         luigi_params=luigi_params,
-        pool='kgd'
+        pool='kgd',
+        do_xcom_push=False
     )
 
     kgd_taxarrears150

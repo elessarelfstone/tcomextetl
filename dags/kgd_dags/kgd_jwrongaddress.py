@@ -22,7 +22,8 @@ with DAG(dag_id='kgd_jwrongaddress',
         luigi_module='kgd_excel',
         luigi_task='KgdWrongAddress',
         luigi_params=luigi_params,
-        pool='kgd'
+        pool='kgd',
+        do_xcom_push=False
     )
 
     kgd_jwrongaddress
