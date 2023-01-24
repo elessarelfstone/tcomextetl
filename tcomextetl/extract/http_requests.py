@@ -48,6 +48,7 @@ class HttpRequest:
         data=None,
         json=None,
         params=None,
+        files=None,
         stream=False
     ):
         if data or json:
@@ -63,6 +64,7 @@ class HttpRequest:
             method,
             url,
             params=p,
+            files=files,
             data=data,
             json=json,
             headers=self.headers,

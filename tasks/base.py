@@ -3,7 +3,8 @@ import gzip
 import json
 import os
 import shutil
-import sys
+import tempfile
+import traceback
 from datetime import datetime, timedelta
 from os.path import basename
 from pathlib import Path
@@ -16,13 +17,14 @@ from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
 
-from settings import (DATA_PATH, TEMP_PATH, FTP_PATH,
-                      FTP_PASS, FTP_HOST, FTP_USER, FTP_EXPORT_PATH)
+from settings import (DATA_PATH, TEMP_PATH, FTP_PATH, FTP_PASS,
+                      FTP_HOST, FTP_USER, FTP_EXPORT_PATH, TBOT_TOKEN)
 
 from tcomextetl.extract.http_requests import Downloader
 from tcomextetl.common.arch import extract_by_wildcard
 from tcomextetl.common.dates import DEFAULT_FORMAT, DEFAULT_DATETIME_FORMAT, today
 from tcomextetl.common.exceptions import FtpFileError
+from tcomextetl.common.notify import send_message, send_document
 from tcomextetl.common.utils import build_fpath, get_yaml_task_config, read_file
 from tcomextetl.transform import StructRegister
 
@@ -127,6 +129,10 @@ class CsvFileOutput(Base):
 
     def run(self):
         open(self.output().path, 'a', encoding="utf-8").close()
+
+    @property
+    def params_for_report(self):
+        return {"name": self.name, "date": self.date.strftime(DEFAULT_FORMAT)}
 
 
 class ApiToCsv(CsvFileOutput):
@@ -254,7 +260,7 @@ class Runner(luigi.WrapperTask):
     @property
     def params_for_report(self) -> dict:
         params = self.params
-        params['date'] = self.date.strftime(DEFAULT_DATETIME_FORMAT)
+        params['date'] = self.date.strftime(DEFAULT_FORMAT)
 
         p = dict()
         p['name'] = self.params['name']
@@ -263,19 +269,49 @@ class Runner(luigi.WrapperTask):
 
         if os.path.exists(t.success_fpath):
             p = json.loads(read_file(t.success_fpath))
-            params.update(p)
+            p["name"] = params["name"]
+            p["date"] = params["date"]
 
-        return params
+        return p
 
 
 @Runner.event_handler(luigi.Event.SUCCESS)
 def success_runner_handler(task):
-    print(task.params_for_report)
+
+    if not TBOT_TOKEN:
+        return
+
+    report = task.params_for_report
+    task_name = report.pop('name')
+
+    m = json.dumps(
+        report,
+        ensure_ascii=False,
+        sort_keys=True,
+        indent=2
+    )
+
+    message = f'✅ <b>{task_name}</b>\n<code>{m}</code>'
+    send_message(TBOT_TOKEN, message)
 
 
-@Runner.event_handler(luigi.Event.FAILURE)
+@CsvFileOutput.event_handler(luigi.Event.FAILURE)
 def failure_runner_handler(task, exception):
-    print(task.params_for_report)
+
+    if not TBOT_TOKEN:
+        return
+
+    report = task.params_for_report
+    task_name = report.pop('name')
+    task_date = report.pop('date')
+    caption = f'❌ <b>{task_name}</b>'
+    suffix = f'_{task_name}_{task_date}_err.log'
+
+    with tempfile.NamedTemporaryFile(suffix=suffix, mode='w', delete=False) as tf:
+        tf.write(traceback.format_exc())
+
+    send_document(TBOT_TOKEN, caption, tf.name)
+
 
 
 class ExternalFtpCsvDFInput(luigi.ExternalTask):

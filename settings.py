@@ -7,6 +7,9 @@ load_dotenv()
 DATA_PATH = os.getenv('DATA_PATH')
 TEMP_PATH = os.getenv('TEMP_PATH')
 PARAMS_CONFIG_PATH = os.getenv('PARAMS_CONFIG_PATH')
+TBOT_TOKEN = os.getenv('TBOT_TOKEN')
+TBOT_CHAT_IDS = os.getenv('TBOT_CHAT_IDS')
+
 
 FTP_PATH = os.getenv('FTP_PATH')
 FTP_HOST = os.getenv('FTP_HOST')
