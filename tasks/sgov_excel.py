@@ -3,7 +3,7 @@ from time import sleep
 
 from luigi.util import requires
 
-from tasks.base import Base, FtpUploadedOutput, Runner
+from tasks.base import Base, FtpUploadedOutput, Runner, CsvFileOutput
 from tasks.xls import WebExcelFileParsingToCsv, ArchivedWebExcelFileParsingToCsv
 from tcomextetl.extract.sgov_requests import SgovApiRCutParser
 from tcomextetl.common.dates import first_day_of_month
@@ -107,10 +107,10 @@ class SgovKpved(SgovExcelRunner):
         return SgovKpvedFtpOutput(**self.params)
 
 
-class SgovRcutJuridicalLinkOutput(Base):
+class SgovRcutJuridicalLinkOutput(CsvFileOutput):
 
-    name = luigi.Parameter()
     juridical_type_id = luigi.IntParameter()
+    statuses = luigi.ListParameter(default=[39354, 39355, 39356, 39358, 534829, 39359])
     prev_period_index = luigi.IntParameter(default=0)
     timeout = luigi.IntParameter(default=200)
 
@@ -122,7 +122,7 @@ class SgovRcutJuridicalLinkOutput(Base):
         return luigi.LocalTarget(SgovRcutJuridicalLinkOutput.build_fpath(self.name))
 
     def run(self):
-        p = SgovApiRCutParser(self.juridical_type_id, self.prev_period_index)
+        p = SgovApiRCutParser(self.juridical_type_id, self.statuses, self.prev_period_index)
 
         order_id = p.place_order()
 
@@ -135,7 +135,10 @@ class SgovRcutJuridicalLinkOutput(Base):
             sleep(self.timeout)
             url = p.check_state(order_id)
 
+        stat = {"url": url}
         append_file(self.output().path, url)
+        append_file(self.success_fpath, stat)
+
         status_info += '\n' + f' Url: {url}'
         self.set_status_info(status_info, 100)
 
@@ -158,6 +161,16 @@ class SgovRcutsPrepared(luigi.WrapperTask):
         yield SgovRcutJuridicalLinkRunner(name=f'sgov_{rcut_legal_branches}')
         yield SgovRcutJuridicalLinkRunner(name=f'sgov_{rcut_foreign_branches}')
         yield SgovRcutJuridicalLinkRunner(name=f'sgov_{rcut_entrepreneurs}')
+
+
+class SgovRcutsActivePrepared(luigi.WrapperTask):
+
+    def requires(self):
+        yield SgovRcutJuridicalLinkRunner(name=f'sgov_active_{rcut_legal_entities}')
+        yield SgovRcutJuridicalLinkRunner(name=f'sgov_active_{rcut_joint_ventures}')
+        yield SgovRcutJuridicalLinkRunner(name=f'sgov_active_{rcut_legal_branches}')
+        yield SgovRcutJuridicalLinkRunner(name=f'sgov_active_{rcut_foreign_branches}')
+        yield SgovRcutJuridicalLinkRunner(name=f'sgov_active_{rcut_entrepreneurs}')
 
 
 class SgovRcutJuridicalOutput(ArchivedWebExcelFileParsingToCsv):
@@ -192,6 +205,15 @@ class SgovRcutsJuridical(luigi.WrapperTask):
         yield SgovRcutJuridicalRunner(name=f'sgov_{rcut_legal_branches}')
         yield SgovRcutJuridicalRunner(name=f'sgov_{rcut_foreign_branches}')
         yield SgovRcutJuridicalRunner(name=f'sgov_{rcut_entrepreneurs}')
+
+
+class SgovRcutsActiveJuridical(luigi.WrapperTask):
+    def requires(self):
+        yield SgovRcutJuridicalRunner(name=f'sgov_active_{rcut_legal_entities}')
+        yield SgovRcutJuridicalRunner(name=f'sgov_active_{rcut_joint_ventures}')
+        yield SgovRcutJuridicalRunner(name=f'sgov_active_{rcut_legal_branches}')
+        yield SgovRcutJuridicalRunner(name=f'sgov_active_{rcut_foreign_branches}')
+        yield SgovRcutJuridicalRunner(name=f'sgov_active_{rcut_entrepreneurs}')
 
 
 if __name__ == '__main__':

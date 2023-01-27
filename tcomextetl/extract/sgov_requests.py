@@ -27,9 +27,10 @@ class SgovApiException(Exception):
 
 class SgovApiRCutParser(HttpRequest):
 
-    def __init__(self, juridical_type_id, which_last=0):
+    def __init__(self, juridical_type_id, statuses, which_last=0):
         super().__init__(headers=headers)
         self.juridical_type_id = juridical_type_id
+        self.statuses = statuses
         self.which_last = which_last
 
     @property
@@ -41,7 +42,7 @@ class SgovApiRCutParser(HttpRequest):
 
         # data for placing order
         juridical_type_info = {"classVersionId": 2153, "itemIds": [self.juridical_type_id]}
-        status_info = {"classVersionId": 1989, "itemIds": [1989]}
+        status_info = {"classVersionId": 1989, "itemIds": self.statuses}
         data = json.dumps({'conditions': [juridical_type_info, status_info],
                            'stringForMD5': 'string',
                            'cutId': self.rcuts_list[self.which_last]})
