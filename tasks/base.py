@@ -1,6 +1,7 @@
 import fnmatch
 import gzip
 import json
+import logging
 import os
 import shutil
 import tempfile
@@ -18,11 +19,12 @@ from luigi.util import requires
 
 
 from settings import (DATA_PATH, TEMP_PATH, FTP_PATH, FTP_PASS,
-                      FTP_HOST, FTP_USER, FTP_EXPORT_PATH, TBOT_TOKEN)
+                      FTP_HOST, FTP_USER, FTP_EXPORT_PATH, TBOT_TOKEN, TBOT_CHAT_IDS)
 
 from tcomextetl.extract.http_requests import Downloader
 from tcomextetl.common.arch import extract_by_wildcard
-from tcomextetl.common.dates import DEFAULT_FORMAT, DEFAULT_DATETIME_FORMAT, today
+from tcomextetl.common.csv import CSV_DELIMITER
+from tcomextetl.common.dates import DEFAULT_FORMAT, today
 from tcomextetl.common.exceptions import FtpFileError
 from tcomextetl.common.notify import send_message, send_document
 from tcomextetl.common.utils import build_fpath, get_yaml_task_config, read_file
@@ -267,10 +269,10 @@ class Runner(luigi.WrapperTask):
         p['date'] = self.params['date']
         t = CsvFileOutput(**p)
 
+        p['date'] = params['date']
         if os.path.exists(t.success_fpath):
             p = json.loads(read_file(t.success_fpath))
             p["name"] = params["name"]
-            p["date"] = params["date"]
 
         return p
 
@@ -278,7 +280,7 @@ class Runner(luigi.WrapperTask):
 @Runner.event_handler(luigi.Event.SUCCESS)
 def success_runner_handler(task):
 
-    if not TBOT_TOKEN:
+    if (not TBOT_TOKEN) or (not TBOT_CHAT_IDS):
         return
 
     report = task.params_for_report
@@ -291,27 +293,34 @@ def success_runner_handler(task):
         indent=2
     )
 
+    chats = TBOT_CHAT_IDS.split(CSV_DELIMITER)
+    chats = [int(chat_id) for chat_id in chats]
+
     message = f'✅ <b>{task_name}</b>\n<code>{m}</code>'
-    send_message(TBOT_TOKEN, message)
+    send_message(TBOT_TOKEN, chats, message)
 
 
 @CsvFileOutput.event_handler(luigi.Event.FAILURE)
 def failure_runner_handler(task, exception):
 
-    if not TBOT_TOKEN:
+    if (not TBOT_TOKEN) or (not TBOT_CHAT_IDS):
         return
 
     report = task.params_for_report
-    task_name = report.pop('name')
-    task_date = report.pop('date')
-    caption = f'❌ <b>{task_name}</b>'
-    suffix = f'_{task_name}_{task_date}_err.log'
+    caption = f'❌ <b>{report["name"]}</b>'
+    suffix = f'_{report["name"]}_{report["date"]}_err.log'
 
-    with tempfile.NamedTemporaryFile(suffix=suffix, mode='w', delete=False) as tf:
-        tf.write(traceback.format_exc())
+    chats = TBOT_CHAT_IDS.split(CSV_DELIMITER)
+    chats = [int(chat_id) for chat_id in chats ]
 
-    send_document(TBOT_TOKEN, caption, tf.name)
-
+    try:
+        f = tempfile.NamedTemporaryFile(suffix=suffix, mode='w', delete=False)
+        f.write(traceback.format_exc())
+        f_path = f.name
+        f.close()
+        send_document(TBOT_TOKEN, chats, caption, f_path)
+    finally:
+        os.unlink(f_path)
 
 
 class ExternalFtpCsvDFInput(luigi.ExternalTask):
