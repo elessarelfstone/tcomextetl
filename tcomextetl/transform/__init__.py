@@ -34,6 +34,12 @@ StructRegister.add('sgov_foreign_branches', CompanieRow)
 StructRegister.add('sgov_joint_ventures', CompanieRow)
 StructRegister.add('sgov_entrepreneurs', CompanieRow)
 StructRegister.add('sgov_legal_branches', CompanieRow)
+StructRegister.add('sgov_active_companies', CompanieRow)
+StructRegister.add('sgov_active_legal_entities', CompanieRow)
+StructRegister.add('sgov_active_foreign_branches', CompanieRow)
+StructRegister.add('sgov_active_joint_ventures', CompanieRow)
+StructRegister.add('sgov_active_entrepreneurs', CompanieRow)
+StructRegister.add('sgov_active_legal_branches', CompanieRow)
 
 
 # kgd.gov.kz

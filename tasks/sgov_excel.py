@@ -1,3 +1,4 @@
+import os
 import luigi
 from time import sleep
 
@@ -135,10 +136,7 @@ class SgovRcutJuridicalLinkOutput(CsvFileOutput):
             sleep(self.timeout)
             url = p.check_state(order_id)
 
-        stat = {"url": url}
         append_file(self.output().path, url)
-        append_file(self.success_fpath, stat)
-
         status_info += '\n' + f' Url: {url}'
         self.set_status_info(status_info, 100)
 
@@ -191,6 +189,8 @@ class SgovRcutJuridicalRunner(Runner):
         params = self.params
         del params['juridical_type_id']
         del params['timeout']
+        if params.get('statuses'):
+            del params['statuses']
         # get prepared url
         params['url'] = read_file(link_task_class.build_fpath(self.name))
         params['wildcard'] = '*.xlsx'

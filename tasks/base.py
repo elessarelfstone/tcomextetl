@@ -264,15 +264,24 @@ class Runner(luigi.WrapperTask):
         params = self.params
         params['date'] = self.date.strftime(DEFAULT_FORMAT)
 
-        p = dict()
-        p['name'] = self.params['name']
-        p['date'] = self.params['date']
-        t = CsvFileOutput(**p)
+        _p = dict()
+        _p['name'] = self.params['name']
+        _p['date'] = self.params['date']
+        t = CsvFileOutput(**_p)
 
-        p['date'] = params['date']
+        p = dict()
+
         if os.path.exists(t.success_fpath):
             p = json.loads(read_file(t.success_fpath))
-            p["name"] = params["name"]
+
+        p['date'] = params['date']
+        p["name"] = params["name"]
+
+        f_path = build_fpath(TEMP_PATH, self.name, '.url')
+
+        if os.path.exists(f_path):
+            url = read_file(f_path)
+            p["url"] = url
 
         return p
 

@@ -85,8 +85,6 @@ services:
       - "9443:9443"
 
 
-
-
   luigi:
     container_name: luigi_dispatcher
     image: elessarelfstone/luigid
