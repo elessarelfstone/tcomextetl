@@ -1,6 +1,7 @@
 import sys
 from datetime import datetime, timedelta
 
+import pendulum
 from airflow.operators.python import PythonOperator
 from airflow.models import DAG
 from airflow.models import Variable
@@ -13,7 +14,7 @@ from dags.goszakup_dags.goszakup_common import prepare_command_args
 with DAG(
         dag_id='goszakup_planpoints',
         catchup=False,
-        start_date=datetime.today() - timedelta(1),
+        start_date=pendulum.datetime(2023, 2, 1, tz="Asia/Almaty"),
         schedule_interval='@daily',
         tags=['goszakup']
      ) as dag:
