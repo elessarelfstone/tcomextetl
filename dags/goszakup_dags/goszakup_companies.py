@@ -15,7 +15,7 @@ with DAG(
         dag_id='goszakup_companies',
         catchup=False,
         start_date=pendulum.datetime(2023, 2, 1, tz="Asia/Almaty"),
-        schedule_interval='50 13 * * *',
+        schedule_interval='56 13 * * *',
         tags=['goszakup']
      ) as dag:
 
