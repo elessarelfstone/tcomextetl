@@ -15,7 +15,7 @@ with DAG(
         dag_id='goszakup_companies',
         catchup=False,
         start_date=pendulum.datetime(2023, 2, 1, tz=f'{Variable.get("TZ")}'),
-        schedule_interval='48 16 * * *',
+        schedule_interval='2 0 * * *',
         tags=['goszakup']
      ) as dag:
 
