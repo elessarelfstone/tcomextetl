@@ -28,7 +28,8 @@ class ExternalEtlDockerRunner(DockerOperator):
             'FTP_PATH': Variable.get('FTP_PATH'),
             'FTP_EXPORT_PATH': Variable.get('FTP_EXPORT_PATH'),
             'TBOT_TOKEN': Variable.get('TBOT_TOKEN'),
-            'TBOT_CHAT_IDS': Variable.get('TBOT_CHAT_IDS')
+            'TBOT_CHAT_IDS': Variable.get('TBOT_CHAT_IDS'),
+            'TZ': Variable.get('TZ')
         }
 
         _env = Variable.get('ENVIRONMENT')
