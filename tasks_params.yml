@@ -174,42 +174,42 @@ goszakup_companies:
 goszakup_contracts:
   entity: Contract
   endpoint: /v3/contract/all
-  descr: 'Реестр договоров'
+  descr: Реестр договоров
   ftp_directory: goszakup
 
 goszakup_untrusted:
   endpoint: /v3/rnu
-  descr: 'Реестр недобросовестных поставщиков'
+  descr: Реестр недобросовестных поставщиков
   ftp_directory: goszakup
 
 goszakup_lots:
   entity: Lots
   endpoint: /v3/lots
-  descr: 'Реестр лотов'
+  descr: Реестр лотов
   ftp_directory: goszakup
 
 goszakup_trd_buys:
   entity: TrdBuy
   endpoint: /v3/trd-buy/all
-  descr: 'Реестр объявлений'
+  descr: Реестр объявлений
   ftp_directory: goszakup
 
 goszakup_plan_points:
   entity: Plans
   endpoint: /v3/plans/all
-  descr: 'Реестр пунктов плана'
+  descr: Реестр пунктов плана
   ftp_directory: goszakup
 
 goszakup_plans_kato:
   entity: Plans
   endpoint: /v3/plans/kato
-  descr: 'Места поставки'
+  descr: Места поставки
   ftp_directory: goszakup
 
 goszakup_contract_units:
   entity: Contract
   endpoint: /v3/contract/{}/units
-  descr: 'Предметы договора'
+  descr: Предметы договора
   ftp_directory: goszakup
 
 nb_rates:

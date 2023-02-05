@@ -14,8 +14,8 @@ from dags.goszakup_dags.goszakup_common import prepare_command_args
 with DAG(
         dag_id='goszakup_companies',
         catchup=False,
-        start_date=pendulum.datetime(2023, 2, 1, tz="Asia/Almaty"),
-        schedule_interval='@daily',
+        start_date=pendulum.datetime(2023, 2, 1, tz="Asia/Oral"),
+        schedule_interval='40 12 * * *',
         tags=['goszakup']
      ) as dag:
 
