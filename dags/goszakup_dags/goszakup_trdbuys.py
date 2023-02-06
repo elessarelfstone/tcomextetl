@@ -1,6 +1,7 @@
 import sys
 from datetime import datetime, timedelta
 
+import pendulum
 from airflow.operators.python import PythonOperator
 from airflow.models import DAG
 from airflow.models import Variable
@@ -13,8 +14,8 @@ from dags.goszakup_dags.goszakup_common import prepare_command_args
 with DAG(
         dag_id='goszakup_trdbuys',
         catchup=False,
-        start_date=datetime.today() - timedelta(1),
-        schedule_interval='@daily',
+        start_date=pendulum.datetime(2023, 2, 1, tz=f'{Variable.get("TZ")}'),
+        schedule_interval='15 0 * * *',
         tags=['goszakup']
      ) as dag:
 
