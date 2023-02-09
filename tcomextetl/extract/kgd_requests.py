@@ -55,8 +55,8 @@ class KgdGovKzSoapApiParser(HttpRequest):
         s = """
 Response errors: {} - response that can't be represented as xml
 Service errors: {} - internal KGD soap api errors(with codes)
-Availability errors: {} - connection issues, http, too much requests, etc  
-Successes: {} - success processed BINs
+Availability errors: {} - connection issues, http, too many requests, etc  
+Successes: {} - successfully processed BINs
 """.format(*self._stat_meta_info.values())
         return s
 

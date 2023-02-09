@@ -100,7 +100,7 @@ class CsvFileOutput(Base):
     directory = luigi.Parameter(default=DATA_PATH, visibility=ParameterVisibility.HIDDEN)
     ext = luigi.Parameter(default='.csv', visibility=ParameterVisibility.HIDDEN)
     sep = luigi.Parameter(default=';', visibility=ParameterVisibility.HIDDEN)
-    no_resume = luigi.BoolParameter(default=False)  # use carefully
+    resume = luigi.BoolParameter(default=False)  # use carefully
 
     @property
     def file_date(self):
@@ -174,7 +174,7 @@ class ApiToCsv(CsvFileOutput):
     def complete(self):
         if not os.path.exists(self.success_fpath):
             # start all over from scratch
-            if self.no_resume:
+            if not self.resume:
                 # erase all the files we already have
                 self._clean()
 
@@ -241,7 +241,7 @@ class Runner(luigi.WrapperTask):
     name = luigi.Parameter()
     all_data = luigi.BoolParameter(default=False)
     date = luigi.DateParameter(default=today())
-    no_resume = luigi.BoolParameter(default=False)
+    resume = luigi.BoolParameter(default=True)
 
     @staticmethod
     def yesterday(frmt=DEFAULT_FORMAT):

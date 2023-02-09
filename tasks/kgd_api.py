@@ -10,6 +10,7 @@ from time import sleep
 
 import luigi
 from luigi.contrib.ftp import RemoteTarget
+from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
 from tasks.base import Runner, ApiToCsv, ExternalFtpCsvDFInput, FtpUploadedOutput
@@ -75,7 +76,7 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
 
     start_date = luigi.Parameter()
     end_date = luigi.Parameter()
-    ftp_file_mask = luigi.Parameter()
+    ftp_file_mask = luigi.Parameter(visibility=ParameterVisibility.HIDDEN)
     timeout = luigi.FloatParameter(default=1.5)
     timeout_ban = luigi.FloatParameter(default=5)
     notaxes_fext = luigi.Parameter('.notaxes')

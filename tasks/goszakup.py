@@ -41,7 +41,7 @@ class GoszakupOutput(ApiToCsv):
                 params['from'], params['to'] = self.from_to
 
         # resume if there were fails
-        if not self.no_resume and os.path.exists(self.stat_fpath):
+        if self.resume and os.path.exists(self.stat_fpath):
             next_page_params = self.stat['page_params']
             params.update(next_page_params)
 
@@ -106,7 +106,7 @@ class GoszakupRunner(Runner):
     def params(self):
         params = super(GoszakupRunner, self).params
         params['use_rest'] = self.use_rest
-        params['no_resume'] = self.no_resume
+        params['resume'] = self.resume
 
         if not self.use_rest:
             params.pop('endpoint')
