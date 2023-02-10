@@ -61,6 +61,7 @@ StructRegister.add('goszakup_trd_buys', GoszakupTradeBuyRow)
 StructRegister.add('goszakup_plan_points', GoszakupPlanPointRow)
 StructRegister.add('goszakup_plans_kato', GoszakupPlanKatoRow)
 StructRegister.add('goszakup_contract_units', GoszakupContractUnitsRow)
+StructRegister.add('goszakup_trd_app_offers', GoszakupTrdAppOffersRow)
 
 
 # data.egov.kz

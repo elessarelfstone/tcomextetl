@@ -212,6 +212,12 @@ goszakup_contract_units:
   descr: Предметы договора
   ftp_directory: goszakup
 
+goszakup_trd_app_offers:
+  entity: TrdApp
+  endpoint: /v3/trd-app
+  descr: Заявки поставщиков
+  ftp_directory: goszakup
+
 nb_rates:
   url: https://nationalbank.kz/ru/exchangerates/ezhednevnye-oficialnye-rynochnye-kursy-valyut
   ftp_directory: nb

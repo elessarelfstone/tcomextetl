@@ -1,0 +1,35 @@
+query getTrdAppOffers($from: String, $to: String, $limit: Int, $after: Int){
+  TrdApp(filter: {dateApply: [$from, $to]}, limit: $limit, after: $after){
+    _ : AppLots {
+      _: Offers {
+        id: id
+        point_id: pointId
+        lot_id: lotId
+        app_lot_id: appLotId
+        price: price
+        amount: amount
+        system_id: systemId
+        index_date: indexDate
+      }
+      app_lot_point_list: pointList
+      app_lot_status_id: statusId
+      app_lot_price: price
+      app_lot_amount: amount
+      app_lot_discount_value: discountValue
+      app_lot_discount_price: discountPrice
+      app_lot_system_id: systemId
+      app_lot_index_date: indexDate
+    }
+    app_id: id
+    app_buy_id: buyId
+    app_supplier_id: supplierId
+    app_cr_fio: crFio
+    app_mod_fio: modFio
+    app_supplier_bin_iin: supplierBinIin
+    app_prot_id: protId
+    app_prot_number: protNumber
+    app_date_apply: dateApply
+    app_system_id: systemId
+    app_index_date: indexDate
+  }
+}

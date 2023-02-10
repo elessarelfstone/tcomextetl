@@ -165,5 +165,10 @@ class GoszakupContractUnits(GoszakupRunner):
     name = luigi.Parameter('goszakup_contract_units')
 
 
+class GoszakupTrdAppOffers(GoszakupRunner):
+
+    name = luigi.Parameter('goszakup_trd_app_offers')
+
+
 if __name__ == '__main__':
     code = luigi_run()
