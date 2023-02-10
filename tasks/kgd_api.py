@@ -92,7 +92,8 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
 
     @property
     def bins_fpath(self):
-        return build_fpath(self.directory, self.name, '.bins')
+        # return build_fpath(self.directory, self.name, '.bins')
+        return self._file_path('.bins')
 
     @property
     def failed_fpath(self):

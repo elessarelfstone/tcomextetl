@@ -1,3 +1,4 @@
+import datetime
 import json
 import os
 from pathlib import Path
@@ -6,6 +7,7 @@ import luigi
 
 from luigi.cmdline import luigi_run
 from tasks.base import ApiToCsv, FtpUploadedOutput, Runner
+from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
 from tcomextetl.extract.goszakup_requests import (GoszakupRestApiParser,
@@ -27,7 +29,7 @@ class GoszakupOutput(ApiToCsv):
     endpoint = luigi.Parameter(default='/v3/graphql')
     timeout = luigi.IntParameter(default=0)
     limit = luigi.IntParameter(default=200)
-    token = luigi.Parameter(default=GOSZAKUP_TOKEN)
+    token = luigi.Parameter(default=GOSZAKUP_TOKEN, visibility=ParameterVisibility.HIDDEN)
 
     @property
     def request_params(self):
@@ -168,6 +170,32 @@ class GoszakupContractUnits(GoszakupRunner):
 class GoszakupTrdAppOffers(GoszakupRunner):
 
     name = luigi.Parameter('goszakup_trd_app_offers')
+
+    @property
+    def params(self):
+        params = super(GoszakupTrdAppOffers, self).params
+
+        if not self.use_rest:
+            if not self.all_data:
+
+                sd = datetime.datetime.combine(
+                    self.start_date,
+                    datetime.time(hour=0, minute=0, second=0, microsecond=0)
+                )
+                ed = datetime.datetime.combine(
+                    self.end_date,
+                    datetime.time(hour=23, minute=59, second=59, microsecond=0)
+                )
+
+                params['from_to'] = (
+                    sd.strftime('%Y-%m-%d %H:%M:%S.%f'),
+                    ed.strftime('%Y-%m-%d %H:%M:%S.%f')
+                )
+
+        return params
+
+    def requires(self):
+        return GoszakupFtpOutput(**self.params)
 
 
 if __name__ == '__main__':

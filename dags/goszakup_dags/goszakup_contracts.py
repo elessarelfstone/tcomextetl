@@ -1,5 +1,4 @@
 import sys
-from datetime import datetime, timedelta
 
 from airflow.operators.python import PythonOperator
 from airflow.models import DAG
