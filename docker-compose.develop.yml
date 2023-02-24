@@ -23,6 +23,7 @@ x-airflow-common:
     - ~/airflow_data/plugins:/opt/airflow/plugins
     - ~/airflow_data:/opt/airflow
     - ~/temp:/temp
+    - ~/data:/data
 
 services:
 

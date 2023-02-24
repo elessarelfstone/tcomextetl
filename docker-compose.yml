@@ -18,6 +18,7 @@ x-airflow-common:
     - AIRFLOW__CORE__LOGGING_LEVEL=INFO
     - AIRFLOW__CORE__HOME=/opt/airflow/
     - AIRFLOW__CORE__DEFAULT_TIMEZONE=Asia/Almaty
+    - TZ=Asia/Almaty
   volumes:
     - ./dags:/opt/airflow/dags
     - ~/airflow_data/logs:/opt/airflow/logs
@@ -26,6 +27,7 @@ x-airflow-common:
     - ~/airflow_data:/opt/airflow
     - /var/run/docker.sock:/var/run/docker.sock
     - ~/temp:/temp
+    - ~/data:/data
 
 
 services:
