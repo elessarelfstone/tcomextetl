@@ -1,5 +1,5 @@
-import os
 import luigi
+from datetime import datetime
 from time import sleep
 
 from luigi.util import requires
@@ -181,6 +181,8 @@ class SgovRcutJuridicalFtpOutput(FtpUploadedOutput):
 
 
 class SgovRcutJuridicalRunner(Runner):
+
+    date = luigi.DateParameter(default=datetime.today().replace(day=1).date())
 
     def requires(self):
 
