@@ -15,7 +15,7 @@ with DAG(dag_id='kgd_jwrongaddress',
          tags=['kgdgov']
          ) as dag:
 
-    luigi_params = '--no-resume'
+    luigi_params = ''
 
     kgd_jwrongaddress = ExternalEtlDockerRunner(
         task_id='kgd_jwrongaddress',

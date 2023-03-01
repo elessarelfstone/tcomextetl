@@ -15,7 +15,7 @@ with DAG(dag_id='kgd_invregistration',
          tags=['kgdgov']
          ) as dag:
 
-    luigi_params = '--no-resume'
+    luigi_params = ''
 
     kgd_invregistration = ExternalEtlDockerRunner(
         task_id='kgd_invregistration',
