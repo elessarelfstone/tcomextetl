@@ -15,7 +15,7 @@ with DAG(dag_id='sgov_kpved',
          tags=['statgov']
          ) as dag:
 
-    luigi_params = '--no-resume'
+    luigi_params = ''
 
     sgov_kpved = ExternalEtlDockerRunner(
         task_id='sgov_kpved',

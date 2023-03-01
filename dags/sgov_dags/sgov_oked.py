@@ -18,7 +18,7 @@ with DAG(dag_id='sgov_oked',
          tags=['statgov']
          ) as dag:
 
-    luigi_params = '--no-resume'
+    luigi_params = ''
 
     sgov_oked = ExternalEtlDockerRunner(
         task_id='sgov_oked',

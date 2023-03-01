@@ -21,6 +21,7 @@ rcut_entrepreneurs = 'entrepreneurs'
 class SgovExcelRunner(Runner):
 
     date = luigi.DateParameter(default=first_day_of_month())
+    resume = luigi.BoolParameter(default=False)
 
 
 class SgovKatoOutput(ArchivedWebExcelFileParsingToCsv):
