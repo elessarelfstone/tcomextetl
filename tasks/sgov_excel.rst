@@ -14,7 +14,7 @@
 
 Класс-структура:
 
-.. _A cool website: http://sphinx-doc.org
+`https://stat.gov.kz/api/getFile/?docId=ESTAT442785 <https://stat.gov.kz/api/getFile/?docId=ESTAT442785>`__
 
 ```python
 class KatoRow:
