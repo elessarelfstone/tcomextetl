@@ -14,6 +14,8 @@
 
 Класс-структура:
 
+.. _A cool website: http://sphinx-doc.org
+
 ```python
 class KatoRow:
     te = field(default='')
