@@ -16,7 +16,7 @@
 
 
 
-..  code-block:: php
+..  code-block:: python
 
    a = 'hello'
    b = 'something'
