@@ -18,14 +18,6 @@
 
 ..  code-block:: php
 
-class KatoRow:
-    te = field(default='')
-    ab = field(default='')
-    cd = field(default='')
-    ef = field(default='')
-    hij = field(default='')
-    k = field(default='')
-    name_kaz = field(default='')
-    name_rus = field(default='')
-    nn = field(default='')
+   a = 'hello'
+   b = 'something'
 
