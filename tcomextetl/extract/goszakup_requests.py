@@ -126,6 +126,9 @@ class GoszakupGraphQLApiParser(ApiRequests):
 
         data = self._raw['data'][self.entity]
 
+        if data is None:
+            return []
+
         # level up nested data
         normalized_data = [flatten_dict(d) for d in data]
 

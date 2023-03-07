@@ -257,6 +257,7 @@ class Runner(luigi.WrapperTask):
         params = get_yaml_task_config(params_fpath, self.name)
         params['name'] = self.name
         params['date'] = self.date
+        params['resume'] = self.resume
         return params
 
     @property
