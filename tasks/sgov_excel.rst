@@ -7,7 +7,6 @@
 **Классификатор административно-территориальных объектов**
 
 Код в проекте: sgov_kato
-
 Формат: Excel
 
 Ссылка: `https://stat.gov.kz/api/getFile/?docId=ESTAT442785 <https://stat.gov.kz/api/getFile/?docId=ESTAT442785>`__
