@@ -1,13 +1,11 @@
-|PyPI version| |Docs badge| |Chat badge| |Build Status| |Code Of Conduct| |Mailing Lists| |License| |CII Best Practices|
 
-==============================================
 Справочники и классификаторы сайта stat.gov.kz
-==============================================
+----------------------------------------------
 
 Ansible is a radically simple IT automation system. It handles configuration management, application deployment, cloud provisioning, ad-hoc task execution, network automation, and multi-node orchestration. Ansible makes complex changes like zero-downtime rolling updates with load balancers easy. More information on the Ansible website.
 
 Классификатор административно-территориальных объектов
-======================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Код в проекте: sgov_kato
 
