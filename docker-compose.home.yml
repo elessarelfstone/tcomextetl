@@ -1,0 +1,55 @@
+version: '3.8'
+
+
+networks:
+  luigi-net:
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1
+
+
+services:
+
+  luigi:
+    container_name: luigi_dispatcher
+    image: elessarelfstone/luigid
+    ports:
+      - "8082:8082"
+    restart: always
+    command: luigid
+    networks:
+      luigi-net:
+        ipv4_address: 10.5.0.5
+
+  ftp_server:
+    image: stilliard/pure-ftpd
+    container_name: ftpd
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    volumes:
+      - '~/ftp_data:/ftp_data'
+    environment:
+      PUBLICHOST: "localhost"
+      FTP_USER_NAME: ftpuser
+      FTP_USER_PASS: ftpuser
+      FTP_USER_HOME: /ftp_data
+    restart: always
+    networks:
+      luigi-net:
+        ipv4_address: 10.5.0.6
+
+  job:
+    image: elessarelfstone/tcomextetl
+    volumes:
+      - ~/temp:/temp
+      - ~/data:/data
+    environment:
+      FTP_EXPORT_PATH: /export
+      FTP_PATH: /
+      FTP_HOST: 10.5.0.6
+      FTP_USER: ftpuser
+      FTP_PASS: ftpuser
+    networks:
+      luigi-net:

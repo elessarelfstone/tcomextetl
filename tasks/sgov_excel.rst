@@ -28,3 +28,10 @@ Ansible is a radically simple IT automation system. It handles configuration man
        name_rus = field(default='')
        nn = field(default='')
 
+Запуск из контейнера:
+
+..  code-block:: bash
+
+    docker-compose -f docker-compose.home.yml run --rm job luigi --module sgov_excel SgovKato
+
+
