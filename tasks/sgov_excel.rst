@@ -35,3 +35,32 @@ Ansible is a radically simple IT automation system. It handles configuration man
     docker-compose -f docker-compose.home.yml run --rm job luigi --module sgov_excel SgovKato
 
 
+
+Общий классификатор видов экономической деятельности
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Код в проекте: sgov_oked
+
+Формат: Excel
+
+Ссылка: `https://stat.gov.kz/api/getFile/?docId=ESTAT310324 <https://stat.gov.kz/api/getFile/?docId=ESTAT310324>`__
+
+Класс-структура:
+
+..  code-block:: python
+
+   class OkedRow:
+    code = field(default='')
+    namekz = field(default='')
+    nameru = field(default='')
+    lv0 = field(default='')
+    lv1 = field(default='')
+    lv2 = field(default='')
+    lv3 = field(default='')
+
+Запуск из контейнера:
+
+..  code-block:: bash
+
+    docker-compose -f docker-compose.home.yml run --rm job luigi --module sgov_excel SgovOked
+
