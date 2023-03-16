@@ -27,7 +27,7 @@ class GoszakupOutput(ApiToCsv):
     from_to = luigi.TupleParameter(default=())
     entity = luigi.Parameter(default='')
     endpoint = luigi.Parameter(default='/v3/graphql')
-    timeout = luigi.IntParameter(default=0)
+    timeout = luigi.FloatParameter(default=10.0)
     limit = luigi.IntParameter(default=200)
     token = luigi.Parameter(default=GOSZAKUP_TOKEN, visibility=ParameterVisibility.HIDDEN)
 
