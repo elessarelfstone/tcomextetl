@@ -68,6 +68,7 @@ class HttpRequest:
             data=data,
             json=json,
             headers=self.headers,
+            timeout=self.timeout,
             auth=self.auth,
             stream=stream,
             verify=self.verify_cert

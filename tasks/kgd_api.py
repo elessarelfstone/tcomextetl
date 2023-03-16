@@ -78,7 +78,7 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
     end_date = luigi.Parameter()
     ftp_file_mask = luigi.Parameter(visibility=ParameterVisibility.HIDDEN)
     timeout = luigi.FloatParameter(default=1.5)
-    timeout_ban = luigi.FloatParameter(default=5)
+    timeout_ban = luigi.FloatParameter(default=5.0)
     notaxes_fext = luigi.Parameter('.notaxes')
 
     @property
@@ -124,7 +124,8 @@ class KgdSoapApiTaxPaymentOutput(ApiToCsv):
             self.url,
             self.request_form,
             params=params,
-            headers=headers
+            headers=headers,
+            timeout=self.timeout_ban
         )
 
         bins_manager = BinsManager(
