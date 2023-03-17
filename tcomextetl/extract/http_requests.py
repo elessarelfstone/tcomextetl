@@ -19,6 +19,7 @@ class HttpRequest:
         headers=None,
         auth=None,
         timeout=None,
+        timeout_ban=None,
         verify_cert=False
     ):
 
@@ -39,7 +40,11 @@ class HttpRequest:
 
         self._stat_meta_info = {}
 
+        #read timeout
         self.timeout = timeout
+
+        # timeout to avoid limitation on requests per time of source side
+        self.timeout_ban = timeout_ban
         self.session = Session()
 
     def request(

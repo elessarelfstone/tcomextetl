@@ -78,4 +78,5 @@ class ApiRequests(ABC, HttpRequest):
             self._parsed_count += len(data)
             self._end_date = datetime.now()
             yield data
-            sleep(self.timeout)
+            if self.timeout_ban:
+                sleep(self.timeout_ban)
