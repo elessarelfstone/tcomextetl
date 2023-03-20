@@ -104,66 +104,66 @@ sgov_foreign_branches:
   juridical_type_id: !!int 742684
   timeout: 90
   skiptop: 1
-  ftp_directory: sgov/foreign_branches
+  ftp_directory: sgov
 
 sgov_legal_entities:
   juridical_type_id: !!int 742679
   timeout: 90
   skiptop: 1
-  ftp_directory: sgov/legal_entities
+  ftp_directory: sgov
 
 sgov_joint_ventures:
   juridical_type_id: !!int 742687
   timeout: 90
   skiptop: 1
-  ftp_directory: sgov/joint_ventures
+  ftp_directory: sgov
 
 sgov_entrepreneurs:
   juridical_type_id: !!int 742681
   timeout: 90
   skiptop: 1
-  ftp_directory: sgov/entrepreneurs
+  ftp_directory: sgov
 
 sgov_legal_branches:
   juridical_type_id: !!int 742680
   timeout: 90
   skiptop: 1
-  ftp_directory: sgov/legal_branches
+  ftp_directory: sgov
 
 sgov_active_foreign_branches:
   juridical_type_id: !!int 742684
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
   skiptop: 1
-  ftp_directory: sgov/foreign_branches
+  ftp_directory: sgov
 
 sgov_active_legal_entities:
   juridical_type_id: !!int 742679
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
   skiptop: 1
-  ftp_directory: sgov/legal_entities
+  ftp_directory: sgov
 
 sgov_active_joint_ventures:
   juridical_type_id: !!int 742687
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
   skiptop: 1
-  ftp_directory: sgov/joint_ventures
+  ftp_directory: sgov
 
 sgov_active_entrepreneurs:
   juridical_type_id: !!int 742681
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
   skiptop: 1
-  ftp_directory: sgov/entrepreneurs
+  ftp_directory: sgov
 
 sgov_active_legal_branches:
   juridical_type_id: !!int 742680
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
   skiptop: 1
-  ftp_directory: sgov/legal_branches
+  ftp_directory: sgov
 
 goszakup_companies:
   entity: Subjects
