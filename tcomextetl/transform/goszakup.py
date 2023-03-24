@@ -339,6 +339,7 @@ class GoszakupUntrustedSupplierRow:
 @define
 class GoszakupContractUnitsRow:
     contract_id = field(default='')
+    id = field(default='')
     lot_id = field(default='')
     pln_point_id = field(default='')
     item_price = field(default='')
