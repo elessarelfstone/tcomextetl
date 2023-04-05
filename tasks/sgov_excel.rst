@@ -167,6 +167,20 @@
         legal_address = field(default='')
         head_fio = field(default='')
 
+Запуск получения ссылок на срезы из контейнера для зарегистрированных:
+
+    *.url файлы
+
+    ..  code-block:: bash
+
+        docker-compose -f docker-compose.home.yml run --rm job luigi --module sgov_excel SgovRcutsPrepared
+
+
+Запуск из контейнера для зарегистрированных:
+
+    ..  code-block:: bash
+
+        docker-compose -f docker-compose.home.yml run --rm job luigi --module sgov_excel SgovRcutsJuridical
 
 Зарегистрированные юридические лица
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -225,3 +239,19 @@
 Действующие индивидуальные предприниматели
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Код в проекте: sgov_active_entrepreneurs
+
+
+Запуск получения ссылок на срезы из контейнера для зарегистрированных:
+
+    *.url файлы
+
+    ..  code-block:: bash
+
+        docker-compose -f docker-compose.home.yml run --rm job luigi --module sgov_excel SgovRcutsActivePrepared
+
+
+Запуск из контейнера для зарегистрированных:
+
+    ..  code-block:: bash
+
+        docker-compose -f docker-compose.home.yml run --rm job luigi --module sgov_excel SgovRcutsActiveJuridical
