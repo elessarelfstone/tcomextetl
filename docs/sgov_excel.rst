@@ -259,3 +259,6 @@
     ..  code-block:: bash
 
         docker-compose -f docker-compose.home.yml run --rm job luigi --module sgov_excel SgovRcutsActiveJuridical
+
+
+External hyperlinks, like `Python <https://www.python.org/>`_.
