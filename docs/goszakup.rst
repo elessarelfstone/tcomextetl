@@ -383,3 +383,168 @@
     GOSZAKUP_TOKEN="<GOSZAKUP_TOKEN>" docker-compose -f docker-compose.home.yml run --rm job luigi --module goszakup GoszakupPlansKato
 
 
+Места поставки пункта плана
+~~~~~~~~~~~~~~~~~
+
+Код в проекте: goszakup_plans_kato
+
+Формат: api, json
+
+Ссылка на документацию REST: https://goszakup.gov.kz/ru/developer/ows_v3#reestr-godovykh-planov-reestr-mest-postavki
+
+Ссылка на документацию GraphQL: https://ows.goszakup.gov.kz/help/v3/schema/plnpointskato.doc.html
+
+Класс-структура:
+
+..  code-block:: python
+
+   class GoszakupPlanKatoRow:
+        id = field(default='')
+        pln_points_id = field(default='')
+        ref_kato_code = field(default='')
+        ref_countries_code = field(default='')
+        full_delivery_place_name_ru = field(default='')
+        full_delivery_place_name_kz = field(default='')
+        count = field(default='')
+        is_active = field(default='')
+        is_deleted = field(default='')
+        system_id = field(default='')
+        index_date = field(default='')
+
+Запуск из контейнера:
+
+..  code-block:: bash
+
+    GOSZAKUP_TOKEN="<GOSZAKUP_TOKEN>" docker-compose -f docker-compose.home.yml run --rm job luigi --module goszakup GoszakupPlansKato
+
+
+Предметы договора
+~~~~~~~~~~~~~~~~~
+
+Код в проекте: goszakup_contract_units
+
+Формат: api, json
+
+Ссылка на документацию REST: https://goszakup.gov.kz/ru/developer/ows_v3#reestr-dogovorov-predmety-dogovora
+
+Ссылка на документацию GraphQL: https://ows.goszakup.gov.kz/help/v3/schema/contractunits.doc.html
+
+Класс-структура:
+
+..  code-block:: python
+
+   class GoszakupContractUnitsRow:
+        contract_id = field(default='')
+        id = field(default='')
+        lot_id = field(default='')
+        pln_point_id = field(default='')
+        item_price = field(default='')
+        item_price_wnds = field(default='')
+        quantity = field(default='')
+        total_sum = field(default='')
+        total_sum_wnds = field(default='')
+        fact_sum = field(default='')
+        fact_sum_wnds = field(default='')
+        ks_proc = field(default='')
+        ks_sum = field(default='')
+        deleted = field(default='')
+        trd_buy_id = field(default='')
+        contract_registry_id = field(default='')
+        crdate = field(default='')
+        exec_fakt_date = field(default='')
+        exec_plan_date = field(default='')
+        executed = field(default='')
+        parent_id = field(default='')
+        root_id = field(default='')
+        ref_contract_status_id = field(default='')
+        cr_deleted = field(default='')
+        ref_amendm_agreem_justif_id = field(default='')
+        system_id = field(default='')
+        index_date = field(default='')
+
+Запуск из контейнера:
+
+..  code-block:: bash
+
+    GOSZAKUP_TOKEN="<GOSZAKUP_TOKEN>" docker-compose -f docker-compose.home.yml run --rm job luigi --module goszakup GoszakupContractUnits
+
+
+Предметы договора
+~~~~~~~~~~~~~~~~~
+
+Код в проекте: goszakup_contract_units
+
+Формат: api, json
+
+Ссылка на документацию REST: https://goszakup.gov.kz/ru/developer/ows_v3#reestr-dogovorov-predmety-dogovora
+
+Ссылка на документацию GraphQL: https://ows.goszakup.gov.kz/help/v3/schema/contractunits.doc.html
+
+Класс-структура:
+
+..  code-block:: python
+
+   class GoszakupContractUnitsRow:
+        contract_id = field(default='')
+        id = field(default='')
+        lot_id = field(default='')
+        pln_point_id = field(default='')
+        item_price = field(default='')
+        item_price_wnds = field(default='')
+        quantity = field(default='')
+        total_sum = field(default='')
+        total_sum_wnds = field(default='')
+        fact_sum = field(default='')
+        fact_sum_wnds = field(default='')
+        ks_proc = field(default='')
+        ks_sum = field(default='')
+        deleted = field(default='')
+        trd_buy_id = field(default='')
+        contract_registry_id = field(default='')
+        crdate = field(default='')
+        exec_fakt_date = field(default='')
+        exec_plan_date = field(default='')
+        executed = field(default='')
+        parent_id = field(default='')
+        root_id = field(default='')
+        ref_contract_status_id = field(default='')
+        cr_deleted = field(default='')
+        ref_amendm_agreem_justif_id = field(default='')
+        system_id = field(default='')
+        index_date = field(default='')
+
+Запуск из контейнера:
+
+..  code-block:: bash
+
+    GOSZAKUP_TOKEN="<GOSZAKUP_TOKEN>" docker-compose -f docker-compose.home.yml run --rm job luigi --module goszakup GoszakupContractUnits
+
+
+Реестр недобросовестных поставщиков
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Код в проекте: goszakup_untrusted
+
+Формат: api, json
+
+Ссылка на документацию REST: https://goszakup.gov.kz/ru/developer/ows_v3#reestr-nedobrosovestnykh-postavshchikov-reestr-nedobrosovestnykh-postavshchikov
+
+Класс-структура:
+
+..  code-block:: python
+
+   class GoszakupUntrustedSupplierRow:
+        pid = field(default='')
+        supplier_biin = field(default='')
+        supplier_innunp = field(default='')
+        supplier_name_ru = field(default='')
+        supplier_name_kz = field(default='')
+        kato_list = field(default='')
+        index_date = field(default='')
+        system_id = field(default='')
+
+Запуск из контейнера:
+
+..  code-block:: bash
+
+    GOSZAKUP_TOKEN="<GOSZAKUP_TOKEN>" docker-compose -f docker-compose.home.yml run --rm job luigi --module goszakup GoszakupUntrusted
