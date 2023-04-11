@@ -1,0 +1,504 @@
+{
+	"info": {
+		"_postman_id": "5f0de780-43cb-459f-88f7-6d5b5f4b4fa3",
+		"name": "gozsakup",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "trade_app_offers_graphql",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query getTrd($from: String, $to: String, $limit: Int, $after: Int){\r\n    TrdApp(filter: {dateApply: [$from, $to]}, limit: $limit, after: $after){\r\n        _ : AppLots {\r\n            _: Offers {\r\n                id: id\r\n                point_id: pointId\r\n                lot_id: lotId\r\n                app_lot_id: appLotId\r\n                price: price\r\n                amount: amount\r\n                system_id: systemId\r\n                index_date: indexDate\r\n            }\r\n            app_lot_point_list: pointList\r\n            app_lot_status_id: statusId\r\n            app_lot_price: price\r\n            app_lot_amount: amount\r\n            app_lot_discount_value: discountValue\r\n            app_lot_discount_price: discountPrice\r\n            app_lot_system_id: systemId\r\n            app_lot_index_date: indexDate\r\n        }\r\n        app_id: id\r\n        app_buy_id: buyId\r\n        app_supplier_id: supplierId\r\n        app_cr_fio: crFio\r\n        app_mod_fio: modFio\r\n        app_supplier_bin_iin: supplierBinIin\r\n        app_prot_id: protId\r\n        app_prot_number: protNumber\r\n        app_date_apply: dateApply\r\n        app_system_id: systemId\r\n        app_index_date: indexDate\r\n    }\r\n}",
+						"variables": "{\r\n    \"from\": \"2022-01-01 00:00:00.000000\",\r\n    \"to\": \"2022-10-19 23:59:59.000000\",\r\n    \"limit\": 500\r\n}"
+					},
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/graphql",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "contract_units_graphql",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query getContractUnits($from: String, $to: String, $limit: Int, $after: Int){\r\n                  Contract(filter: {lastUpdateDate: [$from, $to]}, limit: $limit, after: $after) {\r\n                    contract_id: id\r\n                    _: ContractUnits{\r\n                        id\r\n                        lot_id: lotId\r\n                        pln_point_id: plnPointId\r\n                        item_price: itemPrice\r\n                        item_price_wnds: itemPriceWnds\r\n                        quantity\r\n                        total_sum: totalSum\r\n                        total_sum_wnds: totalSumWnds\r\n                        fact_sum: factSum\r\n                        fact_sum_wnds: factSumWnds\r\n                        ks_proc: ksProc\r\n                        ks_sum: ksSum\r\n                        deleted\r\n                        trd_buy_id: trdBuyId\r\n                        contract_registry_id: contractRegistryId\r\n                        crdate\r\n                        exec_fakt_date: execFaktDate\r\n                        exec_plan_date: execPlanDate\r\n                        executed\r\n                        parent_id: parentId\r\n                        root_id: rootId\r\n                        ref_contract_status_id: refContractStatusId\r\n                        cr_deleted: crDeleted\r\n                        ref_amendm_agreem_justif_id: refAmendmAgreemJustifId\r\n                        systemId\r\n                        indexDate\r\n                    }\r\n                }\r\n            }",
+						"variables": "{\r\n    \"from\": \"2022-01-01\",\r\n    \"to\": \"2022-01-01\",\r\n    \"limit\": 200\r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/graphql",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "contracts_graphql",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query getContracts($from: String, $to: String, $limit: Int, $after: Int){\r\n  Contract(filter: {lastUpdateDate: [$from, $to]}, limit: $limit, after: $after) {\r\n    id\r\n    parent_id: parentId\r\n    root_id: rootId\r\n    trd_buy_id: trdBuyId\r\n    trd_buy_number_anno: trdBuyNumberAnno\r\n    trd_buy_name_ru: trdBuyNameRu\r\n    trd_buy_name_kz: trdBuyNameKz\r\n    ref_contract_status_id: refContractStatusId\r\n    deleted\r\n    crdate\r\n    last_update_date: lastUpdateDate\r\n    supplier_id: supplierId\r\n    supplier_biin: supplierBiin\r\n    supplier_bik: supplierBik\r\n    supplier_iik: supplierIik\r\n    supplier_bank_name_kz: supplierBankNameKz\r\n    supplier_bank_name_ru: supplierBankNameRu\r\n    supplier_legal_address: supplierLegalAddress\r\n    supplier_bill_id: supplierBillId\r\n    contract_number: contractNumber\r\n    sign_reason_doc_name: signReasonDocName\r\n    sign_reason_doc_date: signReasonDocDate\r\n    trd_buy_itogi_date_public: trdBuyItogiDatePublic\r\n    customer_id: customerId\r\n    customer_bin: customerBin\r\n    customer_bik: customerBik\r\n    customer_iik: customerIik\r\n    customer_bill_id: customerBillId\r\n    customer_bank_name_kz: customerBankNameKz\r\n    customer_bank_name_ru: customerBankNameRu\r\n    customer_legal_address: customerLegalAddress\r\n    contract_number_sys: contractNumberSys\r\n    payments_terms_ru: paymentsTermsRu\r\n    payments_terms_kz: paymentsTermsKz\r\n    ref_subject_type_id: refSubjectTypeId\r\n    ref_subject_types_id: refSubjectTypesId\r\n    is_gu: isGu\r\n    fin_year: finYear\r\n    ref_contract_agr_form_id: refContractAgrFormId\r\n    ref_contract_year_type_id: refContractYearTypeId\r\n    ref_finsource_id: refFinsourceId\r\n    ref_currency_code: refCurrencyCode\r\n    exchange_rate: exchangeRate\r\n    contract_sum: contractSum\r\n    contract_sum_wnds: contractSumWnds\r\n    sign_date: signDate\r\n    ec_end_date: ecEndDate\r\n    plan_exec_date: planExecDate\r\n    fakt_exec_date: faktExecDate\r\n    fakt_sum: faktSum\r\n    fakt_sum_wnds: faktSumWnds\r\n    contract_end_date: contractEndDate\r\n    ref_contract_cancel_id: refContractCancelId\r\n    ref_contract_type_id: refContractTypeId\r\n    description_kz: descriptionKz\r\n    description_ru: descriptionRu\r\n    fakt_trade_methods_id: faktTradeMethodsId\r\n    ec_customer_approve: ecCustomerApprove\r\n    ec_supplier_approve: ecSupplierApprove\r\n    contract_ms: contractMs\r\n    treasure_req_num: treasureReqNum\r\n    treasure_req_date: treasureReqDate\r\n    treasure_not_num: treasureNotNum\r\n    treasure_not_date: treasureNotDate\r\n    system_id: systemId\r\n    index_date: indexDate\r\n  }\r\n}",
+						"variables": "{\r\n    \"from\": \"2022-05-26\",\r\n    \"to\": \"2022-05-26\",\r\n    \"limit\": 200\r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/graphql",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "companies_graphql",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "a89fc669ac88e904286a2df80710d163",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query getSubjects($from: String, $to: String, $limit: Int, $after: Int){\r\n  Subjects(filter: {lastUpdateDate: [$from, $to]}, limit: $limit, after: $after) {\r\n    pid\r\n    bin\r\n    iin\r\n    inn\r\n    unp\r\n    regdate\r\n    crdate\r\n    number_reg: numberReg\r\n    series\r\n    name_ru: nameRu\r\n    name_kz: nameKz\r\n    email\r\n    phone\r\n    website\r\n    last_update_date: lastUpdateDate\r\n    country_code: countryCode\r\n    qvazi\r\n    customer\r\n    organizer\r\n    mark_national_company: markNationalCompany\r\n    ref_kopf_code: refKopfCode\r\n    mark_assoc_with_disab: markAssocWithDisab\r\n    year\r\n    mark_resident: markResident\r\n    system_id: systemId\r\n    supplier\r\n    krp_code: krpCode\r\n    oked_list: okedList\r\n    kse_code: kseCode\r\n    mark_world_company: markWorldCompany\r\n    mark_state_monopoly: markStateMonopoly\r\n    mark_natural_monopoly: markNaturalMonopoly\r\n    mark_patronymic_producer: markPatronymicProducer\r\n    mark_patronymic_supplyer: markPatronymicSupplyer\r\n    mark_small_employer: markSmallEmployer\r\n    type_supplier: typeSupplier\r\n    is_single_org: isSingleOrg\r\n    index_date: indexDate\r\n  }\r\n}",
+						"variables": "{\r\n    \"from\": \"2022-01-01\",\r\n    \"to\": \"2022-01-01\",\r\n    \"limit\": 200\r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/graphql",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "lots_graphql",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query getLots($from: String, $to: String, $limit: Int, $after: Int){\r\n          Lots(filter: {lastUpdateDate: [$from, $to]}, limit: $limit, after: $after) {\r\n            id\r\n            lot_number: lotNumber\r\n            ref_lot_status_id: refLotStatusId\r\n            last_update_date: lastUpdateDate\r\n            union_lots: unionLots\r\n            point_list: pointList\r\n            count\r\n            amount\r\n            name_ru: nameRu\r\n            name_kz: nameKz\r\n            description_ru: descriptionRu\r\n            description_kz: descriptionKz\r\n            customer_id: customerId\r\n            customer_bin: customerBin\r\n            trd_buy_number_anno: trdBuyNumberAnno\r\n            trd_buy_id: trdBuyId\r\n            dumping\r\n            ref_trade_methods_id: refTradeMethodsId\r\n            psd_sign: psdSign\r\n            consulting_services: consultingServices\r\n            point_list: pointList\r\n            singl_org_sign: singlOrgSign\r\n            is_light_industry: isLightIndustry\r\n            is_construction_work: isConstructionWork\r\n            disable_person_id: disablePersonId\r\n            customer_name_kz: customerNameKz\r\n            customer_name_ru: customerNameRu\r\n            ref_buy_trade_methods_id: refBuyTradeMethodsId\r\n            index_date: indexDate\r\n            system_id: systemId\r\n          }\r\n        }",
+						"variables": "{\r\n    \"from\": \"2022-01-01\",\r\n    \"to\": \"2022-01-01\",\r\n    \"limit\": 200\r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/graphql",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "contracts_rest",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "a89fc669ac88e904286a2df80710d163",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/contract/all",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"contract",
+						"all"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "next",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "trade_buys_rest",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/trd-buy/all",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"trd-buy",
+						"all"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "next",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "plan_points_rest",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/plans/all",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"plans",
+						"all"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "next",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "untrusted_companies_rest",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/rnu",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"rnu"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "next",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "lots_rest",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/lots",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"lots"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "next",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "companies_rest",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "a89fc669ac88e904286a2df80710d163",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/subject/all",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"subject",
+						"all"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "next",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "plans_kato_graphql",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "a89fc669ac88e904286a2df80710d163",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query getPlansKato($from: String, $to: String, $limit: Int, $after: Int){\r\n                  Plans(filter: {timestamp: [$from, $to]}, limit: $limit, after: $after) {\r\n                    _: PlansKato {\r\n                        id\r\n                        pln_points_id: plnPointsId\r\n                        ref_kato_code: refKatoCode\r\n                        ref_countries_code: refCountriesCode\r\n                        full_delivery_place_name_ru: fullDeliveryPlaceNameRu\r\n                        full_delivery_place_name_kz: fullDeliveryPlaceNameKz\r\n                        count\r\n                        is_active: isActive\r\n                        is_deleted: isDeleted\r\n                        system_id: systemId\r\n                        index_date: indexDate\r\n                    }\r\n                }\r\n            }",
+						"variables": "{\r\n    \"from\": \"2020-01-01\",\r\n    \"to\": \"2020-01-01\",\r\n    \"limit\": 200\r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/graphql",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "plan_points_graphql",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "a89fc669ac88e904286a2df80710d163",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query getPlanPoints($from: String, $to: String, $limit: Int, $after: Int){\r\n          Plans(filter: {timestamp: [$from, $to]}, limit: $limit, after: $after) {\r\n            id\r\n            rootrecord_id: rootrecordId\r\n            sys_subjects_id: sysSubjectsId\r\n            sys_organizator_id: sysOrganizatorId\r\n            subject_biin: subjectBiin\r\n            subject_name_ru: subjectNameRu\r\n            subject_name_kz: subjectNameKz\r\n            name_ru: nameRu\r\n            name_kz: nameKz\r\n            ref_trade_methods_id: refTradeMethodsId\r\n            ref_units_code: refUnitsCode\r\n            count\r\n            price\r\n            amount\r\n            ref_months_id: refMonthsId\r\n            ref_pln_point_status_id: refPlnPointStatusId\r\n            pln_point_year: plnPointYear\r\n            ref_subject_type_id: refSubjectTypeId\r\n            ref_enstru_code: refEnstruCode\r\n            ref_finsource_id: refFinsourceId\r\n            ref_abp_code: refAbpCode\r\n            is_qvazi: isQvazi\r\n            date_create: dateCreate\r\n            timestamp: timestamp\r\n            ref_point_type_id: refPointTypeId\r\n            desc_ru: descRu\r\n            desc_kz: descKz\r\n            extra_desc_kz: extraDescKz\r\n            extra_desc_ru: extraDescRu\r\n            sum_1: sum1\r\n            sum_2: sum2\r\n            sum_3: sum3\r\n            supply_date_ru: supplyDateRu\r\n            prepayment: prepayment\r\n            ref_justification_id: refJustificationId\r\n            ref_amendment_agreem_type_id: refAmendmentAgreemTypeId\r\n            ref_amendm_agreem_justif_id: refAmendmAgreemJustifId\r\n            contract_prev_point_id: contractPrevPointId\r\n            disable_person_id: disablePersonId\r\n            transfer_sys_subjects_id: transferSysSubjectsId\r\n            transfer_type: transferType\r\n            ref_budget_type_id: refBudgetTypeId\r\n            createdin_act_id: createdinActId\r\n            is_active: isActive\r\n            active_act_id: activeActId\r\n            is_deleted: isDeleted\r\n            system_id: systemId\r\n            index_date: indexDate\r\n            _: PlanActs{\r\n                plan_act_id: id\r\n                number: planActNumber\r\n                ref_plan_status_id: refPlanStatusId\r\n                plan_fin_year: planFinYear\r\n                plan_preliminary: planPreliminary\r\n                date_approved: dateApproved\r\n            }\r\n          }\r\n        }",
+						"variables": "{\r\n    \"from\": \"2020-01-01\",\r\n    \"to\": \"2020-01-01\",\r\n    \"limit\": 200\r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/graphql",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "trade_buys_graphql",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query getTradeBuys($from: String, $to: String, $limit: Int, $after: Int){\r\n          TrdBuy(filter: {lastUpdateDate: [$from, $to]}, limit: $limit, after: $after) {\r\n            id\r\n            number_anno: numberAnno\r\n            name_ru: nameRu\r\n            name_kz: nameKz\r\n            total_sum: totalSum\r\n            count_lots: countLots\r\n            ref_trade_methods_id: refTradeMethodsId\r\n            ref_subject_type_id: refSubjectTypeId\r\n            customer_bin: customerBin\r\n            customer_pid: customerPid\r\n            customer_name_kz: customerNameKz\r\n            customer_name_ru: customerNameRu\r\n            org_bin: orgBin\r\n            org_pid: orgPid\r\n            org_name_kz: orgNameKz\r\n            org_name_ru: orgNameRu\r\n            ref_buy_status_id: refBuyStatusId\r\n            start_date: startDate\r\n            repeat_start_date: repeatStartDate\r\n            repeat_end_date: repeatEndDate\r\n            end_date: endDate\r\n            publish_date: publishDate\r\n            itogi_date_public: itogiDatePublic\r\n            ref_type_trade_id: refTypeTradeId\r\n            disable_person_id: disablePersonId\r\n            discus_start_date: discusStartDate\r\n            discus_end_date: discusEndDate\r\n            id_supplier: idSupplier\r\n            biin_supplier: biinSupplier\r\n            parent_id: parentId\r\n            singl_org_sign: singlOrgSign\r\n            is_light_industry: isLightIndustry\r\n            is_construction_work: isConstructionWork\r\n            system_id: systemId\r\n            index_date: indexDate\r\n          }\r\n        }",
+						"variables": "{\r\n    \"from\": \"2020-01-01\",\r\n    \"to\": \"2020-01-01\",\r\n    \"limit\": 200\r\n}"
+					}
+				},
+				"url": {
+					"raw": "https://ows.goszakup.gov.kz/v3/graphql",
+					"protocol": "https",
+					"host": [
+						"ows",
+						"goszakup",
+						"gov",
+						"kz"
+					],
+					"path": [
+						"v3",
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "a89fc669ac88e904286a2df80710d163",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
