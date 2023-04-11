@@ -11,5 +11,5 @@
 
 Папка tcomextetl содержит в себе программный код выполняющий основные ETL операции по работе с данными, осуществляющий HTTP взаимодействие и прочие вспомогательные функции. Пайплайны с тасками Luigi находятся с папке tasks. Описание разбито по источникам:
 
-- `Справочники и классификаторы сайта stat.gov.kz <https://https://github.com/elessarelfstone/tcomextetl/blob/master/docs/sgov_excel.rst/>`_
+- `Справочники и классификаторы сайта stat.gov.kz <https://https://github.com/elessarelfstone/tcomextetl/blob/master/docs/sgov_excel.rst>`_
 - Реестры сайта Комитета Гос. Доходов РК
