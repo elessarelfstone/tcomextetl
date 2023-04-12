@@ -27,7 +27,13 @@
 
     mkdir ~/data ~/temp
 
-2. Развернуть окружение через команду docker-compose:
+2. Загрузить compose-файл:
+
+..  code-block:: bash
+
+    wget https://raw.githubusercontent.com/elessarelfstone/tcomextetl/master/docker-compose.home.yml -o docker-compose.home.yml
+
+3. Развернуть окружение через команду docker-compose
 
 ..  code-block:: bash
 
