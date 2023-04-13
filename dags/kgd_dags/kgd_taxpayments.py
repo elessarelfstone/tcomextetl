@@ -1,6 +1,6 @@
 import sys
-from datetime import datetime, timedelta
 
+import pendulum
 from airflow.models import DAG, Variable
 
 sys.path.append('.')
@@ -10,8 +10,8 @@ from dags.docker_runner import ExternalEtlDockerRunner as Runner
 
 with DAG(dag_id='kgd_taxpayments',
          catchup=False,
-         start_date=datetime.today() - timedelta(1),
-         schedule_interval='0 4 1 * *',
+         start_date=pendulum.datetime(2023, 2, 1, tz=f'{Variable.get("TZ")}'),
+         schedule_interval='@monthly',
          tags=['kgdgov']
          ) as dag:
 

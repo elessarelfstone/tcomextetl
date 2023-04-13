@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 
 import pendulum
 from airflow.operators.python import PythonOperator
-from airflow.models import DAG
-from airflow.models import Variable
+from airflow.models import DAG, Variable
+
 
 sys.path.append('.')
 

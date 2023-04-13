@@ -1,7 +1,7 @@
 import sys
-from datetime import datetime, timedelta
 
-from airflow.models import DAG
+import pendulum
+from airflow.models import DAG, Variable
 
 sys.path.append('.')
 
@@ -10,8 +10,8 @@ from dags.docker_runner import ExternalEtlDockerRunner
 
 with DAG(dag_id='sgov_juridical',
          catchup=False,
-         start_date=datetime.today() - timedelta(1),
-         schedule_interval='0 6 13 * *',
+         start_date=pendulum.datetime(2023, 2, 1, tz=f'{Variable.get("TZ")}'),
+         schedule_interval='0 6 21 * *',
          tags=['statgov']
          ) as dag:
 

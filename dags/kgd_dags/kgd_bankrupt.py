@@ -2,8 +2,7 @@ import sys
 from datetime import datetime, timedelta
 
 import pendulum
-from airflow.models import DAG
-from airflow.models import Variable
+from airflow.models import DAG, Variable
 
 sys.path.append('.')
 
