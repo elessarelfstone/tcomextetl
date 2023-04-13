@@ -20,6 +20,7 @@ def clean_data_files():
     for f in os.listdir(folder):
         f_nm_parts = f.split('.')[0].split('_')
         dt = f_nm_parts[-1]
+        date = pendulum.today(tz=Variable.get('TZ'))
         try:
             date = pendulum.from_format(dt, 'YYYYMMDD', tz=Variable.get('TZ'))
         except Exception:
