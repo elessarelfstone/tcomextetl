@@ -10,6 +10,7 @@ sys.path.append('.')
 
 import pendulum
 
+
 def clean_data_files():
 
     today = pendulum.today(tz=Variable.get('TZ'))
@@ -19,9 +20,14 @@ def clean_data_files():
     for f in os.listdir(folder):
         f_nm_parts = f.split('.')[0].split('_')
         dt = f_nm_parts[-1]
-        date = pendulum.from_format(dt, 'YYYYMMDD', tz=Variable.get('TZ'))
+        try:
+            date = pendulum.from_format(dt, 'YYYYMMDD', tz=Variable.get('TZ'))
+        except Exception:
+            print(dt)
+
         if date < red_line:
             os.remove(folder.joinpath(f))
+
 
 with DAG(
         dag_id='system_clean_data',
