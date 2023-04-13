@@ -23,6 +23,7 @@ def clean_data_files():
         date = pendulum.today(tz=Variable.get('TZ'))
         try:
             date = pendulum.from_format(dt, 'YYYYMMDD', tz=Variable.get('TZ'))
+            print(date)
         except Exception:
             print(dt)
 
