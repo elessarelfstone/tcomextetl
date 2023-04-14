@@ -27,7 +27,7 @@ x-airflow-common:
     - ~/airflow_data:/opt/airflow
     - /var/run/docker.sock:/var/run/docker.sock
     - ~/temp:/temp
-    - ~/data:/data
+    - ~/data_all:/data
 
 
 services:
