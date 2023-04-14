@@ -13,6 +13,13 @@ import pendulum
 
 def clean_data_files():
 
+    def check_date(date_str: str):
+        try:
+            pendulum.from_format(date_str, 'YYYYMMDD', tz=Variable.get('TZ'))
+            return True
+        except ValueError:
+            return False
+
     today = pendulum.today(tz=Variable.get('TZ'))
     red_line = today.subtract(days=int(Variable.get('N_DAYS_TO_CLEAN_DATA')))
     folder = Path(Variable.get('DATA_DIR'))
@@ -20,15 +27,12 @@ def clean_data_files():
     for f in os.listdir(folder):
         f_nm_parts = f.split('.')[0].split('_')
         dt = f_nm_parts[-1]
-        date = pendulum.today(tz=Variable.get('TZ'))
-        try:
-            date = pendulum.from_format(dt, 'YYYYMMDD', tz=Variable.get('TZ'))
-            print(date)
-        except Exception:
-            print(dt)
 
-        if date < red_line:
-            os.remove(folder.joinpath(f))
+        if check_date(dt):
+            date = pendulum.from_format(dt, 'YYYYMMDD', tz=Variable.get('TZ'))
+
+            if date < red_line:
+                os.remove(folder.joinpath(f))
 
 
 with DAG(
