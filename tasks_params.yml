@@ -220,7 +220,7 @@ goszakup_trd_app_offers:
 
 nb_rates:
   url: https://nationalbank.kz/ru/exchangerates/ezhednevnye-oficialnye-rynochnye-kursy-valyut
-  ftp_directory: nb
+  ftp_directory: rates
 
 export_kgdgovkz_bins:
   f_pattern: export_kgdgovkz_bins_*.csv

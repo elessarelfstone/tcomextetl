@@ -20,6 +20,8 @@ class NBRatesFtpOutput(FtpUploadedOutput):
 
 class NBRates(Runner):
 
+    name = luigi.Parameter('nb_rates')
+
     def requires(self):
         return NBRatesFtpOutput(self.name)
 
