@@ -23,7 +23,7 @@ class NBRates(Runner):
     name = luigi.Parameter('nb_rates')
 
     def requires(self):
-        return NBRatesFtpOutput(self.name)
+        return NBRatesFtpOutput(**self.params)
 
 
 if __name__ == '__main__':
