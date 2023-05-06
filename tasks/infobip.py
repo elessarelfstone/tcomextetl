@@ -1,4 +1,5 @@
 import csv
+import json
 from datetime import datetime, timedelta
 
 import luigi
@@ -17,6 +18,7 @@ from tcomextetl.common.utils import rewrite_file
 
 
 class InfobipOutput(ApiToCsv):
+
     endpoint = luigi.Parameter()
 
     user = luigi.Parameter(default=INFOBIP_USER, visibility=ParameterVisibility.HIDDEN)
@@ -31,7 +33,7 @@ class InfobipOutput(ApiToCsv):
         return f'{INFOBIP_URL}{self.endpoint}'
 
     @property
-    def params(self):
+    def request_params(self):
         p = dict(page=0, size=self.limit)
 
         if self.from_to:
@@ -45,17 +47,16 @@ class InfobipOutput(ApiToCsv):
 
     def run(self):
         auth = {'user': self.user, 'password': self.password}
-        parser = InfobipRestApiParser(self.url, self.endpoint, params=self.params,
+        parser = InfobipRestApiParser(self.url, self.endpoint, params=self.request_params,
                                       auth=auth, timeout=self.timeout)
-
-        # if 'messages' in self.url or 'tags' in self.url:
-        #     pass
 
         for data in parser:
             save_csvrows(self.output_fpath,
                          [dict_to_row(d, self.struct) for d in data], quotechar='"')
             self.set_status_info(*parser.status_percent)
-            rewrite_file(self.stat_fpath, str(parser.stat))
+            stat = parser.stat
+            stat.update(self.request_params)
+            rewrite_file(self.stat_fpath, json.dumps(stat))
 
         self.finalize()
 
@@ -70,16 +71,13 @@ class InfobipRunner(Runner):
     start_date = luigi.Parameter(default=Runner.yesterday())
     end_date = luigi.Parameter(default=Runner.yesterday())
 
-    # start_date = luigi.DateParameter(default='2022-08-20')
-    # end_date = luigi.DateParameter(default='2022-08-20')
-
     def requires(self):
 
         params = self.params
 
-        if self.period == 'range':
+        if not self.all_data:
             params['from_to'] = (self.start_date, self.end_date)
-        print(params)
+
         return InfobipFtpOutput(**params)
 
 
@@ -115,8 +113,8 @@ class InfobipConversationDetailsOutput(InfobipOutput):
         return _ids
 
     @property
-    def params(self):
-        params = super().params
+    def request_params(self):
+        params = super().request_params
         if self.endpoint == 'tags':
             params['conversationId'] = self.conversation_id
 
@@ -138,7 +136,7 @@ class InfobipConversationDetailsOutput(InfobipOutput):
 
         for conv_id in conv_ids:
             self.conversation_id = conv_id
-            params = self.params
+            params = self.request_params
 
             parser = InfobipRestApiParser(self.url, self.endpoint, params=params,
                                           auth=auth, timeout=self.timeout)
@@ -147,6 +145,7 @@ class InfobipConversationDetailsOutput(InfobipOutput):
                 _data = []
                 for d in data:
                     _data.append({**d, **{'conversationid': conv_id}})
+
                 save_csvrows(self.output_fpath,
                              [dict_to_row(d, self.struct) for d in _data], quotechar='"')
 
