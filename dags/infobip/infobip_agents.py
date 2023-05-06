@@ -9,7 +9,7 @@ from airflow.models import Variable
 sys.path.append('.')
 
 from dags.docker_runner import ExternalEtlDockerRunner as Runner
-from dags.goszakup_dags.goszakup_common import prepare_command_args
+from dags.infobip.infobip_common import prepare_command_args
 
 with DAG(
         dag_id='infobip_agents',
@@ -30,6 +30,7 @@ with DAG(
         task_id='infobip_agents',
         luigi_module='infobip',
         luigi_task='InfobipAgents',
+        luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
         env_vars={'INFOBIP_USER': Variable.get('INFOBIP_USER'),
                   'INFOBIP_PASSWORD': Variable.get('INFOBIP_PASSWORD')},
         pool='infobip',
