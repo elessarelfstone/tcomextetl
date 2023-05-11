@@ -298,7 +298,6 @@ samruk_kzt_plan_items:
   endpoint: proxy/planproxy/esb-api/plan-item
   ftp_directory: samruk
 
-
 infobip_agents:
   endpoint: agents
   ftp_directory: infobip
@@ -310,11 +309,17 @@ infobip_queues:
 infobip_conversations:
   endpoint: conversations
   ftp_directory: infobip
+  timeout: !!float 5
+  timeout_ban: !!float 3
 
 infobip_messages:
   endpoint: messages
-  ftp_directory: infobip
+#  ftp_directory: infobip
+  timeout: !!float 5
+  timeout_ban: !!float 3
 
 infobip_tags:
   endpoint: tags
   ftp_directory: infobip
+  timeout: !!float 5
+  timeout_ban: !!float 3
