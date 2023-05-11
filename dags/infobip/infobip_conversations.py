@@ -12,7 +12,7 @@ from dags.docker_runner import ExternalEtlDockerRunner as Runner
 from dags.infobip.infobip_common import prepare_command_args
 
 with DAG(
-        dag_id='infobip_agents',
+        dag_id='infobip_conversations',
         catchup=False,
         start_date=pendulum.datetime(2023, 2, 1, tz=f'{Variable.get("TZ")}'),
         schedule_interval='@daily',
@@ -26,15 +26,15 @@ with DAG(
         do_xcom_push=False
     )
 
-    infobip_agents = Runner(
-        task_id='infobip_agents',
+    infobip_conversations = Runner(
+        task_id='infobip_conversations',
         luigi_module='infobip',
-        luigi_task='InfobipAgents',
-        luigi_params="--all-data",
+        luigi_task='InfobipConversations',
+        luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
         env_vars={'INFOBIP_USER': Variable.get('INFOBIP_USER'),
                   'INFOBIP_PASSWORD': Variable.get('INFOBIP_PASSWORD')},
         pool='infobip',
         do_xcom_push=False
     )
 
-    command_args >> infobip_agents
+    command_args >> infobip_conversations

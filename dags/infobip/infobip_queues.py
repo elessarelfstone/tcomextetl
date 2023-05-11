@@ -30,6 +30,7 @@ with DAG(
         task_id='infobip_queues',
         luigi_module='infobip',
         luigi_task='InfobipQueues',
+        luigi_params="--all-data",
         env_vars={'INFOBIP_USER': Variable.get('INFOBIP_USER'),
                   'INFOBIP_PASSWORD': Variable.get('INFOBIP_PASSWORD')},
         pool='infobip',
