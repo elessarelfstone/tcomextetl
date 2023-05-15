@@ -32,8 +32,8 @@ with DAG(
         external_dag_id="infobip_conversations",
         external_task_id="infobip_conversations",
         failed_states=['failed', 'skipped'],
-        # timeout=30,
-        # poke_interval=60 * 30,
+        timeout=60 * 120,
+        poke_interval=60 * 5,
         dag=dag
     )
 

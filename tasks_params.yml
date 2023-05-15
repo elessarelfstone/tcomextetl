@@ -314,7 +314,7 @@ infobip_conversations:
 
 infobip_messages:
   endpoint: messages
-#  ftp_directory: infobip
+  ftp_directory: infobip
   timeout: !!float 5
   timeout_ban: !!float 3
 
