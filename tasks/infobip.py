@@ -1,5 +1,7 @@
 import csv
 import json
+import os
+from math import floor
 from datetime import datetime, timedelta
 
 import luigi
@@ -45,12 +47,20 @@ class InfobipOutput(ApiToCsv):
             params['updatedAfter'], params['updatedBefore'] = u_after, u_before
             print(params)
 
+        # resume if there were fails
+        if self.resume and os.path.exists(self.stat_fpath):
+            next_page_params = self.stat['page_params']
+            params.update(next_page_params)
+
         return params
 
     def run(self):
         auth = {'user': self.user, 'password': self.password}
         parser = InfobipRestApiParser(self.url, self.endpoint, params=self.request_params,
-                                      auth=auth, timeout=self.timeout)
+                                      auth=auth, timeout=self.timeout, timeout_ban=self.timeout_ban)
+
+        # set parsed rows count if resume
+        parser.set_parsed_count(self.stat.get('parsed', 0))
 
         for data in parser:
             save_csvrows(self.output_fpath,
@@ -107,7 +117,7 @@ class InfobipConversationDetailsOutput(InfobipOutput):
 
     def _conv_ids(self):
         _ids = []
-        with open(self.input().path) as csv_file:
+        with open(self.input().path, encoding='utf-8') as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=self.sep)
             for row in csv_reader:
                 _ids.append(row[0])
@@ -134,14 +144,22 @@ class InfobipConversationDetailsOutput(InfobipOutput):
         auth = {'user': self.user, 'password': self.password}
 
         conv_ids = self._conv_ids()
-        parsed_convs_count = 0
-        count = 0
+        total_conv_ids = len(conv_ids)
+
+        # if we resume start from the last conv_id we write in stat file
+        if self.resume and self.request_params.get('conv_id'):
+            conv_id = self.request_params['conv_id']
+            conv_ids = conv_ids[conv_ids.index(conv_id)+1:]
+
+        parsed_convs_count = self.stat.get('parsed_convs_count', 0)
+        total_parsed = self.stat.get('parsed_convs_count', 0)
+
         for conv_id in conv_ids:
             self.conversation_id = conv_id
             params = self.request_params
 
             parser = InfobipRestApiParser(self.url, self.endpoint, params=params,
-                                          auth=auth, timeout=self.timeout)
+                                          auth=auth, timeout=self.timeout, timeout_ban=self.timeout_ban)
 
             for data in parser:
                 _data = []
@@ -152,26 +170,27 @@ class InfobipConversationDetailsOutput(InfobipOutput):
                 save_csvrows(self.output_fpath,
                              [dict_to_row(d, self.struct) for d in _data], quotechar='"')
 
-                count += len(data)
-
-                s, p = parser.status_percent
-                status = f'Total conversations: {len(conv_ids)}. Conversation ID: {conv_id}. Parsed conversations: {parsed_convs_count}'
-                status = f'{status} \n {s}'
-
-                self.set_status_info(status, p)
-                stat = parser.stat
-                stat.update(self.request_params)
-                stat["total_conv_ids"] = len(conv_ids)
-                stat["total_parsed"] = count
-
-                del stat["total"]
-                del stat["parsed"]
-
-                rewrite_file(self.stat_fpath, json.dumps(stat))
+                total_parsed += len(data)
 
             parsed_convs_count += 1
+            p = floor((parsed_convs_count * 100) / len(conv_ids))
+            status = f'Total conversations: {len(conv_ids)}. Conversation ID: {conv_id}. \n'
+            status += f'Parsed conversations: {parsed_convs_count}. Total rows parsed: {total_parsed}'
 
-            self.finalize()
+            self.set_status_info(status, p)
+            stat = parser.stat
+            stat.update(self.request_params)
+            stat["total_conv_ids"] = total_conv_ids
+            stat["total_parsed"] = total_parsed
+            stat["parsed_convs_count"] = parsed_convs_count
+            stat["conv_id"] = conv_id
+
+            del stat["total"]
+            del stat["parsed"]
+
+            rewrite_file(self.stat_fpath, json.dumps(stat))
+
+        self.finalize()
 
 
 @requires(InfobipConversationDetailsOutput)
@@ -186,7 +205,7 @@ class InfobipConversationDetailsRunner(InfobipRunner):
 
         if not self.all_data:
             params['from_to'] = (self.start_date, self.end_date)
-        # print(params)
+
         return InfobipConversationDetailsFtpOutput(**params)
 
 

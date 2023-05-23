@@ -16,7 +16,7 @@ with DAG(
         dag_id='infobip_messages',
         catchup=False,
         start_date=pendulum.datetime(2023, 2, 1, tz=f'{Variable.get("TZ")}'),
-        schedule_interval='@daily',
+        schedule_interval='0 1 * * *',
         tags=['infobip']
      ) as dag:
 
@@ -25,16 +25,6 @@ with DAG(
         python_callable=prepare_command_args,
         dag=dag,
         do_xcom_push=False
-    )
-
-    conversation_sensor = ExternalTaskSensor(
-        task_id="conversation_sensor_id",
-        external_dag_id="infobip_conversations",
-        external_task_id="infobip_conversations",
-        failed_states=['failed', 'skipped'],
-        timeout=60 * 120,
-        poke_interval=60 * 5,
-        dag=dag
     )
 
     infobip_messages = Runner(
@@ -48,4 +38,4 @@ with DAG(
         do_xcom_push=False
     )
 
-    conversation_sensor >> command_args >> infobip_messages
+    command_args >> infobip_messages

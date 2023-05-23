@@ -4,6 +4,7 @@ from math import floor
 from time import sleep
 
 import humanize
+from requests.exceptions import ReadTimeout
 
 from tcomextetl.common.dates import DEFAULT_DATETIME_FORMAT
 from tcomextetl.extract.http_requests import HttpRequest
@@ -72,11 +73,19 @@ class ApiRequests(ABC, HttpRequest):
     def __iter__(self):
 
         self._start_date = datetime.now()
+        errors_count = 0
         while self.next_page_params:
-            self._raw = self.load(self.next_page_params)
-            data = self.parse()
-            self._parsed_count += len(data)
-            self._end_date = datetime.now()
-            yield data
-            if self.timeout_ban:
-                sleep(self.timeout_ban)
+            try:
+                self._raw = self.load(self.next_page_params)
+                data = self.parse()
+                self._parsed_count += len(data)
+                self._end_date = datetime.now()
+                yield data
+                if self.timeout_ban:
+                    sleep(self.timeout_ban)
+            except ReadTimeout:
+                if errors_count <= 10:
+                    sleep(self.timeout * errors_count)
+                    errors_count += 1
+                else:
+                    raise
