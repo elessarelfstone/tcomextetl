@@ -1,3 +1,4 @@
+import csv
 import fnmatch
 import gzip
 import json
@@ -135,6 +136,15 @@ class CsvFileOutput(Base):
     @property
     def params_for_report(self):
         return {"name": self.name, "date": self.date.strftime(DEFAULT_FORMAT)}
+
+    def get_column_as_list_from_csv(self, csv_fpath: str, column_index: int):
+        vals = []
+        with open(csv_fpath, encoding='utf-8') as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=self.sep)
+            for row in csv_reader:
+                vals.append(row[column_index])
+
+        return vals
 
 
 class ApiToCsv(CsvFileOutput):

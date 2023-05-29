@@ -45,7 +45,6 @@ class InfobipOutput(ApiToCsv):
             u_before = datetime.strptime(u_before, DEFAULT_FORMAT)
             u_before = u_before.replace(hour=23, minute=59, second=59).isoformat() + '.000UTC'
             params['updatedAfter'], params['updatedBefore'] = u_after, u_before
-            print(params)
 
         # resume if there were fails
         if self.resume and os.path.exists(self.stat_fpath):
@@ -113,7 +112,8 @@ class InfobipConversationDetailsOutput(InfobipOutput):
     conversation_id = None
 
     def requires(self):
-        return ExternalCsvLocalInput(name='infobip_conversations')
+        return ExternalCsvLocalInput(name='infobip_conversations',
+                                     date=self.date)
 
     def _conv_ids(self):
         _ids = []
@@ -147,12 +147,12 @@ class InfobipConversationDetailsOutput(InfobipOutput):
         total_conv_ids = len(conv_ids)
 
         # if we resume start from the last conv_id we write in stat file
-        if self.resume and self.request_params.get('conv_id'):
-            conv_id = self.request_params['conv_id']
+        if self.resume and self.stat.get('conv_id'):
+            conv_id = self.stat.get('conv_id')
             conv_ids = conv_ids[conv_ids.index(conv_id)+1:]
 
         parsed_convs_count = self.stat.get('parsed_convs_count', 0)
-        total_parsed = self.stat.get('parsed_convs_count', 0)
+        total_parsed = self.stat.get('total_parsed', 0)
 
         for conv_id in conv_ids:
             self.conversation_id = conv_id
@@ -173,8 +173,8 @@ class InfobipConversationDetailsOutput(InfobipOutput):
                 total_parsed += len(data)
 
             parsed_convs_count += 1
-            p = floor((parsed_convs_count * 100) / len(conv_ids))
-            status = f'Total conversations: {len(conv_ids)}. Conversation ID: {conv_id}. \n'
+            p = floor((parsed_convs_count * 100) / total_conv_ids)
+            status = f'Total conversations: {total_conv_ids}. Conversation ID: {conv_id}. \n'
             status += f'Parsed conversations: {parsed_convs_count}. Total rows parsed: {total_parsed}'
 
             self.set_status_info(status, p)

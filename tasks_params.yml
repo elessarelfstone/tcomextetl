@@ -309,17 +309,17 @@ infobip_queues:
 infobip_conversations:
   endpoint: conversations
   ftp_directory: infobip
-  timeout: !!float 3.0
-  timeout_ban: !!float 1.5
+  timeout: !!float 4.0
+  timeout_ban: !!float 2.0
 
 infobip_messages:
   endpoint: messages
   ftp_directory: infobip
-  timeout: !!float 3.0
-  timeout_ban: !!float 1.5
+  timeout: !!float 4.0
+  timeout_ban: !!float 2.0
 
 infobip_tags:
   endpoint: tags
   ftp_directory: infobip
-  timeout: !!float 3.0
-  timeout_ban: !!float 1.5
+  timeout: !!float 4.0
+  timeout_ban: !!float 2.0
