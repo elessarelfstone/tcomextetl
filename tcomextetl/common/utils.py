@@ -57,6 +57,11 @@ def append_file(fpath: str, data: str):
         f.write(data + '\n')
 
 
+def write_binary(fpath: str, data):
+    with open(fpath, 'wb') as f:
+        f.write(data)
+
+
 def rewrite_file(fpath, data):
     with open(fpath, 'w', encoding="utf8") as f:
         f.write(data + '\n')
@@ -121,7 +126,7 @@ def build_fpath(directory: str, name: str, ext: str, suff: str = None) -> str:
 
 
 def get_yaml_task_config(fpath, section) -> dict:
-    with open(fpath) as c:
+    with open(fpath, encoding='utf-8') as c:
         config = load(c, Loader=Loader)
 
     return config[section]

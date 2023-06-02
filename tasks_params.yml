@@ -1,32 +1,38 @@
+#sgov_kato:
+#  url: https://stat.gov.kz/api/getFile/?docId=ESTAT442785
+#  files_count: !!int 2
+#  wildcard: !!str "*.xls"
+#  skiptop: !!int 1
+#  usecolumns: A:I
+#  ftp_directory: sgov
+
 sgov_kato:
-  url: https://stat.gov.kz/api/getFile/?docId=ESTAT442785
-  files_count: !!int 2
-  wildcard: !!str "*.xls"
-  skiptop: !!int 1
+  url: https://stat.gov.kz/upload/iblock/657/5meeln0v3aa2oxyk4w2tt3l0bs863gj5/КАТО_18.05.2023.xls
+  skiptop: 1
   usecolumns: A:I
   ftp_directory: sgov
 
 sgov_oked:
-  url: https://stat.gov.kz/api/getFile/?docId=ESTAT310324
+  url: https://stat.gov.kz/upload/iblock/7c4/avpvdw6e8ab31c77pgk1emb0mtnr2r1z.xlsx
   skiptop: 3
   usecolumns: A:C
   ftp_directory: sgov
 
 sgov_mkeis:
-  url: https://stat.gov.kz/api/getFile/?docId=ESTAT316776
+  url: https://old.stat.gov.kz/api/getFile/?docId=ESTAT316776
   skiptop: 4
   usecolumns: A:C
   ftp_directory: sgov
 
 sgov_kurk:
-  url: https://stat.gov.kz/api/getFile/?docId=ESTAT249322
+  url: https://old.stat.gov.kz/api/getFile/?docId=ESTAT249322
   skiptop: 16
   usecolumns: A:C
   skipbottom: 4
   ftp_directory: sgov
 
 sgov_kpved:
-  url: https://stat.gov.kz/api/getFile/?docId=ESTAT116569
+  url: https://stat.gov.kz/upload/iblock/558/zpgw5k0pb4fg02jmtzqxd5saplm69vrm.xls
   skiptop: 3
   usecolumns: A:C
   ftp_directory: sgov
@@ -323,3 +329,31 @@ infobip_tags:
   ftp_directory: infobip
   timeout: !!float 4.0
   timeout_ban: !!float 2.0
+
+telecomob_clicks:
+  entity: clicks.csv
+  app_id: 3863278
+  ftp_directory: telecomob
+  timeout: !!float 4.0
+  timeout_ban: !!float 60
+
+telecomob_postbacks:
+  entity: postbacks.csv
+  app_id: 3863278
+  ftp_directory: telecomob
+  timeout: !!float 4.0
+  timeout_ban: !!float 60
+
+telecomob_installations:
+  entity: installations.csv
+  app_id: 3863278
+  ftp_directory: telecomob
+  timeout: !!float 4.0
+  timeout_ban: !!float 60
+
+telecomob_:
+  entity: installations.csv
+  app_id: 3863278
+  ftp_directory: telecomob
+  timeout: !!float 4.0
+  timeout_ban: !!float 60

@@ -4,6 +4,8 @@ from tcomextetl.transform.goszakup import *
 from tcomextetl.transform.dgov import *
 from tcomextetl.transform.samruk import *
 from tcomextetl.transform.infobip import *
+from tcomextetl.transform.telecomob import *
+
 
 
 class StructRegister:
@@ -94,4 +96,11 @@ StructRegister.add('infobip_queues', InfobipQueueRow)
 StructRegister.add('infobip_conversations', InfobipConversationRow)
 StructRegister.add('infobip_messages', InfobipConvMessagesRow)
 StructRegister.add('infobip_tags', InfobipConvTagsRow)
+
+
+# telecomob
+StructRegister.add('telecomob_clicks', TelecomobClickRow)
+StructRegister.add('telecomob_installations', TelecomobInstallationRow)
+StructRegister.add('telecomob_postbacks', TelecomobPostbackRow)
+# StructRegister.add('telecomob_data', InfobipConvMessagesRow)
 
