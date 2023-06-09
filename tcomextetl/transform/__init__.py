@@ -99,8 +99,8 @@ StructRegister.add('infobip_tags', InfobipConvTagsRow)
 
 
 # telecomob
-StructRegister.add('telecomob_clicks', TelecomobClickRow)
-StructRegister.add('telecomob_installations', TelecomobInstallationRow)
-StructRegister.add('telecomob_postbacks', TelecomobPostbackRow)
-# StructRegister.add('telecomob_data', InfobipConvMessagesRow)
-
+StructRegister.add('telecomob_logs_clicks', TelecomobClickLogRow)
+StructRegister.add('telecomob_logs_installations', TelecomobInstallationLogRow)
+StructRegister.add('telecomob_logs_postbacks', TelecomobPostbackLogRow)
+StructRegister.add('telecomob_reps_acquisitions', TelecomobRepAcquisitionsRow)
+StructRegister.add('telecomob_reps_dau', TelecomobRepDauRow)

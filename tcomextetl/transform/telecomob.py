@@ -2,7 +2,7 @@ from attrs import define, field
 
 
 @define
-class TelecomobClickRow:
+class TelecomobClickLogRow:
     application_id = field(default='')
     click_datetime = field(default='')
     click_id = field(default='')
@@ -28,7 +28,7 @@ class TelecomobClickRow:
 
 
 @define
-class TelecomobPostbackRow:
+class TelecomobPostbackLogRow:
     application_id = field(default='')
     click_datetime = field(default='')
     click_id = field(default='')
@@ -71,7 +71,7 @@ class TelecomobPostbackRow:
 
 
 @define
-class TelecomobInstallationRow:
+class TelecomobInstallationLogRow:
     application_id = field(default='')
     click_datetime = field(default='')
     click_id = field(default='')
@@ -111,3 +111,42 @@ class TelecomobInstallationRow:
     windows_aid = field(default='')
     app_package_name = field(default='')
     app_version_name = field(default='')
+
+
+@define
+class TelecomobInstallationRepRow:
+    date = field(default='')
+    cnt = field(default='')
+
+@define
+class TelecomobRepAcquisitionsRow:
+    date = field(default='')
+    os = field(default='')
+    install_count = field(default='')
+
+
+@define
+class TelecomobRepDauRow:
+    date = field(default='')
+    active_users_count = field(default='')
+    active_users_share = field(default='')
+    new_users_count = field(default='')
+    new_users_share = field(default='')
+
+
+@define
+class TelecomobRepDauRow:
+    date = field(default='')
+    active_users_count = field(default='')
+    active_users_share = field(default='')
+    new_users_count = field(default='')
+    new_users_share = field(default='')
+
+
+@define
+class TelecomobRepDauRow:
+    date = field(default='')
+    active_users_count = field(default='')
+    active_users_share = field(default='')
+    new_users_count = field(default='')
+    new_users_share = field(default='')

@@ -17,11 +17,12 @@ from tcomextetl.common.dates import yesterday, n_days_ago, DEFAULT_FORMAT, DEFAU
 from tcomextetl.common.utils import rewrite_file, write_binary
 from settings import TELECOMOB_YANDEX_METRICA_TOKEN
 
+host = 'https://api.appmetrica.yandex.ru'
+logs_api_url = 'https://api.appmetrica.yandex.ru/logs/v1/export'
+reps_api_url = 'https://api.appmetrica.yandex.ru/stat/v1/data.csv'
 
-api_url = 'https://api.appmetrica.yandex.ru/logs/v1/export'
 
-
-class TelecomobYandexMetricaOutput(CsvFileOutput):
+class TelecomobYandexMetricaLogsOutput(CsvFileOutput):
 
     app_id = luigi.IntParameter()
     from_to = luigi.TupleParameter()
@@ -53,7 +54,7 @@ class TelecomobYandexMetricaOutput(CsvFileOutput):
     def run(self):
         headers = dict()
         headers['Authorization'] = self.token
-        url = f'{api_url}/{self.entity}'
+        url = f'{host}/{self.entity}'
         parser = TelecomobilYandexMetricsRequests(
                     url,
                     headers=headers,
@@ -76,7 +77,63 @@ class TelecomobYandexMetricaOutput(CsvFileOutput):
         rewrite_file(self.success_fpath, json.dumps(params))
 
 
-@requires(TelecomobYandexMetricaOutput)
+class TelecomobYandexMetricaRepsOutput(CsvFileOutput):
+
+    app_id = luigi.IntParameter()
+    entity = luigi.Parameter()
+    from_to = luigi.TupleParameter()
+    metrics = luigi.Parameter(default='')
+    dimensions = luigi.Parameter(default='')
+    source = luigi.Parameter(default='')
+    timeout = luigi.FloatParameter(default=2.0)
+    timeout_ban = luigi.FloatParameter(default=30.0)
+    token = luigi.Parameter(default=TELECOMOB_YANDEX_METRICA_TOKEN, visibility=ParameterVisibility.HIDDEN)
+
+    @property
+    def dates_params(self):
+        params = dict()
+        params['date1'], params['date2'] = self.from_to
+        return params
+
+    @property
+    def request_params(self):
+        params = dict()
+        params['id'] = self.app_id
+        params.update(self.dates_params)
+        fields = ','.join([a.name for a in attr.fields(self.struct)])
+        params['dimensions'] = self.dimensions
+        params['metrics'] = self.metrics
+        if self.source:
+            params['source'] = self.source
+        return params
+
+    def run(self):
+        headers = dict()
+        headers['Authorization'] = self.token
+        url = f'{host}/{self.entity}'
+        parser = TelecomobilYandexMetricsRequests(
+                    url,
+                    headers=headers,
+                    timeout=self.timeout,
+                    timeout_ban=self.timeout_ban
+        )
+        data = parser.load(self.request_params)
+        data = data.decode('utf-8').strip()
+        data_lines = data.splitlines()[2:]
+        parsed_count = len(data_lines)
+        data = '\n'.join(data_lines)
+
+        # parsed_count = len(data.decode('utf-8').split('\n'))
+        params = self.request_params
+        params.update(dict(parsed=parsed_count))
+
+        # print(parsed_count)
+        # write_binary(self.output_fpath, data)
+        rewrite_file(self.output_fpath, data)
+        rewrite_file(self.success_fpath, json.dumps(params))
+
+
+@requires(TelecomobYandexMetricaLogsOutput)
 class TelecomobYandexMetricaFtpOutput(FtpUploadedOutput):
     pass
 
@@ -102,17 +159,51 @@ class TelecomobYandexMetricaRunner(Runner):
 
 class TelecomobYandexMetricaClicks(TelecomobYandexMetricaRunner):
 
-    name = luigi.Parameter('telecomob_clicks')
+    name = luigi.Parameter('telecomob_logs_clicks')
 
 
 class TelecomobYandexMetricaPostbacks(TelecomobYandexMetricaRunner):
 
-    name = luigi.Parameter('telecomob_postbacks')
+    name = luigi.Parameter('telecomob_logs_postbacks')
 
 
 class TelecomobYandexMetricaInstallations(TelecomobYandexMetricaRunner):
 
-    name = luigi.Parameter('telecomob_installations')
+    name = luigi.Parameter('telecomob_logs_installations')
+
+
+@requires(TelecomobYandexMetricaRepsOutput)
+class TelecomobYandexMetricaRepsFtpOutput(FtpUploadedOutput):
+    pass
+
+
+class TelecomobYandexMetricaRepsRunner(Runner):
+
+    name = luigi.Parameter()
+    start_date = luigi.DateParameter(default=n_days_ago())
+    end_date = luigi.DateParameter(default=n_days_ago())
+
+    @property
+    def params(self):
+        params = super(TelecomobYandexMetricaRepsRunner, self).params
+        params['from_to'] = (
+            self.start_date.strftime(DEFAULT_FORMAT),
+            self.end_date.strftime(DEFAULT_FORMAT)
+        )
+        return params
+
+    def requires(self):
+        return TelecomobYandexMetricaRepsFtpOutput(**self.params)
+
+
+class TelecomobYandexMetricaRepAcquisitions(TelecomobYandexMetricaRepsRunner):
+
+    name = luigi.Parameter('telecomob_reps_acquisitions')
+
+
+class TelecomobYandexMetricaRepDau(TelecomobYandexMetricaRepsRunner):
+
+    name = luigi.Parameter('telecomob_reps_dau')
 
 
 
