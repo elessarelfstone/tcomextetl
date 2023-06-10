@@ -145,6 +145,7 @@ class TelecomobRepDauRow:
 
 @define
 class TelecomobRepDauRow:
+    event_name = field(default='')
     date = field(default='')
     active_users_count = field(default='')
     active_users_share = field(default='')
