@@ -351,7 +351,7 @@ telecomob_reps_acquisitions:
   dimensions: date,operatingSystemInfo
   source: installation
   ftp_directory: telecomob
-  timeout: !!float 4.0
+  timeout: !!float 30
   timeout_ban: !!float 60
 
 
@@ -360,16 +360,16 @@ telecomob_reps_dau:
   metrics: ym:u:activeUsers,norm(ym:u:activeUsers),ym:u:newUsers,norm(ym:u:newUsers),ym:u:newUsersShare
   dimensions: ym:u:date
   app_id: 3863278
-#  ftp_directory: telecomob
-  timeout: !!float 4.0
+  ftp_directory: telecomob
+  timeout: !!float 30
   timeout_ban: !!float 60
 
 
 telecomob_reps_events:
   entity: stat/v1/data.csv
   metrics: ym:ce2:allEvents,norm(ym:ce2:allEvents),ym:ce2:devicesWithEvent,norm(ym:ce2:devicesWithEvent),ym:ce2:eventsPerDevice,ym:ce2:devicesPercent
-  dimensions: ym:ce2:eventLabel,ym:ce2:eventLabelComment
+  dimensions: ym:ce2:date,ym:ce2:eventLabel,ym:ce2:eventLabelComment
   app_id: 3863278
-#  ftp_directory: telecomob
-  timeout: !!float 4.0
+  ftp_directory: telecomob
+  timeout: !!float 30
   timeout_ban: !!float 60

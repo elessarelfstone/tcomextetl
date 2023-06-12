@@ -84,6 +84,7 @@ class TelecomobYandexMetricaRepsOutput(CsvFileOutput):
     from_to = luigi.TupleParameter()
     metrics = luigi.Parameter(default='')
     dimensions = luigi.Parameter(default='')
+    limit = luigi.Parameter(default=100000)
     source = luigi.Parameter(default='')
     timeout = luigi.FloatParameter(default=2.0)
     timeout_ban = luigi.FloatParameter(default=30.0)
@@ -103,6 +104,7 @@ class TelecomobYandexMetricaRepsOutput(CsvFileOutput):
         fields = ','.join([a.name for a in attr.fields(self.struct)])
         params['dimensions'] = self.dimensions
         params['metrics'] = self.metrics
+        params['limit'] = self.limit
         if self.source:
             params['source'] = self.source
         return params
@@ -205,6 +207,10 @@ class TelecomobYandexMetricaRepDau(TelecomobYandexMetricaRepsRunner):
 
     name = luigi.Parameter('telecomob_reps_dau')
 
+
+class TelecomobYandexMetricaRepEvents(TelecomobYandexMetricaRepsRunner):
+
+    name = luigi.Parameter('telecomob_reps_events')
 
 
 if __name__ == '__main__':
