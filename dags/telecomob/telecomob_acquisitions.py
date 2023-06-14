@@ -9,7 +9,7 @@ from airflow.models import Variable
 sys.path.append('.')
 
 from dags.docker_runner import ExternalEtlDockerRunner as Runner
-from dags.goszakup_dags.goszakup_common import prepare_command_args
+from dags.telecomob.telecomob_common import prepare_command_args
 
 with DAG(
         dag_id='telecomob_acquisitions',
