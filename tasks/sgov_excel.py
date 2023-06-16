@@ -1,15 +1,20 @@
-import luigi
 from datetime import datetime
 from time import sleep
 
+import attr
+import json
+import luigi
 from luigi.util import requires
 
 from tasks.base import Base, FtpUploadedOutput, Runner, CsvFileOutput
 from tasks.xls import WebExcelFileParsingToCsv, ArchivedWebExcelFileParsingToCsv
 from tcomextetl.extract.sgov_requests import SgovApiRCutParser
+from tcomextetl.common.csv import save_csvrows
 from tcomextetl.common.dates import first_day_of_month
-from tcomextetl.common.utils import build_fpath, append_file, read_file
+from tcomextetl.common.excel import SimpleExcelDataReader
+from tcomextetl.common.utils import build_fpath, append_file, read_file, rewrite_file
 from settings import TEMP_PATH
+
 
 rcut_legal_entities = 'legal_entities'
 rcut_legal_branches = 'legal_branches'
@@ -57,8 +62,40 @@ class SgovKato(SgovExcelRunner):
         return SgovKatoFtpOutput(**self.params)
 
 
+# class SgovOkedOutput(WebExcelFileParsingToCsv):
+#     pass
+
+
 class SgovOkedOutput(WebExcelFileParsingToCsv):
-    pass
+
+    def run(self):
+
+        # super().run()
+        excel_reader = SimpleExcelDataReader(
+            self.input().path,
+            ws_indexes=self.sheets,
+            skip_rows=self.skiptop,
+            skip_footer=self.skipbottom,
+            use_cols=self.usecolumns
+        )
+
+        wrapper = self.struct
+        for chunk in excel_reader:
+            # wrap in struct, transform
+            rows = []
+            for i, row in enumerate(chunk, start=1):
+                _row = list(row)
+                _row.append(str(i))
+                _row = tuple(_row)
+                rows.append(attr.astuple(wrapper(*_row)))
+
+            save_csvrows(self.output().path, rows)
+            self.set_status_info(excel_reader.status, excel_reader.percent_done)
+
+        rewrite_file(
+            self.success_fpath,
+            json.dumps(excel_reader.stat)
+        )
 
 
 @requires(SgovOkedOutput)
