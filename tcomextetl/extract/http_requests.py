@@ -102,11 +102,6 @@ class Downloader(HttpRequest):
         super().__init__(params, headers, auth, timeout)
         self.url = url
         self.chunk_size = chunk_size
-        self._file_format = self.file_format()
-
-        if not self._file_format:
-            raise ExternalSourceError('Could not detect format of file')
-
         self._curr_size = 0
 
     @property
@@ -119,14 +114,15 @@ class Downloader(HttpRequest):
 
     @property
     def ext(self):
-        return self._file_format['extension']
+        _file_format = self._file_format(self.url)
+        return _file_format['extension']
 
-    def file_format(self):
+    def _file_format(self, url):
 
         ext = None
         file_format = None
 
-        r = self.head(self.url, self.params)
+        r = self.head(url, self.params)
         if r:
             content_type = r.headers.get('Content-Type')
             location = r.headers.get('Location')
@@ -151,10 +147,17 @@ class Downloader(HttpRequest):
 
         return file_format
 
-    def download(self, fpath):
+    def download(self, fpath, url=None):
         """ Download file using stream """
 
-        with self.request(self.url, stream=True) as r:
+        _url = url if url else self.url
+
+        file_format = self._file_format(_url)
+
+        if not file_format:
+            raise ExternalSourceError('Could not detect format of file')
+
+        with self.request(_url, stream=True) as r:
             r.raise_for_status()
             f_size = 0
             with open(fpath, 'wb') as f:
