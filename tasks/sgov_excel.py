@@ -29,22 +29,6 @@ class SgovExcelRunner(Runner):
     resume = luigi.BoolParameter(default=False)
 
 
-# class SgovKatoOutput(ArchivedWebExcelFileParsingToCsv):
-#     pass
-#
-#
-# @requires(SgovKatoOutput)
-# class SgovKatoFtpOutput(FtpUploadedOutput):
-#     pass
-#
-#
-# class SgovKato(SgovExcelRunner):
-#
-#     name = luigi.Parameter(default='sgov_kato')
-#
-#     def requires(self):
-#         return SgovKatoFtpOutput(**self.params)
-
 class SgovKatoOutput(WebExcelFileParsingToCsv):
     pass
 
