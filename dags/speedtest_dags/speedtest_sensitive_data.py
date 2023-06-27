@@ -16,7 +16,7 @@ with DAG(
         catchup=False,
         start_date=pendulum.now(tz=f'{Variable.get("TZ")}').subtract(days=1),
         schedule_interval='@daily',
-        tags=['speedtest_dags']
+        tags=['speedtest']
      ) as dag:
 
     command_args = PythonOperator(
