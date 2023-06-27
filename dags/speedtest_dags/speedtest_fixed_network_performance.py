@@ -29,7 +29,7 @@ with DAG(
     speedtest_sensitive_data = Runner(
         task_id='speedtest_fixed_network_performance',
         luigi_module='speedtest',
-        luigi_task='SpeedtestSensitiveData',
+        luigi_task='SpeedtestFixedNetworkPerformance',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
         env_vars={
             'SPEEDTEST_USER': Variable.get('SPEEDTEST_USER'),
