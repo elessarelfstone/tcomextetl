@@ -121,6 +121,7 @@ class TelecomobYandexMetricaRepsOutput(CsvFileOutput):
         )
         data = parser.load(self.request_params)
         data = data.decode('utf-8').strip()
+        # TODO refactor this with pandas
         data_lines = data.splitlines()[2:]
         parsed_count = len(data_lines)
         data = '\n'.join(data_lines)

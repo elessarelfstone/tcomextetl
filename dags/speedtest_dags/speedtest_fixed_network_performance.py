@@ -9,15 +9,14 @@ from airflow.models import Variable
 sys.path.append('.')
 
 from dags.docker_runner import ExternalEtlDockerRunner as Runner
-from dags.telecomob.telecomob_common import prepare_command_args
+from dags.speedtest_dags.speedtest_common import prepare_command_args
 
 with DAG(
-        dag_id='telecomob_events',
+        dag_id='speedtest_fixed_network_performance',
         catchup=False,
-        # start_date=pendulum.datetime(2023, 2, 1, tz=f'{Variable.get("TZ")}'),
         start_date=pendulum.now(tz=f'{Variable.get("TZ")}').subtract(days=1),
         schedule_interval='@daily',
-        tags=['telecomob']
+        tags=['speedtest']
      ) as dag:
 
     command_args = PythonOperator(
@@ -27,14 +26,17 @@ with DAG(
         do_xcom_push=False
     )
 
-    telecomob_events = Runner(
-        task_id='telecomob_events',
-        luigi_module='telecomob',
-        luigi_task='TelecomobYandexMetricaRepEvents',
+    speedtest_sensitive_data = Runner(
+        task_id='speedtest_fixed_network_performance',
+        luigi_module='speedtest',
+        luigi_task='SpeedtestSensitiveData',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
-        env_vars={'TELECOMOB_YANDEX_METRICA_TOKEN': Variable.get('TELECOMOB_YANDEX_METRICA_TOKEN')},
-        pool='telecomob',
+        env_vars={
+            'SPEEDTEST_USER': Variable.get('SPEEDTEST_USER'),
+            'SPEEDTEST_PASS': Variable.get('SPEEDTEST_PASS')
+        },
+        pool='speedtest',
         do_xcom_push=False
     )
 
-    command_args >> telecomob_events
+    command_args >> speedtest_sensitive_data
