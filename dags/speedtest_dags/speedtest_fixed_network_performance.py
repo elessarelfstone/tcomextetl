@@ -15,7 +15,7 @@ with DAG(
         dag_id='speedtest_fixed_network_performance',
         catchup=False,
         start_date=pendulum.now(tz=f'{Variable.get("TZ")}').subtract(days=1),
-        schedule_interval='@daily',
+        schedule_interval='0 13 * * *',
         tags=['speedtest']
      ) as dag:
 
