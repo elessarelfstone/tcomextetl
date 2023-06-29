@@ -1,4 +1,3 @@
-import logging
 import platform
 from datetime import date, timedelta
 
@@ -65,7 +64,7 @@ class ExternalEtlDockerRunner(DockerOperator):
              task_id=task_id,
              container_name=task_id,
              image=image,
-             auto_remove=True,
+             auto_remove='success',
              network_mode=network_mode,
              docker_url=docker_url,
              environment=_vars,
