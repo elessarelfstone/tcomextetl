@@ -8,8 +8,7 @@ import luigi
 from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
-from settings import (INFOBIP_URL, INFOBIP_USER,
-                      INFOBIP_PASSWORD, INFOBIP_TIMEOUT)
+from settings import (INFOBIP_USER, INFOBIP_PASSWORD, INFOBIP_TIMEOUT)
 
 from tasks.base import ApiToCsv, FtpUploadedOutput, Runner, ExternalCsvLocalInput
 from tcomextetl.common.csv import save_csvrows, dict_to_row
@@ -18,6 +17,7 @@ from tcomextetl.common.dates import DEFAULT_FORMAT
 from tcomextetl.extract.infobip_requests import InfobipRestApiParser
 from tcomextetl.common.utils import rewrite_file
 
+infobip_url = 'https://9rrrjd.api.infobip.com/ccaas/1/'
 
 class InfobipOutput(ApiToCsv):
 
@@ -33,7 +33,7 @@ class InfobipOutput(ApiToCsv):
 
     @property
     def url(self):
-        return f'{INFOBIP_URL}{self.endpoint}'
+        return f'{infobip_url}{self.endpoint}'
 
     @property
     def request_params(self):

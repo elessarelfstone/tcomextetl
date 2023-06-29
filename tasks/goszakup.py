@@ -13,7 +13,7 @@ from luigi.util import requires
 from tcomextetl.extract.goszakup_requests import (GoszakupRestApiParser,
                                                   GoszakupGraphQLApiParser)
 from tcomextetl.common.csv import dict_to_row, save_csvrows
-from tcomextetl.common.dates import yesterday, n_days_ago, DEFAULT_FORMAT
+from tcomextetl.common.dates import n_days_ago, DEFAULT_FORMAT
 from tcomextetl.common.utils import rewrite_file
 from settings import GOSZAKUP_TOKEN
 
@@ -59,7 +59,7 @@ class GoszakupOutput(ApiToCsv):
 
         url = f'{host}{self.endpoint}'
 
-        # goszakup_dags.gov.kz provides Rest and GraphQl API services
+        # goszakup.gov.kz provides Rest and GraphQl API services
         # Rest API can't retrieve data for specified period
         if self.use_rest:
             parser = GoszakupRestApiParser(

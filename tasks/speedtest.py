@@ -5,6 +5,7 @@ from time import sleep
 
 import luigi
 import pandas as pd
+from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
 from tasks.base import CsvFileOutput, FtpUploadedOutput, Runner
@@ -22,8 +23,8 @@ class SpeedTestOutput(CsvFileOutput):
 
     from_to = luigi.TupleParameter(default=())
     dataset = luigi.Parameter(default='')
-    user = luigi.Parameter(default=SPEEDTEST_USER)
-    password = luigi.Parameter(default=SPEEDTEST_PASS)
+    user = luigi.Parameter(default=SPEEDTEST_USER, visibility=ParameterVisibility.HIDDEN)
+    password = luigi.Parameter(default=SPEEDTEST_PASS, visibility=ParameterVisibility.HIDDEN)
 
     @property
     def auth(self):
@@ -45,10 +46,11 @@ class SpeedTestOutput(CsvFileOutput):
         f_paths = []
         d_count = 0
 
-        # download and unpacking
+        # download and unpack
         for file in d:
             af_path = build_fpath(TEMP_PATH, self.name, '.zip')
             d.download(af_path, file['url'])
+            # there is always only one csv file in zip archive
             f_path, *_ = extract_by_wildcard(af_path, wildcard=wildcard)
             f_paths.append(f_path)
             d_count += 1
@@ -61,13 +63,14 @@ class SpeedTestOutput(CsvFileOutput):
         df = pd.DataFrame()
         row_count = 0
         file_count = 0
+
         # merging csv files
-        for count, file in enumerate(f_paths):
+        for count, file in enumerate(f_paths, start=1):
             data = pd.read_csv(file, sep=',')
             row_count += len(data.index) - 1
-            file_count += 1
+            # file_count += 1
             df = pd.concat([df, data], axis=0)
-
+            file_count = count
             self.set_status_info(
                 f'Merging file {file}.',
                 floor((count * 100) / len(f_paths))

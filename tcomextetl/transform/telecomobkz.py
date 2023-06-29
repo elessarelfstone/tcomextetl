@@ -2,7 +2,7 @@ from attrs import define, field
 
 
 @define
-class TelecomobClickLogRow:
+class TelecomobkzClickLogRow:
     application_id = field(default='')
     click_datetime = field(default='')
     click_id = field(default='')
@@ -28,7 +28,7 @@ class TelecomobClickLogRow:
 
 
 @define
-class TelecomobPostbackLogRow:
+class TelecomobkzPostbackLogRow:
     application_id = field(default='')
     click_datetime = field(default='')
     click_id = field(default='')
@@ -71,7 +71,7 @@ class TelecomobPostbackLogRow:
 
 
 @define
-class TelecomobInstallationLogRow:
+class TelecomobkzInstallationLogRow:
     application_id = field(default='')
     click_datetime = field(default='')
     click_id = field(default='')
@@ -114,19 +114,19 @@ class TelecomobInstallationLogRow:
 
 
 @define
-class TelecomobInstallationRepRow:
+class TelecomobkzInstallationRepRow:
     date = field(default='')
     cnt = field(default='')
 
 @define
-class TelecomobRepAcquisitionsRow:
+class TelecomobkzRepAcquisitionsRow:
     date = field(default='')
     os = field(default='')
     install_count = field(default='')
 
 
 @define
-class TelecomobRepDauRow:
+class TelecomobkzRepDauRow:
     date = field(default='')
     active_users_count = field(default='')
     active_users_share = field(default='')
@@ -135,16 +135,7 @@ class TelecomobRepDauRow:
 
 
 @define
-class TelecomobRepDauRow:
-    date = field(default='')
-    active_users_count = field(default='')
-    active_users_share = field(default='')
-    new_users_count = field(default='')
-    new_users_share = field(default='')
-
-
-@define
-class TelecomobRepEventRow:
+class TelecomobkzRepEventRow:
     date = field(default='')
     event_name = field(default='')
     event_comment = field(default='')

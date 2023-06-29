@@ -324,21 +324,21 @@ infobip_tags:
 
 telecomob_logs_clicks:
   entity: clicks.csv
-  app_id: 3863278
+  id: 3863278
   ftp_directory: telecomob
   timeout: !!float 4.0
   timeout_ban: !!float 60
 
 telecomob_logs_postbacks:
   entity: postbacks.csv
-  app_id: 3863278
+  id: 3863278
   ftp_directory: telecomob
   timeout: !!float 4.0
   timeout_ban: !!float 60
 
-telecomob_reps_acquisitions:
+telecomobkz_reps_acquisitions:
   entity: v2/user/acquisition.csv
-  app_id: 3863278
+  id: 3863278
   metrics: devices
   dimensions: date,operatingSystemInfo
   source: installation
@@ -346,23 +346,30 @@ telecomob_reps_acquisitions:
   timeout: !!float 30
   timeout_ban: !!float 60
 
-
-telecomob_reps_dau:
+telecomobkz_reps_dau:
   entity: stat/v1/data.csv
   metrics: ym:u:activeUsers,norm(ym:u:activeUsers),ym:u:newUsers,norm(ym:u:newUsers),ym:u:newUsersShare
   dimensions: ym:u:date
-  app_id: 3863278
+  id: 3863278
   ftp_directory: telecomob
   timeout: !!float 30
   timeout_ban: !!float 60
 
-
-telecomob_reps_events:
+telecomobkz_reps_events:
   entity: stat/v1/data.csv
   metrics: ym:ce2:allEvents,norm(ym:ce2:allEvents),ym:ce2:devicesWithEvent,norm(ym:ce2:devicesWithEvent),ym:ce2:eventsPerDevice,ym:ce2:devicesPercent
   dimensions: ym:ce2:date,ym:ce2:eventLabel,ym:ce2:eventLabelComment
-  app_id: 3863278
+  id: 3863278
   ftp_directory: telecomob
+  timeout: !!float 30
+  timeout_ban: !!float 60
+
+telecomkz_reps_main_visits:
+  entity: stat/v1/data.csv
+  id: 49372510
+  metrics: ym:s:visits
+  dimensions: ym:s:date
+  ftp_directory: telecomkz
   timeout: !!float 30
   timeout_ban: !!float 60
 

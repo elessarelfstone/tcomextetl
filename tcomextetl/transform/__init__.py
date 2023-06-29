@@ -4,9 +4,9 @@ from tcomextetl.transform.goszakup import *
 from tcomextetl.transform.dgov import *
 from tcomextetl.transform.samruk import *
 from tcomextetl.transform.infobip import *
-from tcomextetl.transform.telecomob import *
+from tcomextetl.transform.telecomobkz import *
+from tcomextetl.transform.telecomkz import *
 from tcomextetl.transform.speedtest import *
-
 
 
 class StructRegister:
@@ -99,14 +99,24 @@ StructRegister.add('infobip_messages', InfobipConvMessagesRow)
 StructRegister.add('infobip_tags', InfobipConvTagsRow)
 
 
-# telecomob
-StructRegister.add('telecomob_logs_clicks', TelecomobClickLogRow)
-StructRegister.add('telecomob_logs_installations', TelecomobInstallationLogRow)
-StructRegister.add('telecomob_logs_postbacks', TelecomobPostbackLogRow)
-StructRegister.add('telecomob_reps_acquisitions', TelecomobRepAcquisitionsRow)
-StructRegister.add('telecomob_reps_dau', TelecomobRepDauRow)
-StructRegister.add('telecomob_reps_events', TelecomobRepEventRow)
+# telecomobkz
+StructRegister.add('telecomobkz_logs_clicks', TelecomobkzClickLogRow)
+StructRegister.add('telecomobkz_logs_installations', TelecomobkzInstallationLogRow)
+StructRegister.add('telecomobkz_logs_postbacks', TelecomobkzPostbackLogRow)
+StructRegister.add('telecomobkz_reps_acquisitions', TelecomobkzRepAcquisitionsRow)
+StructRegister.add('telecomobkz_reps_dau', TelecomobkzRepDauRow)
+StructRegister.add('telecomobkz_reps_events', TelecomobkzRepEventRow)
 
+
+# telecomkz
+StructRegister.add('telecomkz_reps_main_visits', TelecomkzMainVisitsRow)
+# StructRegister.add('telecomkz_reps_installations', TelecomobInstallationLogRow)
+# StructRegister.add('telecomobkz_logs_postbacks', TelecomobPostbackLogRow)
+# StructRegister.add('telecomobkz_reps_acquisitions', TelecomobRepAcquisitionsRow)
+# StructRegister.add('telecomobkz_reps_dau', TelecomobRepDauRow)
+# StructRegister.add('telecomobkz_reps_events', TelecomobRepEventRow)
+# StructRegister.add('telecomobkz_reps_dau', TelecomobRepDauRow)
+# StructRegister.add('telecomobkz_reps_events', TelecomobRepEventRow)
 
 # telecomob
 StructRegister.add('speedtest_sensitive_data', SpeedtestSensitiveDataRow)

@@ -13,7 +13,6 @@ from dags.goszakup_dags.goszakup_common import prepare_command_args
 with DAG(
         dag_id='goszakup_contract_units',
         catchup=False,
-        # start_date=datetime.today() - timedelta(1),
         start_date=pendulum.now(tz=f'{Variable.get("TZ")}').subtract(days=1),
         schedule_interval='@daily',
         tags=['goszakup']
