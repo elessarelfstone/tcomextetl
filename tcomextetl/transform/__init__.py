@@ -5,6 +5,7 @@ from tcomextetl.transform.dgov import *
 from tcomextetl.transform.samruk import *
 from tcomextetl.transform.infobip import *
 from tcomextetl.transform.telecomob import *
+from tcomextetl.transform.speedtest import *
 
 
 
@@ -105,3 +106,8 @@ StructRegister.add('telecomob_logs_postbacks', TelecomobPostbackLogRow)
 StructRegister.add('telecomob_reps_acquisitions', TelecomobRepAcquisitionsRow)
 StructRegister.add('telecomob_reps_dau', TelecomobRepDauRow)
 StructRegister.add('telecomob_reps_events', TelecomobRepEventRow)
+
+
+# telecomob
+StructRegister.add('speedtest_sensitive_data', SpeedtestSensitiveDataRow)
+StructRegister.add('speedtest_fixed_network_performance', FixedNetworkPerformanceRow)
