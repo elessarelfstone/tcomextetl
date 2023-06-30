@@ -123,12 +123,9 @@ class TelecomYandexMetricaRepsOutput(CsvFileOutput):
         parsed_count = len(data_lines)
         data = '\n'.join(data_lines)
 
-        # parsed_count = len(data.decode('utf-8').split('\n'))
         params = self.request_params
         params.update(dict(parsed=parsed_count))
 
-        # print(parsed_count)
-        # write_binary(self.output_fpath, data)
         rewrite_file(self.output_fpath, data)
         rewrite_file(self.success_fpath, json.dumps(params))
 
@@ -209,7 +206,6 @@ class TelecomobkzYandexMetricaRepDau(TelecomobkzYandexMetricaRepsRunner):
 class TelecomobkzYandexMetricaRepEvents(TelecomobkzYandexMetricaRepsRunner):
 
     name = luigi.Parameter('telecomobkz_reps_events')
-
 
 
 

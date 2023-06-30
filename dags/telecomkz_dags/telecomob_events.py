@@ -9,7 +9,7 @@ from airflow.models import Variable
 sys.path.append('.')
 
 from dags.docker_runner import ExternalEtlDockerRunner as Runner
-from dags.telecomobkz_dags.telecomob_common import prepare_command_args
+from dags.telecomkz_dags.telecomob_common import prepare_command_args
 
 with DAG(
         dag_id='telecomob_events',
@@ -29,10 +29,10 @@ with DAG(
 
     telecomob_events = Runner(
         task_id='telecomob_events',
-        luigi_module='telecomob',
-        luigi_task='TelecomobYandexMetricaRepEvents',
+        luigi_module='telecomkz',
+        luigi_task='TelecomobkzYandexMetricaRepEvents',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
-        env_vars={'TELECOMOB_YANDEX_METRICA_TOKEN': Variable.get('TELECOMOB_YANDEX_METRICA_TOKEN')},
+        env_vars={'TELECOMOBKZ_YANDEX_APP_METRICA_TOKEN': Variable.get('TELECOMOBKZ_YANDEX_APP_METRICA_TOKEN')},
         pool='telecomob',
         do_xcom_push=False
     )
