@@ -136,7 +136,7 @@ class InfobipConversationDetailsOutput(InfobipOutput):
     def url(self):
         url = super().url
         if self.endpoint == 'messages':
-            url = f'{INFOBIP_URL}conversations/{self.conversation_id}/messages'
+            url = f'{infobip_url}conversations/{self.conversation_id}/messages'
 
         return url
 
