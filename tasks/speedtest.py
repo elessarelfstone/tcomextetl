@@ -75,8 +75,6 @@ class SpeedTestOutput(CsvFileOutput):
                 f'Merging file {file}.',
                 floor((count * 100) / len(f_paths))
             )
-        # there is always extra column - id, so rid off it
-        df.drop(columns=df.columns[0], axis=1, inplace=True)
 
         df.to_csv(
             self.output_fpath,
