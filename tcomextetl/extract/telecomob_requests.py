@@ -1,18 +1,17 @@
 from time import sleep
 from tcomextetl.extract.http_requests import HttpRequest
+import logging
 
 
-class TelecomobilYandexMetricsRequests(HttpRequest):
+class TelecomkzYandexMetricsRequests(HttpRequest):
 
     def __init__(self, url, **kwargs):
-        super(TelecomobilYandexMetricsRequests, self).__init__(**kwargs)
+        super(TelecomkzYandexMetricsRequests, self).__init__(**kwargs)
         self.url = url
 
     def load(self, params):
 
         r = self.request(self.url, params=params)
-
-        print(r.text)
 
         while r.status_code == 202:
             sleep(self.timeout_ban)

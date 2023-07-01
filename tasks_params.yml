@@ -342,7 +342,7 @@ telecomobkz_reps_acquisitions:
   metrics: devices
   dimensions: date,operatingSystemInfo
   source: installation
-  ftp_directory: telecomob
+  ftp_directory: telecomkz
   timeout: !!float 30
   timeout_ban: !!float 60
 
@@ -351,7 +351,7 @@ telecomobkz_reps_dau:
   metrics: ym:u:activeUsers,norm(ym:u:activeUsers),ym:u:newUsers,norm(ym:u:newUsers),ym:u:newUsersShare
   dimensions: ym:u:date
   id: 3863278
-  ftp_directory: telecomob
+  ftp_directory: telecomkz
   timeout: !!float 30
   timeout_ban: !!float 60
 
@@ -360,7 +360,7 @@ telecomobkz_reps_events:
   metrics: ym:ce2:allEvents,norm(ym:ce2:allEvents),ym:ce2:devicesWithEvent,norm(ym:ce2:devicesWithEvent),ym:ce2:eventsPerDevice,ym:ce2:devicesPercent
   dimensions: ym:ce2:date,ym:ce2:eventLabel,ym:ce2:eventLabelComment
   id: 3863278
-  ftp_directory: telecomob
+  ftp_directory: telecomkz
   timeout: !!float 30
   timeout_ban: !!float 60
 
