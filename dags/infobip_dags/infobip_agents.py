@@ -1,5 +1,4 @@
 import sys
-from datetime import datetime, timedelta
 
 import pendulum
 from airflow.operators.python import PythonOperator
@@ -9,7 +8,6 @@ from airflow.models import Variable
 sys.path.append('.')
 
 from dags.docker_runner import ExternalEtlDockerRunner as Runner
-from dags.infobip_dags.infobip_common import prepare_command_args
 
 with DAG(
         dag_id='infobip_agents',
@@ -18,13 +16,6 @@ with DAG(
         schedule_interval='@daily',
         tags=['infobip']
      ) as dag:
-
-    command_args = PythonOperator(
-        task_id='command_args',
-        python_callable=prepare_command_args,
-        dag=dag,
-        do_xcom_push=False
-    )
 
     infobip_agents = Runner(
         task_id='infobip_agents',
@@ -37,4 +28,4 @@ with DAG(
         do_xcom_push=False
     )
 
-    command_args >> infobip_agents
+    infobip_agents

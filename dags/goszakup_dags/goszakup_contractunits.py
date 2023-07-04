@@ -8,7 +8,7 @@ sys.path.append('.')
 
 import pendulum
 from dags.docker_runner import ExternalEtlDockerRunner as Runner
-from dags.goszakup_dags.goszakup_common import prepare_command_args
+from dags.common import get_command_args
 
 with DAG(
         dag_id='goszakup_contract_units',
@@ -20,9 +20,12 @@ with DAG(
 
     command_args = PythonOperator(
         task_id='command_args',
-        python_callable=prepare_command_args,
+        python_callable=get_command_args,
         dag=dag,
-        do_xcom_push=False
+        do_xcom_push=False,
+        op_kwargs={
+            'n_days_delta': 3
+        }
     )
 
     goszakup_contract_units = Runner(

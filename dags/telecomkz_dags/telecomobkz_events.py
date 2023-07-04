@@ -28,7 +28,7 @@ with DAG(
     telecomobkz_events = Runner(
         task_id='telecomobkz_events',
         luigi_module='telecomkz',
-        luigi_task='TelecomobkzYandexMetricaRepEvents',
+        luigi_task='TelecomobkzYandexMetricaRepsEvents',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
         env_vars={'TELECOMOBKZ_YANDEX_APP_METRICA_TOKEN': Variable.get('TELECOMOBKZ_YANDEX_APP_METRICA_TOKEN')},
         pool='telecomobkz',

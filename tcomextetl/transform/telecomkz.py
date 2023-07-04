@@ -37,3 +37,13 @@ class TelecomkzLK2UsersRow:
     users_count = field(default='')
 
 
+@define
+class TelecomkzLK2Yam2VisitsRow:
+    date = field(default='')
+    users_count = field(default='')
+
+
+@define
+class TelecomkzLK2Yam2UsersRow:
+    date = field(default='')
+    users_count = field(default='')

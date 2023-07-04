@@ -373,6 +373,68 @@ telecomkz_reps_main_visits:
   timeout: !!float 30
   timeout_ban: !!float 60
 
+telecomkz_reps_main_users:
+  entity: stat/v1/data.csv
+  id: 49372510
+  metrics: ym:s:users
+  dimensions: ym:s:date
+  ftp_directory: telecomkz
+  timeout: !!float 30
+  timeout_ban: !!float 60
+
+telecomkz_reps_lk1_visits:
+  entity: stat/v1/data.csv
+  id: 52550719
+  metrics: ym:s:visits
+  dimensions: ym:s:date
+  ftp_directory: telecomkz
+  timeout: !!float 30
+  timeout_ban: !!float 60
+
+telecomkz_reps_lk1_users:
+  entity: stat/v1/data.csv
+  id: 52550719
+  metrics: ym:s:users
+  dimensions: ym:s:date
+  ftp_directory: telecomkz
+  timeout: !!float 30
+  timeout_ban: !!float 60
+
+telecomkz_reps_lk2_visits:
+  entity: stat/v1/data.csv
+  id: 62132932
+  metrics: ym:s:visits
+  dimensions: ym:s:date
+  ftp_directory: telecomkz
+  timeout: !!float 30
+  timeout_ban: !!float 60
+
+telecomkz_reps_lk2_users:
+  entity: stat/v1/data.csv
+  id: 62132932
+  metrics: ym:s:users
+  dimensions: ym:s:date
+  ftp_directory: telecomkz
+  timeout: !!float 30
+  timeout_ban: !!float 60
+
+telecomkz_reps_lk2_yam2_visits:
+  entity: stat/v1/data.csv
+  id: 92978096
+  metrics: ym:s:visits
+  dimensions: ym:s:date
+  ftp_directory: telecomkz
+  timeout: !!float 30
+  timeout_ban: !!float 60
+
+telecomkz_reps_lk2_yam2_users:
+  entity: stat/v1/data.csv
+  id: 92978096
+  metrics: ym:s:users
+  dimensions: ym:s:date
+  ftp_directory: telecomkz
+  timeout: !!float 30
+  timeout_ban: !!float 60
 
 speedtest_fixed_network_performance:
   dataset: FixedNetworkPerformance

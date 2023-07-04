@@ -110,13 +110,13 @@ StructRegister.add('telecomobkz_reps_events', TelecomobkzRepEventRow)
 
 # telecomkz
 StructRegister.add('telecomkz_reps_main_visits', TelecomkzMainVisitsRow)
-# StructRegister.add('telecomkz_reps_installations', TelecomobInstallationLogRow)
-# StructRegister.add('telecomobkz_logs_postbacks', TelecomobPostbackLogRow)
-# StructRegister.add('telecomobkz_reps_acquisitions', TelecomobRepAcquisitionsRow)
-# StructRegister.add('telecomobkz_reps_dau', TelecomobRepDauRow)
-# StructRegister.add('telecomobkz_reps_events', TelecomobRepEventRow)
-# StructRegister.add('telecomobkz_reps_dau', TelecomobRepDauRow)
-# StructRegister.add('telecomobkz_reps_events', TelecomobRepEventRow)
+StructRegister.add('telecomkz_reps_main_users', TelecomkzMainUsersRow)
+StructRegister.add('telecomkz_reps_lk1_visits', TelecomkzLK1VisitsRow)
+StructRegister.add('telecomkz_reps_lk1_users', TelecomkzLK1UsersRow)
+StructRegister.add('telecomkz_reps_lk2_visits', TelecomkzLK2VisitsRow)
+StructRegister.add('telecomkz_reps_lk2_users', TelecomkzLK2UsersRow)
+StructRegister.add('telecomkz_reps_lk2_yam2_visits', TelecomkzLK2Yam2VisitsRow)
+StructRegister.add('telecomkz_reps_lk2_yam2_users', TelecomkzLK2Yam2UsersRow)
 
 # telecomob
 StructRegister.add('speedtest_sensitive_data', SpeedtestSensitiveDataRow)

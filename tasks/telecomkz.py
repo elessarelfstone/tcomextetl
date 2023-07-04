@@ -103,17 +103,17 @@ class TelecomobkzYandexMetricaRepsRunner(Runner):
         return TelecomYandexMetricaRepsFtpOutput(host=app_metrika_host, **self.params)
 
 
-class TelecomobkzYandexMetricaRepAcquisitions(TelecomobkzYandexMetricaRepsRunner):
+class TelecomobkzYandexMetricaRepsAcquisitions(TelecomobkzYandexMetricaRepsRunner):
 
     name = luigi.Parameter('telecomobkz_reps_acquisitions')
 
 
-class TelecomobkzYandexMetricaRepDau(TelecomobkzYandexMetricaRepsRunner):
+class TelecomobkzYandexMetricaRepsDau(TelecomobkzYandexMetricaRepsRunner):
 
     name = luigi.Parameter('telecomobkz_reps_dau')
 
 
-class TelecomobkzYandexMetricaRepEvents(TelecomobkzYandexMetricaRepsRunner):
+class TelecomobkzYandexMetricaRepsEvents(TelecomobkzYandexMetricaRepsRunner):
 
     name = luigi.Parameter('telecomobkz_reps_events')
 
@@ -141,14 +141,44 @@ class TelecomkzYandexMetricaRepsRunner(Runner):
         )
 
 
-class TelecomkzYandexMetricaRepMainVisits(TelecomkzYandexMetricaRepsRunner):
+class TelecomkzYandexMetricaRepsMainVisits(TelecomkzYandexMetricaRepsRunner):
 
     name = luigi.Parameter('telecomkz_reps_main_visits')
 
 
-class TelecomkzYandexMetricaRepMainUsers(TelecomkzYandexMetricaRepsRunner):
+class TelecomkzYandexMetricaRepsMainUsers(TelecomkzYandexMetricaRepsRunner):
 
     name = luigi.Parameter('telecomkz_reps_main_users')
+
+
+class TelecomkzYandexMetricaRepsLK1Visits(TelecomkzYandexMetricaRepsRunner):
+
+    name = luigi.Parameter('telecomkz_reps_lk1_visits')
+
+
+class TelecomkzYandexMetricaRepsLK1Users(TelecomkzYandexMetricaRepsRunner):
+
+    name = luigi.Parameter('telecomkz_reps_lk1_users')
+
+
+class TelecomkzYandexMetricaRepsLK2Visits(TelecomkzYandexMetricaRepsRunner):
+
+    name = luigi.Parameter('telecomkz_reps_lk2_visits')
+
+
+class TelecomkzYandexMetricaRepsLK2Users(TelecomkzYandexMetricaRepsRunner):
+
+    name = luigi.Parameter('telecomkz_reps_lk2_users')
+
+
+class TelecomkzYandexMetricaRepsLK2Yam2Visits(TelecomkzYandexMetricaRepsRunner):
+
+    name = luigi.Parameter('telecomkz_reps_lk2_yam2_visits')
+
+
+class TelecomkzYandexMetricaRepsLK2Yam2Users(TelecomkzYandexMetricaRepsRunner):
+
+    name = luigi.Parameter('telecomkz_reps_lk2_yam2_users')
 
 
 if __name__ == '__main__':
