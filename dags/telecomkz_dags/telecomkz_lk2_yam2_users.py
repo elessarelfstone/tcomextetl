@@ -24,7 +24,7 @@ with DAG(
         dag=dag,
         do_xcom_push=False,
         op_kwargs={
-            'n_days_delta': 3
+            'n_days_delta': 1
         }
     )
 
