@@ -12,7 +12,8 @@ def get_command_args(**context):
 
     # execution date
 
-    exec_date = context["data_interval_end"].to_date_string()
+    exec_date = pm.today().to_date_string()
+    # exec_date = context["data_interval_end"].to_date_string()
     # print(f'{exec_date} - Date')
     command_args = context["dag_run"].conf.get("command_args", '')
 
