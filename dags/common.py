@@ -1,4 +1,5 @@
 import sys
+import logging
 
 import pendulum as pm
 
@@ -10,7 +11,9 @@ def get_command_args(**context):
     ti = context["ti"]
 
     # execution date
-    exec_date = context["ds"]
+
+    exec_date = context["data_interval_end"].to_date_string()
+    # print(f'{exec_date} - Date')
     command_args = context["dag_run"].conf.get("command_args", '')
 
     if not command_args:

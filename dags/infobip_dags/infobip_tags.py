@@ -15,17 +15,17 @@ with DAG(
         catchup=False,
         start_date=pendulum.datetime(2023, 2, 1, tz=f'{Variable.get("TZ")}'),
         schedule_interval='0 1 * * *',
-        tags=['infobip'],
-        params={
-            'n_days_delta': 1
-        }
+        tags=['infobip']
      ) as dag:
 
     command_args = PythonOperator(
         task_id='command_args',
         python_callable=get_command_args,
         dag=dag,
-        do_xcom_push=False
+        do_xcom_push=False,
+        op_kwargs={
+            'n_days_delta': 1
+        }
     )
 
     infobip_tags = Runner(
