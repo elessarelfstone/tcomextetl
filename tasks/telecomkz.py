@@ -6,7 +6,7 @@ from tasks.base import CsvFileOutput, FtpUploadedOutput, Runner
 from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
-from tcomextetl.extract.telecomob_requests import TelecomkzYandexMetricsRequests
+from tcomextetl.extract.telecomkz_requests import TelecomkzYandexMetricsRequests
 
 from tcomextetl.common.dates import n_days_ago, DEFAULT_FORMAT
 from tcomextetl.common.utils import rewrite_file
