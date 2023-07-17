@@ -1,4 +1,4 @@
-import csv
+import re
 from pathlib import Path
 from collections import namedtuple
 
@@ -157,3 +157,6 @@ def flatten_dict(d: dict) -> dict:
 
     return out
 
+
+def dict_keys_to_snake_case(d: dict):
+    return {re.sub(r'(?<!^)(?=[A-Z])', '_', key).lower(): value for (key, value) in d.items()}
