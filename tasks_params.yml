@@ -443,3 +443,7 @@ speedtest_fixed_network_performance:
 speedtest_sensitive_data:
   dataset: SensitiveData
   ftp_directory: speedtest
+
+
+crmsensor_checklist:
+  survey_ids: 16572, 15965, 15556, 15549, 15966, 15962

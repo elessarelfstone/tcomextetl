@@ -7,6 +7,7 @@ from tcomextetl.transform.infobip import *
 from tcomextetl.transform.telecomobkz import *
 from tcomextetl.transform.telecomkz import *
 from tcomextetl.transform.speedtest import *
+from tcomextetl.transform.crmsensor import *
 
 
 class StructRegister:
@@ -121,3 +122,6 @@ StructRegister.add('telecomkz_reps_lk2_yam2_users', TelecomkzLK2Yam2UsersRow)
 # telecomob
 StructRegister.add('speedtest_sensitive_data', SpeedtestSensitiveDataRow)
 StructRegister.add('speedtest_fixed_network_performance', FixedNetworkPerformanceRow)
+
+# crmsensor
+StructRegister.add('crmsensor_checklist', CrmsensorChecklistRow)
