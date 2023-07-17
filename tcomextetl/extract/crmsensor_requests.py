@@ -33,9 +33,6 @@ class CrmSensor(ApiRequests):
 
     def _parse(self, d):
 
-        # def to_snake_case(d):
-        #     return {re.sub(r'(?<!^)(?=[A-Z])', '_', key).lower(): value for (key, value) in d.items() if key != 'Data'}
-
         dicts = []
         base_d = {key: value for (key, value) in d.items() if key != 'Data'}
         questions = d['Data']

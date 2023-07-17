@@ -1,4 +1,4 @@
-from tcomextetl.extract.crmsensor_requests import CrmSensor
+from datetime import datetime, time
 
 import luigi
 
@@ -8,7 +8,6 @@ from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
 from tcomextetl.extract.crmsensor_requests import CrmSensor
-
 from tcomextetl.common.csv import dict_to_row, save_csvrows
 from tcomextetl.common.dates import n_days_ago, DEFAULT_FORMAT
 from tcomextetl.common.utils import rewrite_file
@@ -65,10 +64,13 @@ class CrmSensorRunner(Runner):
     @property
     def params(self):
         params = super(CrmSensorRunner, self).params
+        s_date = datetime.combine(self.start_date, datetime.min.time()).isoformat()
+        e_date = datetime.combine(self.end_date, time(23, 59, 59)).isoformat()
         params['from_to'] = (
-            self.start_date.strftime(DEFAULT_FORMAT),
-            self.end_date.strftime(DEFAULT_FORMAT)
+            s_date,
+            e_date
         )
+
         return params
 
     def requires(self):
