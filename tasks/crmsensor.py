@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, time
 
 import luigi
@@ -44,9 +45,16 @@ class CrmSensorOutput(CsvFileOutput):
             headers=headers
         )
 
+        row_count = 0
         for rows in parser:
             data = [dict_to_row(d, self.struct) for d in rows]
             save_csvrows(self.output_fpath, data)
+            row_count += len(rows)
+
+        stat = parser.stat
+        stat.update(self.request_params)
+        stat.update({'parsed': row_count})
+        rewrite_file(self.success_fpath, json.dumps(stat))
 
 
 @requires(CrmSensorOutput)

@@ -1,4 +1,4 @@
-import re
+from datetime import datetime
 from collections import deque
 
 from tcomextetl.common.utils import dict_keys_to_snake_case
@@ -11,10 +11,11 @@ class CrmSensor(ApiRequests):
         super(CrmSensor, self).__init__(**kwargs)
         self.url = url
         self._queue = None
+        self._total = 0
 
     @property
     def total(self):
-        return len(self._raw)
+        return self._total
 
     @property
     def page(self):
@@ -49,16 +50,11 @@ class CrmSensor(ApiRequests):
 
     def __iter__(self):
 
+        self._start_date = datetime.now()
         queue = deque(self.load(self.params))
-
         while queue:
             d = queue.pop()
+            self._end_date = datetime.now()
+            self._total += 1
+            self._parsed_count += 1
             yield self._parse(d)
-
-
-
-
-
-
-
-
