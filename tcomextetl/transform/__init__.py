@@ -8,6 +8,7 @@ from tcomextetl.transform.telecomobkz import *
 from tcomextetl.transform.telecomkz import *
 from tcomextetl.transform.speedtest import *
 from tcomextetl.transform.crmsensor import *
+from tcomextetl.transform.iot import *
 
 
 class StructRegister:
@@ -125,3 +126,6 @@ StructRegister.add('speedtest_fixed_network_performance', FixedNetworkPerformanc
 
 # crmsensor
 StructRegister.add('crmsensor_checklist', CrmsensorChecklistRow)
+
+
+StructRegister.add('iot_stat', IotStatRow)

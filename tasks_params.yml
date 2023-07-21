@@ -447,3 +447,5 @@ speedtest_sensitive_data:
 crmsensor_checklist:
   survey_ids: 16572, 15965, 15556, 15549, 15966, 15962
   ftp_directory: crmsensor
+
+iot_stat:
