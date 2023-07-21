@@ -265,6 +265,8 @@ class Runner(luigi.WrapperTask):
         """
         params_fpath = Path(__file__).parent.parent / 'tasks_params.yml'
         params = get_yaml_task_config(params_fpath, self.name)
+        if params is None:
+            params = dict()
         params['name'] = self.name
         params['date'] = self.date
         params['resume'] = self.resume
