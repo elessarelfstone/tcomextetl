@@ -8,7 +8,7 @@ from tasks.base import CsvFileOutput, FtpUploadedOutput, Runner
 from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
-from tcomextetl.extract.crmsensor_requests import CrmSensor
+from tcomextetl.extract.crmsensor_requests import CrmSensorRequestsParser
 from tcomextetl.common.csv import dict_to_row, save_csvrows
 from tcomextetl.common.dates import n_days_ago, DEFAULT_FORMAT
 from tcomextetl.common.utils import rewrite_file
@@ -39,7 +39,7 @@ class CrmSensorOutput(CsvFileOutput):
         headers['X-Auth-Password'] = self.password
         headers['Content-Type'] = 'application/json'
 
-        parser = CrmSensor(
+        parser = CrmSensorRequestsParser(
             host,
             params=self.request_params,
             headers=headers
@@ -65,7 +65,6 @@ class CrmSensorOutputFtpOutput(FtpUploadedOutput):
 class CrmSensorRunner(Runner):
 
     name = luigi.Parameter()
-    use_rest = luigi.BoolParameter(default=False)
     start_date = luigi.DateParameter(default=n_days_ago())
     end_date = luigi.DateParameter(default=n_days_ago())
 

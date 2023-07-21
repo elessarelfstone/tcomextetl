@@ -5,10 +5,10 @@ from tcomextetl.common.utils import dict_keys_to_snake_case
 from tcomextetl.extract.api_requests import ApiRequests
 
 
-class CrmSensor(ApiRequests):
+class CrmSensorRequestsParser(ApiRequests):
 
     def __init__(self, url, **kwargs):
-        super(CrmSensor, self).__init__(**kwargs)
+        super(CrmSensorRequestsParser, self).__init__(**kwargs)
         self.url = url
         self._queue = None
         self._total = 0
