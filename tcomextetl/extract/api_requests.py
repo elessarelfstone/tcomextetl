@@ -17,8 +17,8 @@ class ApiRequests(ABC, HttpRequest):
         self._raw = None
         self._page = None
         self._parsed_count = 0
-        self._start_date: datetime = None
-        self._end_date: datetime = None
+        self._start_date: datetime = datetime.now()
+        self._end_date: datetime = datetime.now()
 
     def set_parsed_count(self, count: int):
         self._parsed_count = count
