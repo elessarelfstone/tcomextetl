@@ -44,7 +44,8 @@ class CrmSensorOutput(CsvFileOutput):
             params=self.request_params,
             headers=headers
         )
-
+        
+        super().run()
         row_count = 0
         for rows in parser:
             data = [dict_to_row(d, self.struct) for d in rows]
