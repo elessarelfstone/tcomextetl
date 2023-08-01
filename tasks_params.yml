@@ -101,66 +101,66 @@ sgov_companies:
 sgov_foreign_branches:
   juridical_type_id: !!int 742684
   timeout: 90
-  skiptop: 1
+  skiptop: 2
   ftp_directory: sgov
 
 sgov_legal_entities:
   juridical_type_id: !!int 742679
   timeout: 90
-  skiptop: 1
+  skiptop: 2
   ftp_directory: sgov
 
 sgov_joint_ventures:
   juridical_type_id: !!int 742687
   timeout: 90
-  skiptop: 1
+  skiptop: 2
   ftp_directory: sgov
 
 sgov_entrepreneurs:
   juridical_type_id: !!int 742681
   timeout: 90
-  skiptop: 1
+  skiptop: 2
   ftp_directory: sgov
 
 sgov_legal_branches:
   juridical_type_id: !!int 742680
   timeout: 90
-  skiptop: 1
+  skiptop: 2
   ftp_directory: sgov
 
 sgov_active_foreign_branches:
   juridical_type_id: !!int 742684
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
-  skiptop: 1
+  skiptop: 2
   ftp_directory: sgov
 
 sgov_active_legal_entities:
   juridical_type_id: !!int 742679
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
-  skiptop: 1
+  skiptop: 2
   ftp_directory: sgov
 
 sgov_active_joint_ventures:
   juridical_type_id: !!int 742687
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
-  skiptop: 1
+  skiptop: 2
   ftp_directory: sgov
 
 sgov_active_entrepreneurs:
   juridical_type_id: !!int 742681
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
-  skiptop: 1
+  skiptop: 2
   ftp_directory: sgov
 
 sgov_active_legal_branches:
   juridical_type_id: !!int 742680
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
-  skiptop: 1
+  skiptop: 2
   ftp_directory: sgov
 
 goszakup_companies:
@@ -447,5 +447,16 @@ speedtest_sensitive_data:
 crmsensor_checklist:
   survey_ids: 16572, 15965, 15556, 15549, 15966, 15962
   ftp_directory: crmsensor
+
+telecomkz_reps_conversions_main:
+  entity: stat/v1/data.csv
+  id: 49372510
+  metrics: ym:s:goal{0}conversionRate,ym:s:goal{0}reaches,ym:s:goal{0}visits,ym:s:goal{0}converted<currency>Revenue,ym:s:goal{0}users,ym:s:goal{0}pageviews,ym:s:goal{0}percentNewVisitors,ym:s:goal{0}bounceRate,ym:s:goal{0}pageDepth,ym:s:goal{0}avgVisitDurationSeconds,ym:s:visits
+  dimensions: ym:s:date
+  ftp_directory: telecomkz
+  timeout: !!float 30
+  timeout_ban: !!float 60
+  ftp_file_mask: telecomkz_reps_conversions_main_*
+
 
 iot_stat:

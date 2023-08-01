@@ -1,15 +1,19 @@
+import os
 import json
 import luigi
+from io import StringIO
 
 import attr
+import pandas as pd
 from tasks.base import CsvFileOutput, FtpUploadedOutput, Runner
 from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
+from tasks.base import ExternalFtpCsvDFInput
 from tcomextetl.extract.telecomkz_requests import TelecomkzYandexMetricsRequests
 
 from tcomextetl.common.dates import n_days_ago, DEFAULT_FORMAT
-from tcomextetl.common.utils import rewrite_file
+from tcomextetl.common.utils import rewrite_file, append_file
 from settings import TELECOMOBKZ_YANDEX_APP_METRICA_TOKEN, TELECOMKZ_YANDEX_METRICA_TOKEN
 
 app_metrika_host = 'https://api.appmetrica.yandex.ru'
@@ -179,6 +183,106 @@ class TelecomkzYandexMetricaRepsLK2Yam2Visits(TelecomkzYandexMetricaRepsRunner):
 class TelecomkzYandexMetricaRepsLK2Yam2Users(TelecomkzYandexMetricaRepsRunner):
 
     name = luigi.Parameter('telecomkz_reps_lk2_yam2_users')
+
+
+
+class TelecomkzYandexConversionsMetricaRepsOutput(TelecomYandexMetricaRepsOutput):
+
+    conversion_id = None
+
+    ftp_file_mask = luigi.Parameter(visibility=ParameterVisibility.HIDDEN)
+
+    def _conversioned_metrics(self, conversion_id):
+        m = self.metrics
+        return m.format(conversion_id)
+
+    def requires(self):
+        return ExternalFtpCsvDFInput(
+            ftp_file_mask=self.ftp_file_mask
+        )
+
+    @property
+    def request_params(self):
+        params = dict()
+        params['id'] = self.id
+        params.update(self.dates_params)
+        fields = ','.join([a.name for a in attr.fields(self.struct)])
+        params['dimensions'] = self.dimensions
+        params['metrics'] = self._conversioned_metrics(self.conversion_id)
+        params['limit'] = self.limit
+        if self.source:
+            params['source'] = self.source
+        return params
+
+    def _conversion_ids_fpath(self) -> str:
+        return self._file_path('.ids')
+
+    def run(self):
+        headers = dict()
+        headers['Authorization'] = self.token
+        url = f'{self.host}/{self.entity}'
+        parser = TelecomkzYandexMetricsRequests(
+            url,
+            headers=headers,
+            timeout=self.timeout,
+            timeout_ban=self.timeout_ban
+        )
+
+        if not os.path.exists(self._conversion_ids_fpath()):
+            self.input().get(str(self._conversion_ids_fpath()))
+        print(self._conversion_ids_fpath())
+        conversions = pd.read_csv(self._conversion_ids_fpath(), sep=',', engine='python', encoding='utf-8')
+        row_count = 0
+        df = pd.DataFrame()
+        for _, row in conversions.iterrows():
+            print(row[0], row[1])
+            conversion_id, conversion_title = row[0], row[1]
+            self.conversion_id = conversion_id
+
+            data = parser.load(self.request_params)
+            data = data.decode('utf-8').strip()
+            data = pd.read_csv(StringIO(data), header=None, sep=",", skiprows=2)
+            data.insert(0, 'conversion_title', row[1])
+            data.insert(0, 'conversion_id', row[0])
+            df = pd.concat([df, data], axis=0)
+            row_count += len(data)
+
+        df.to_csv(self.output_fpath, sep=";", header=False, index=False)
+
+        stat = {'parsed': row_count}
+        append_file(self.success_fpath, json.dumps(stat))
+
+
+@requires(TelecomkzYandexConversionsMetricaRepsOutput)
+class TelecomYandexConversionsMetricaRepsFtpOutput(FtpUploadedOutput):
+    pass
+
+
+class TelecomkzYandexConversionsMetricaRepsRunner(Runner):
+
+    name = luigi.Parameter()
+    start_date = luigi.DateParameter(default=n_days_ago())
+    end_date = luigi.DateParameter(default=n_days_ago())
+
+    @property
+    def params(self):
+        params = super(TelecomkzYandexConversionsMetricaRepsRunner, self).params
+        params['from_to'] = (
+            self.start_date.strftime(DEFAULT_FORMAT),
+            self.end_date.strftime(DEFAULT_FORMAT)
+        )
+        return params
+
+    def requires(self):
+        return TelecomYandexConversionsMetricaRepsFtpOutput(
+            host=ya_metrika_host,
+            token=TELECOMKZ_YANDEX_METRICA_TOKEN,
+            **self.params
+        )
+
+
+class TelecomkzYandexConversionsMetricaRepsMain(TelecomkzYandexConversionsMetricaRepsRunner):
+    name = luigi.Parameter('telecomkz_reps_conversions_main')
 
 
 if __name__ == '__main__':
