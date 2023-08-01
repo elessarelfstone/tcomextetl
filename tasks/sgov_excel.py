@@ -1,14 +1,20 @@
+import csv
 from datetime import datetime
+from math import floor
 from time import sleep
 
 import attr
 import json
 import luigi
+import pandas as pd
 from luigi.util import requires
 
 from tasks.base import Base, FtpUploadedOutput, Runner, CsvFileOutput
 from tasks.xls import WebExcelFileParsingToCsv, ArchivedWebExcelFileParsingToCsv
+from tcomextetl.extract.http_requests import Downloader
 from tcomextetl.extract.sgov_requests import SgovApiRCutParser
+from tcomextetl.common.arch import extract_by_wildcard
+from tcomextetl.common.csv import CSV_QUOTECHAR
 from tcomextetl.common.csv import save_csvrows
 from tcomextetl.common.dates import first_day_of_month
 from tcomextetl.common.excel import SimpleExcelDataReader
@@ -254,6 +260,104 @@ class SgovRcutsActiveJuridical(luigi.WrapperTask):
         yield SgovRcutJuridicalRunner(name=f'sgov_active_{rcut_legal_branches}')
         yield SgovRcutJuridicalRunner(name=f'sgov_active_{rcut_foreign_branches}')
         yield SgovRcutJuridicalRunner(name=f'sgov_active_{rcut_entrepreneurs}')
+
+
+class SgovRcutByKatoJuridicalOutput(CsvFileOutput):
+
+    juridical_type_id = luigi.IntParameter()
+    skiptop = luigi.IntParameter(default=None)
+    skipbottom = luigi.IntParameter(default=0)
+    usecolumns = luigi.Parameter(default=None)
+    sheets = luigi.Parameter(default=None)
+    statuses = luigi.ListParameter(default=[39354, 39355, 39356, 39358, 534829, 39359])
+    # kato_ids = luigi.ListParameter(default=[77208141, 247783, 248875, 250502, 252311, 253160, 255577, 77208139, 256619, 258742, 260099, 260907, 263009, 264023, 20243032, 77208140, 264990])
+    kato_ids = luigi.ListParameter(default=[77208141, 247783, 248875])
+    prev_period_index = luigi.IntParameter(default=0)
+    timeout = luigi.IntParameter(default=200)
+
+    def run(self):
+
+        urls = []
+        # 1 step - getting urls
+        for kato in self.kato_ids:
+
+            p = SgovApiRCutParser(
+                self.juridical_type_id,
+                self.statuses,
+                kato_id=kato,
+                which_last=self.prev_period_index
+            )
+
+            order_id = p.place_order()
+
+            status_info = f'OrderID : {order_id}. Kato: {kato}. Waiting for url...'
+            self.set_status_info(status_info, 50)
+
+            url = None
+
+            while url is None:
+                sleep(self.timeout)
+                url = p.check_state(order_id)
+
+            f_path = build_fpath(TEMP_PATH, f'{self.name}_{kato}', '.url')
+            # file_paths.append(f_path)
+            urls.append(url)
+
+        # 2 step - gather data
+        df = pd.DataFrame()
+        row_count = 0
+
+        for i, u in enumerate(urls, start=1):
+            d = Downloader(u)
+            a_fpath = build_fpath(TEMP_PATH, f'{self.name}_{kato}', '.zip')
+            d.download(a_fpath)
+            f_path, *_ = extract_by_wildcard(a_fpath, wildcard='*.xlsx')
+
+            excel_reader = SimpleExcelDataReader(
+                f_path,
+                ws_indexes=self.sheets,
+                skip_rows=self.skiptop,
+                skip_footer=self.skipbottom,
+                use_cols=self.usecolumns
+            )
+
+            wrapper = self.struct
+            for chunk in excel_reader:
+                # wrap in struct, transform
+                rows = [attr.astuple(wrapper(*row)) for row in chunk]
+                save_csvrows(self.output_fpath, rows)
+                row_count += len(rows)
+                self.set_status_info(excel_reader.status, excel_reader.percent_done)
+
+        stat = {'parsed': row_count}
+        append_file(self.success_fpath, json.dumps(stat))
+
+
+@requires(SgovRcutByKatoJuridicalOutput)
+class SgovRcutByKatoJuridicalFtpOutput(FtpUploadedOutput):
+    pass
+
+
+class SgovRcutByKatoJuridicalRunner(Runner):
+
+    name = luigi.Parameter()
+
+    @property
+    def params(self):
+        params = super(SgovRcutByKatoJuridicalRunner, self).params
+        return params
+
+    def requires(self):
+        return SgovRcutByKatoJuridicalFtpOutput(**self.params)
+
+
+class SgovRcutByKatoJuridical(luigi.WrapperTask):
+    def requires(self):
+        yield SgovRcutByKatoJuridicalRunner(name=f'sgov_{rcut_legal_entities}')
+        yield SgovRcutByKatoJuridicalRunner(name=f'sgov_{rcut_joint_ventures}')
+        yield SgovRcutByKatoJuridicalRunner(name=f'sgov_{rcut_legal_branches}')
+        yield SgovRcutByKatoJuridicalRunner(name=f'sgov_{rcut_foreign_branches}')
+        yield SgovRcutByKatoJuridicalRunner(name=f'sgov_{rcut_entrepreneurs}')
 
 
 if __name__ == '__main__':
