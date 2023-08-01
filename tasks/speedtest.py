@@ -84,7 +84,7 @@ class SpeedTestOutput(CsvFileOutput):
             quotechar=CSV_QUOTECHAR
         )
 
-        stat = {'file_count': file_count, 'row_count': row_count}
+        stat = {'file_count': file_count, 'parsed': row_count}
         append_file(self.success_fpath, json.dumps(stat))
 
 
