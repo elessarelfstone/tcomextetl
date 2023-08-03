@@ -31,7 +31,7 @@ with DAG(
     telecomkz_conversions_lk1 = Runner(
         task_id='telecomkz_conversions_lk1',
         luigi_module='telecomkz',
-        luigi_task='TelecomkzYandexConversionsMetricaRepsMain',
+        luigi_task='TelecomkzYandexConversionsMetricaRepsLK1',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
         env_vars={'TELECOMKZ_YANDEX_METRICA_TOKEN': Variable.get('TELECOMKZ_YANDEX_METRICA_TOKEN')},
         pool='telecomkz',
