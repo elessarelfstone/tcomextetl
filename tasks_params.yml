@@ -455,7 +455,7 @@ telecomkz_reps_conversions_main:
   dimensions: ym:s:date
   ftp_directory: telecomkz
   timeout: !!float 30
-  timeout_ban: !!float 2
+  timeout_ban: !!float 10
   ftp_file_mask: telecomkz_reps_conversions_main_*
 
 telecomkz_reps_conversions_lk1:
@@ -465,7 +465,7 @@ telecomkz_reps_conversions_lk1:
   dimensions: ym:s:date
   ftp_directory: telecomkz
   timeout: !!float 30
-  timeout_ban: !!float 2
+  timeout_ban: !!float 10
   ftp_file_mask: telecomkz_reps_conversions_lk1_*
 
 telecomkz_reps_conversions_lk2:
@@ -475,7 +475,7 @@ telecomkz_reps_conversions_lk2:
   dimensions: ym:s:date
   ftp_directory: telecomkz
   timeout: !!float 30
-  timeout_ban: !!float 2
+  timeout_ban: !!float 10
   ftp_file_mask: telecomkz_reps_conversions_lk2_*
 
 
