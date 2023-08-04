@@ -15,6 +15,9 @@ def save_csvrows(fpath: str, rows, delimiter=None, quotechar=CSV_QUOTECHAR):
             # clean new-line and carriage returns
             val = ''.join(filter(lambda ch: ch not in "\n\r", val))
 
+            # clean slashes
+            val = val.strip('/')
+
             if CSV_QUOTECHAR in val:
                 val = val.replace(CSV_QUOTECHAR, "'").strip(CSV_QUOTECHAR)
 
