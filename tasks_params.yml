@@ -480,3 +480,4 @@ telecomkz_reps_conversions_lk2:
 
 
 iot_stat:
+  ftp_directory: iot
