@@ -104,6 +104,7 @@ StructRegister.add('infobip_tags', InfobipConvTagsRow)
 # telecomobkz
 StructRegister.add('telecomobkz_logs_profiles', TelecomobkzProfileLogRow)
 StructRegister.add('telecomobkz_logs_events', TelecomobkzEventLogRow)
+StructRegister.add('telecomobkz_logs_crashes', TelecomobkzCrashLogRow)
 StructRegister.add('telecomobkz_logs_installations', TelecomobkzInstallationLogRow)
 StructRegister.add('telecomobkz_logs_postbacks', TelecomobkzPostbackLogRow)
 StructRegister.add('telecomobkz_reps_acquisitions', TelecomobkzRepAcquisitionsRow)

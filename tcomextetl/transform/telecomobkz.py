@@ -27,6 +27,16 @@ class TelecomobkzEventLogRow:
 
 
 @define
+class TelecomobkzCrashLogRow:
+    crash = field(default='')
+    crash_datetime = field(default='')
+    crash_group_id = field(default='')
+    crash_id = field(default='')
+    crash_name = field(default='')
+    appmetrica_device_i = field(default='')
+
+
+@define
 class TelecomobkzPostbackLogRow:
     application_id = field(default='')
     click_datetime = field(default='')

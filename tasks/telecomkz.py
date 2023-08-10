@@ -110,6 +110,11 @@ class TelecomobkzYandexMetricaLogsEvents(TelecomkzYandexMetricaLogsRunner):
     name = luigi.Parameter('telecomobkz_logs_events')
 
 
+class TelecomobkzYandexMetricaLogsCrushes(TelecomkzYandexMetricaLogsRunner):
+
+    name = luigi.Parameter('telecomobkz_logs_crushes')
+
+
 class TelecomYandexMetricaRepsOutput(CsvFileOutput):
 
     host = luigi.IntParameter()
