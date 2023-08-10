@@ -33,7 +33,7 @@ class TelecomobkzCrashLogRow:
     crash_group_id = field(default='')
     crash_id = field(default='')
     crash_name = field(default='')
-    appmetrica_device_i = field(default='')
+    appmetrica_device_id = field(default='')
 
 
 @define

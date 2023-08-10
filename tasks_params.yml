@@ -336,6 +336,14 @@ telecomobkz_logs_events:
   timeout: !!float 300
   timeout_ban: !!float 60
 
+telecomobkz_logs_crashes:
+  entity: logs/v1/export/crashes.csv
+  app_id: 3863278
+  ftp_directory: telecomkz
+  timeout: !!float 300
+  timeout_ban: !!float 60
+
+
 telecomobkz_reps_acquisitions:
   entity: v2/user/acquisition.csv
   id: 3863278

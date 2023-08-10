@@ -12,7 +12,7 @@ class TelecomkzYandexMetricsRequests(HttpRequest):
     def load(self, params):
 
         r = self.request(self.url, params=params)
-
+        print(r.text)
         while r.status_code == 202:
             sleep(self.timeout_ban)
             r = self.request(self.url, params=params)

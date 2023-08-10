@@ -112,7 +112,7 @@ class TelecomobkzYandexMetricaLogsEvents(TelecomkzYandexMetricaLogsRunner):
 
 class TelecomobkzYandexMetricaLogsCrushes(TelecomkzYandexMetricaLogsRunner):
 
-    name = luigi.Parameter('telecomobkz_logs_crushes')
+    name = luigi.Parameter('telecomobkz_logs_crashes')
 
 
 class TelecomYandexMetricaRepsOutput(CsvFileOutput):
