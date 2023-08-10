@@ -322,18 +322,18 @@ infobip_tags:
   timeout: !!float 4.0
   timeout_ban: !!float 2.0
 
-telecomob_logs_clicks:
-  entity: clicks.csv
-  id: 3863278
-  ftp_directory: telecomob
-  timeout: !!float 4.0
+telecomobkz_logs_profiles:
+  entity: logs/v1/export/profiles.csv
+  app_id: 3863278
+  ftp_directory: telecomkz
+  timeout: !!float 300
   timeout_ban: !!float 60
 
-telecomob_logs_postbacks:
-  entity: postbacks.csv
-  id: 3863278
-  ftp_directory: telecomob
-  timeout: !!float 4.0
+telecomobkz_logs_events:
+  entity: logs/v1/export/events.csv
+  app_id: 3863278
+  ftp_directory: telecomkz
+  timeout: !!float 300
   timeout_ban: !!float 60
 
 telecomobkz_reps_acquisitions:

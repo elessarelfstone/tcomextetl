@@ -2,29 +2,28 @@ from attrs import define, field
 
 
 @define
-class TelecomobkzClickLogRow:
-    application_id = field(default='')
-    click_datetime = field(default='')
-    click_id = field(default='')
-    click_ipv6 = field(default='')
-    click_timestamp = field(default='')
-    click_url_parameters = field(default='')
-    click_user_agent = field(default='')
-    publisher_id = field(default='')
-    publisher_name = field(default='')
-    tracker_name = field(default='')
-    tracking_id = field(default='')
-    city = field(default='')
-    country_iso_code = field(default='')
-    device_type = field(default='')
+class TelecomobkzProfileLogRow:
+    appmetrica_crashes = field(default='')
+    appmetrica_first_session_date = field(default='')
+    appmetrica_last_start_date = field(default='')
+    appmetrica_sessions = field(default='')
+    appmetrica_device_id = field(default='')
     device_model = field(default='')
-    device_manufacturer = field(default='')
     os_version = field(default='')
-    os_name = field(default='')
-    windows_aid = field(default='')
-    google_aid = field(default='')
-    ios_ifv = field(default='')
-    ios_ifa = field(default='')
+    app_version_name = field(default='')
+    customerId = field(default='')
+
+
+@define
+class TelecomobkzEventLogRow:
+    event_datetime = field(default='')
+    event_json = field(default='')
+    event_name = field(default='')
+    event_receive_datetime = field(default='')
+    session_id = field(default='')
+    installation_id = field(default='')
+    appmetrica_device_id = field(default='')
+    profile_id = field(default='')
 
 
 @define

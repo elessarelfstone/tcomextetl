@@ -102,7 +102,8 @@ StructRegister.add('infobip_tags', InfobipConvTagsRow)
 
 
 # telecomobkz
-StructRegister.add('telecomobkz_logs_clicks', TelecomobkzClickLogRow)
+StructRegister.add('telecomobkz_logs_profiles', TelecomobkzProfileLogRow)
+StructRegister.add('telecomobkz_logs_events', TelecomobkzEventLogRow)
 StructRegister.add('telecomobkz_logs_installations', TelecomobkzInstallationLogRow)
 StructRegister.add('telecomobkz_logs_postbacks', TelecomobkzPostbackLogRow)
 StructRegister.add('telecomobkz_reps_acquisitions', TelecomobkzRepAcquisitionsRow)
@@ -123,7 +124,7 @@ StructRegister.add('telecomkz_reps_conversions_main', TelecomkzConversionsMainRo
 StructRegister.add('telecomkz_reps_conversions_lk1', TelecomkzConversionsLK1Row)
 StructRegister.add('telecomkz_reps_conversions_lk2', TelecomkzConversionsLK2Row)
 
-# telecomob
+# speed test
 StructRegister.add('speedtest_sensitive_data', SpeedtestSensitiveDataRow)
 StructRegister.add('speedtest_fixed_network_performance', FixedNetworkPerformanceRow)
 

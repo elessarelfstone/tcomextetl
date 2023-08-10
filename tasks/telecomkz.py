@@ -1,6 +1,7 @@
 import os
 import json
 import luigi
+from datetime import datetime
 from io import StringIO
 from time import sleep
 
@@ -13,7 +14,7 @@ from luigi.util import requires
 from tasks.base import ExternalFtpCsvDFInput
 from tcomextetl.extract.telecomkz_requests import TelecomkzYandexMetricsRequests
 
-from tcomextetl.common.dates import n_days_ago, DEFAULT_FORMAT
+from tcomextetl.common.dates import n_days_ago, DEFAULT_FORMAT, DEFAULT_DATETIME_FORMAT
 from tcomextetl.common.utils import rewrite_file, append_file
 from settings import TELECOMOBKZ_YANDEX_APP_METRICA_TOKEN, TELECOMKZ_YANDEX_METRICA_TOKEN
 
@@ -23,19 +24,105 @@ logs_api_url = 'https://api.appmetrica.yandex.ru/logs/v1/export'
 reps_api_url = 'https://api.appmetrica.yandex.ru/stat/v1/data.csv'
 
 
+class TelecomobYandexMetricaLogsOutput(CsvFileOutput):
+
+    app_id = luigi.IntParameter()
+    from_to = luigi.TupleParameter()
+    entity = luigi.Parameter(default='')
+    timeout = luigi.FloatParameter(default=2.0)
+    timeout_ban = luigi.FloatParameter(default=30.0)
+    token = luigi.Parameter(default=TELECOMOBKZ_YANDEX_APP_METRICA_TOKEN, visibility=ParameterVisibility.HIDDEN)
+
+    @property
+    def dates_params(self):
+        params = dict()
+        dt_since, dt_until = self.from_to
+        dt_since = datetime.strptime(dt_since, DEFAULT_FORMAT)
+        dt_since = dt_since.replace(hour=0, minute=0, second=0).strftime(DEFAULT_DATETIME_FORMAT)
+        dt_until = datetime.strptime(dt_until, DEFAULT_FORMAT)
+        dt_until = dt_until.replace(hour=23, minute=59, second=59).strftime(DEFAULT_DATETIME_FORMAT)
+        params['date_since'], params['date_until'] = dt_since, dt_until
+        return params
+
+    @property
+    def request_params(self):
+        params = dict()
+        params['application_id'] = self.app_id
+        params.update(self.dates_params)
+        fields = ','.join([a.name for a in attr.fields(self.struct)])
+        params['fields'] = fields
+        return params
+
+    def run(self):
+        headers = dict()
+        headers['Authorization'] = self.token
+        url = f'{app_metrika_host}/{self.entity}'
+        parser = TelecomkzYandexMetricsRequests(
+                    url,
+                    headers=headers,
+                    timeout=self.timeout,
+                    timeout_ban=self.timeout_ban
+        )
+        data = parser.load(self.request_params)
+        data = data.decode('utf-8').strip()
+        data = pd.read_csv(StringIO(data), header=None, sep=",", skiprows=2)
+        data.to_csv(self.output_fpath, sep=";", header=False, index=False)
+        parsed_count = len(data)
+        params = self.request_params
+        params.update(dict(parsed=parsed_count))
+        rewrite_file(self.success_fpath, json.dumps(params))
+
+
+@requires(TelecomobYandexMetricaLogsOutput)
+class TelecomobYandexMetricaLogsFtpOutput(FtpUploadedOutput):
+    pass
+
+
+class TelecomkzYandexMetricaLogsRunner(Runner):
+
+    name = luigi.Parameter()
+    start_date = luigi.DateParameter(default=n_days_ago())
+    end_date = luigi.DateParameter(default=n_days_ago())
+
+    @property
+    def params(self):
+        params = super(TelecomkzYandexMetricaLogsRunner, self).params
+        params['from_to'] = (
+            self.start_date.strftime(DEFAULT_FORMAT),
+            self.end_date.strftime(DEFAULT_FORMAT)
+        )
+        return params
+
+    def requires(self):
+        return TelecomobYandexMetricaLogsFtpOutput(
+            token=TELECOMOBKZ_YANDEX_APP_METRICA_TOKEN,
+            **self.params
+        )
+
+
+class TelecomobkzYandexMetricaLogsProfiles(TelecomkzYandexMetricaLogsRunner):
+
+    name = luigi.Parameter('telecomobkz_logs_profiles')
+
+
+class TelecomobkzYandexMetricaLogsEvents(TelecomkzYandexMetricaLogsRunner):
+
+    name = luigi.Parameter('telecomobkz_logs_events')
+
+
 class TelecomYandexMetricaRepsOutput(CsvFileOutput):
 
     host = luigi.IntParameter()
     id = luigi.IntParameter()
     entity = luigi.Parameter()
     from_to = luigi.TupleParameter()
-    metrics = luigi.Parameter(default='')
-    dimensions = luigi.Parameter(default='')
-    limit = luigi.Parameter(default=100000)
-    source = luigi.Parameter(default='')
+    metrics = luigi.Parameter(default='', visibility=ParameterVisibility.HIDDEN)
+    dimensions = luigi.Parameter(default='', visibility=ParameterVisibility.HIDDEN)
+    limit = luigi.Parameter(default=100000, visibility=ParameterVisibility.HIDDEN)
+    source = luigi.Parameter(default='', visibility=ParameterVisibility.HIDDEN)
     timeout = luigi.FloatParameter(default=2.0)
     timeout_ban = luigi.FloatParameter(default=30.0)
-    token = luigi.Parameter(default=TELECOMOBKZ_YANDEX_APP_METRICA_TOKEN, visibility=ParameterVisibility.HIDDEN)
+    token = luigi.Parameter(default=TELECOMOBKZ_YANDEX_APP_METRICA_TOKEN, )
 
     @property
     def dates_params(self):
@@ -236,7 +323,6 @@ class TelecomkzYandexConversionsMetricaRepsOutput(TelecomYandexMetricaRepsOutput
         for _, row in conversions.iterrows():
             conversion_id, conversion_title = row[0], row[1]
             self.conversion_id = conversion_id
-            print(conversion_id)
             data = parser.load(self.request_params)
             data = data.decode('utf-8').strip()
             data = pd.read_csv(StringIO(data), header=None, sep=",", skiprows=2)
