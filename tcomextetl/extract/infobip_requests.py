@@ -1,5 +1,5 @@
 from tcomextetl.extract.api_requests import ApiRequests
-from tcomextetl.extract.http_requests import HttpRequest
+from tcomextetl.common.utils import flatten_dict, clean
 
 
 class InfobipRestApiParser(ApiRequests):
@@ -29,7 +29,15 @@ class InfobipRestApiParser(ApiRequests):
         return r.json()
 
     def parse(self):
-        return self._raw.get(self.entity)
+
+        data = self._raw.get(self.entity)
+
+        if data is None:
+            return []
+
+        normalized_data = [flatten_dict(d) for d in data]
+
+        return [clean(d) for d in normalized_data if '_' not in d.keys()]
 
     @property
     def next_page_params(self):

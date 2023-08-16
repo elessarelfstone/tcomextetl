@@ -5,7 +5,7 @@ from urllib.parse import parse_qsl
 
 from tcomextetl.extract.api_requests import ApiRequests
 from tcomextetl.common.exceptions import ExternalSourceError
-from tcomextetl.common.utils import read_file, flatten_dict
+from tcomextetl.common.utils import read_file, flatten_dict, clean
 
 
 def unnest(wrapper_entity: str, data: list):
@@ -111,12 +111,6 @@ class GoszakupGraphQLApiParser(ApiRequests):
         return r.json()
 
     def parse(self):
-
-        def clean(d):
-            """ Rid off underscores and digits in name of keys """
-
-            pat = '_0123456789'
-            return {k.lstrip(pat): v for k, v in d.items()}
 
         # there are always 2 sections - data and extensions in response
         # check out if we got errors

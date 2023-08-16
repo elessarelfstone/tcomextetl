@@ -51,6 +51,7 @@ class InfobipConvMessagesRow:
     createdat = field(default='')
     updatedat = field(default='')
     contenttype = field(default='')
+    text = field(default='')
 
 
 @define

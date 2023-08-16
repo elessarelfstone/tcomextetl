@@ -158,5 +158,12 @@ def flatten_dict(d: dict) -> dict:
     return out
 
 
+def clean(d):
+    """ Rid off underscores and digits in name of keys """
+
+    pat = '_0123456789'
+    return {k.lstrip(pat): v for k, v in d.items()}
+
+
 def dict_keys_to_snake_case(d: dict):
     return {re.sub(r'(?<!^)(?=[A-Z])', '_', key).lower(): value for (key, value) in d.items()}
