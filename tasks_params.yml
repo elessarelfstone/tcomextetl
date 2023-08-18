@@ -322,6 +322,32 @@ infobip_tags:
   timeout: !!float 4.0
   timeout_ban: !!float 2.0
 
+infobip_omni_agents:
+  endpoint: agents
+  ftp_directory: infobip
+
+infobip_omni_queues:
+  endpoint: queues
+  ftp_directory: infobip
+
+infobip_omni_conversations:
+  endpoint: conversations
+  ftp_directory: infobip
+  timeout: !!float 4.0
+  timeout_ban: !!float 2.0
+
+infobip_omni_messages:
+  endpoint: messages
+  ftp_directory: infobip
+  timeout: !!float 4.0
+  timeout_ban: !!float 2.0
+
+infobip_omni_tags:
+  endpoint: tags
+  ftp_directory: infobip
+  timeout: !!float 4.0
+  timeout_ban: !!float 2.0
+
 telecomobkz_logs_profiles:
   entity: logs/v1/export/profiles.csv
   app_id: 3863278

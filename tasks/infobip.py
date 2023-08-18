@@ -8,7 +8,7 @@ import luigi
 from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
-from settings import (INFOBIP_USER, INFOBIP_PASSWORD, INFOBIP_TIMEOUT)
+from settings import (INFOBIP_USER, INFOBIP_PASSWORD, INFOBIP_TIMEOUT, INFOBIP_DRB_TOKEN)
 
 from tasks.base import ApiToCsv, FtpUploadedOutput, Runner, ExternalCsvLocalInput
 from tcomextetl.common.csv import save_csvrows, dict_to_row
@@ -18,6 +18,8 @@ from tcomextetl.extract.infobip_requests import InfobipRestApiParser
 from tcomextetl.common.utils import rewrite_file
 
 infobip_url = 'https://9rrrjd.api.infobip.com/ccaas/1/'
+infobip_omni_url = 'https://9rrrjd.api.infobip.com/ccaas/1/'
+
 
 class InfobipOutput(ApiToCsv):
 
@@ -181,12 +183,11 @@ class InfobipConversationDetailsOutput(InfobipOutput):
             stat = parser.stat
             stat.update(self.request_params)
             stat["total_conv_ids"] = total_conv_ids
-            stat["total_parsed"] = total_parsed
+            stat["parsed"] = total_parsed
             stat["parsed_convs_count"] = parsed_convs_count
             stat["conv_id"] = conv_id
 
             del stat["total"]
-            del stat["parsed"]
 
             rewrite_file(self.stat_fpath, json.dumps(stat))
 
@@ -217,6 +218,189 @@ class InfobipMessages(InfobipConversationDetailsRunner):
 class InfobipTags(InfobipConversationDetailsRunner):
 
     name = luigi.Parameter('infobip_tags')
+
+
+class InfobipOmniOutput(InfobipOutput):
+
+    token = luigi.Parameter(default=INFOBIP_DRB_TOKEN, visibility=ParameterVisibility.HIDDEN)
+
+    @property
+    def url(self):
+        return f'{infobip_omni_url}{self.endpoint}'
+
+    def run(self):
+        headers = dict()
+        headers['Authorization'] = self.token
+
+        parser = InfobipRestApiParser(
+            self.url,
+            self.endpoint,
+            params=self.request_params,
+            headers=headers,
+            timeout=self.timeout,
+            timeout_ban=self.timeout_ban
+        )
+
+        # set parsed rows count if resume
+        parser.set_parsed_count(self.stat.get('parsed', 0))
+
+        for data in parser:
+            save_csvrows(self.output_fpath,
+                         [dict_to_row(d, self.struct) for d in data], quotechar='"')
+            self.set_status_info(*parser.status_percent)
+            stat = parser.stat
+            stat.update(self.request_params)
+            rewrite_file(self.stat_fpath, json.dumps(stat))
+
+        self.finalize()
+
+
+@requires(InfobipOmniOutput)
+class InfobipOmniFtpOutput(FtpUploadedOutput):
+    pass
+
+
+class InfobipOmniRunner(Runner):
+
+    start_date = luigi.Parameter(default=Runner.yesterday())
+    end_date = luigi.Parameter(default=Runner.yesterday())
+
+    def requires(self):
+
+        params = self.params
+
+        if not self.all_data:
+            params['from_to'] = (self.start_date, self.end_date)
+
+        return InfobipOmniFtpOutput(**params)
+
+
+class InfobipOmniAgents(InfobipOmniRunner):
+
+    name = luigi.Parameter('infobip_omni_agents')
+
+
+class InfobipOmniQueues(InfobipOmniRunner):
+
+    name = luigi.Parameter('infobip_omni_queues')
+
+
+class InfobipOmniConversations(InfobipOmniRunner):
+
+    name = luigi.Parameter('infobip_omni_conversations')
+
+
+class InfobipOmniConversationDetailsOutput(InfobipOmniOutput):
+
+    conversation_id = None
+
+    def requires(self):
+        return ExternalCsvLocalInput(name='infobip_omni_conversations',
+                                     date=self.date)
+
+    def _conv_ids(self):
+        _ids = []
+        with open(self.input().path, encoding='utf-8') as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=self.sep)
+            for row in csv_reader:
+                _ids.append(row[0])
+
+        return _ids
+
+    @property
+    def request_params(self):
+        params = super().request_params
+        if self.endpoint == 'tags':
+            params['conversationId'] = self.conversation_id
+
+        return params
+
+    @property
+    def url(self):
+        url = super().url
+        if self.endpoint == 'messages':
+            url = f'{infobip_url}conversations/{self.conversation_id}/messages'
+
+        return url
+
+    def run(self):
+
+        headers = dict()
+        headers['Authorization'] = self.token
+
+        conv_ids = self._conv_ids()
+        total_conv_ids = len(conv_ids)
+
+        # if we resume start from the last conv_id we write in stat file
+        if self.resume and self.stat.get('conv_id'):
+            conv_id = self.stat.get('conv_id')
+            conv_ids = conv_ids[conv_ids.index(conv_id)+1:]
+
+        parsed_convs_count = self.stat.get('parsed_convs_count', 0)
+        total_parsed = self.stat.get('total_parsed', 0)
+
+        for conv_id in conv_ids:
+            self.conversation_id = conv_id
+            params = self.request_params
+
+            parser = InfobipRestApiParser(self.url, self.endpoint, params=params,
+                                          headers=headers, timeout=self.timeout, timeout_ban=self.timeout_ban)
+
+            for data in parser:
+                _data = []
+
+                for d in data:
+                    _data.append({**d, **{'conversationid': conv_id}})
+
+                save_csvrows(self.output_fpath,
+                             [dict_to_row(d, self.struct) for d in _data], quotechar='"')
+
+                total_parsed += len(data)
+
+            parsed_convs_count += 1
+            p = floor((parsed_convs_count * 100) / total_conv_ids)
+            status = f'Total conversations: {total_conv_ids}. Conversation ID: {conv_id}. \n'
+            status += f'Parsed conversations: {parsed_convs_count}. Total rows parsed: {total_parsed}'
+
+            self.set_status_info(status, p)
+            stat = parser.stat
+            stat.update(self.request_params)
+            stat["total_conv_ids"] = total_conv_ids
+            stat["parsed"] = total_parsed
+            stat["parsed_convs_count"] = parsed_convs_count
+            stat["conv_id"] = conv_id
+
+            del stat["total"]
+
+            rewrite_file(self.stat_fpath, json.dumps(stat))
+
+        self.finalize()
+
+
+@requires(InfobipOmniConversationDetailsOutput)
+class InfobipOmniConversationDetailsFtpOutput(FtpUploadedOutput):
+    pass
+
+
+class InfobipOmniConversationDetailsRunner(InfobipRunner):
+
+    def requires(self):
+        params = self.params
+
+        if not self.all_data:
+            params['from_to'] = (self.start_date, self.end_date)
+
+        return InfobipOmniConversationDetailsFtpOutput(**params)
+
+
+class InfobipOmniMessages(InfobipOmniConversationDetailsRunner):
+
+    name = luigi.Parameter('infobip_omni_messages')
+
+
+class InfobipOmniTags(InfobipOmniConversationDetailsRunner):
+
+    name = luigi.Parameter('infobip_omni_tags')
 
 
 if __name__ == '__main__':

@@ -100,6 +100,11 @@ StructRegister.add('infobip_conversations', InfobipConversationRow)
 StructRegister.add('infobip_messages', InfobipConvMessagesRow)
 StructRegister.add('infobip_tags', InfobipConvTagsRow)
 
+StructRegister.add('infobip_omni_agents', InfobipAgentRow)
+StructRegister.add('infobip_omni_queues', InfobipQueueRow)
+StructRegister.add('infobip_omni_conversations', InfobipConversationRow)
+StructRegister.add('infobip_omni_messages', InfobipConvMessagesRow)
+StructRegister.add('infobip_omni_tags', InfobipConvTagsRow)
 
 # telecomobkz
 StructRegister.add('telecomobkz_logs_profiles', TelecomobkzProfileLogRow)
