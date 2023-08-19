@@ -34,7 +34,7 @@ with DAG(
         luigi_task='InfobipOmniTags',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
         env_vars={'INFOBIP_DRB_TOKEN': Variable.get('INFOBIP_DRB_TOKEN')},
-        pool='infobip',
+        pool='infobip_omni',
         do_xcom_push=False
     )
 

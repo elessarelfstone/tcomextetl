@@ -22,7 +22,7 @@ with DAG(
         luigi_task='InfobipOmniQueues',
         luigi_params="--all-data",
         env_vars={'INFOBIP_DRB_TOKEN': Variable.get('INFOBIP_DRB_TOKEN')},
-        pool='infobip',
+        pool='infobip_omni',
         do_xcom_push=False
     )
 
