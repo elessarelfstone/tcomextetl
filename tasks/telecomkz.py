@@ -337,7 +337,7 @@ class TelecomkzYandexConversionsMetricaRepsOutput(TelecomYandexMetricaRepsOutput
             row_count += len(data)
             sleep(self.timeout_ban)
 
-        df.to_csv(self.output_fpath, sep=";", header=False, index=False)
+        df.to_csv(self.output_fpath, float_format='%.0f', sep=";", header=False, index=False)
 
         stat = {'parsed': row_count}
         append_file(self.success_fpath, json.dumps(stat))
