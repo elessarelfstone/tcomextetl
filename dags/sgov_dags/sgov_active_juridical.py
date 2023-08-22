@@ -18,7 +18,7 @@ with DAG(dag_id='sgov_active_juridical',
     sgov_rcuts_active_parse = ExternalEtlDockerRunner(
         task_id='sgov_rcuts_active_parse',
         luigi_module='sgov_excel',
-        luigi_task='SgovRcutsActiveJuridical',
+        luigi_task='SgovRcutByKatoActiveJuridical',
         do_xcom_push=False
     )
 
