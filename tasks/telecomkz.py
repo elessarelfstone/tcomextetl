@@ -66,7 +66,7 @@ class TelecomobYandexMetricaLogsOutput(CsvFileOutput):
         data = parser.load(self.request_params)
         data = data.decode('utf-8').strip()
         data = pd.read_csv(StringIO(data), header=None, sep=",", skiprows=2)
-        data.to_csv(self.output_fpath, sep=";", header=False, index=False)
+        data.to_csv(self.output_fpath, float_format='%.0f', sep=";", header=False, index=False)
         parsed_count = len(data)
         params = self.request_params
         params.update(dict(parsed=parsed_count))
@@ -337,7 +337,7 @@ class TelecomkzYandexConversionsMetricaRepsOutput(TelecomYandexMetricaRepsOutput
             row_count += len(data)
             sleep(self.timeout_ban)
 
-        df.to_csv(self.output_fpath, float_format='%.0f', sep=";", header=False, index=False)
+        df.to_csv(self.output_fpath, sep=";", header=False, index=False)
 
         stat = {'parsed': row_count}
         append_file(self.success_fpath, json.dumps(stat))

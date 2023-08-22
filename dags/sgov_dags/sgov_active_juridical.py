@@ -15,12 +15,6 @@ with DAG(dag_id='sgov_active_juridical',
          tags=['statgov']
          ) as dag:
 
-    sgov_links_active_prepare = ExternalEtlDockerRunner(
-        task_id='sgov_links_active_prepare',
-        luigi_module='sgov_excel',
-        luigi_task='SgovRcutsActivePrepared'
-    )
-
     sgov_rcuts_active_parse = ExternalEtlDockerRunner(
         task_id='sgov_rcuts_active_parse',
         luigi_module='sgov_excel',
@@ -28,4 +22,4 @@ with DAG(dag_id='sgov_active_juridical',
         do_xcom_push=False
     )
 
-    sgov_links_active_prepare >> sgov_rcuts_active_parse
+    sgov_rcuts_active_parse

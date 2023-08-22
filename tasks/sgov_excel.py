@@ -270,8 +270,8 @@ class SgovRcutByKatoJuridicalOutput(CsvFileOutput):
     usecolumns = luigi.Parameter(default=None)
     sheets = luigi.Parameter(default=None)
     statuses = luigi.ListParameter(default=[39354, 39355, 39356, 39358, 534829, 39359])
-    # kato_ids = luigi.ListParameter(default=[77208141, 247783, 248875, 250502, 252311, 253160, 255577, 77208139, 256619, 258742, 260099, 260907, 263009, 264023, 20243032, 77208140, 264990])
-    kato_ids = luigi.ListParameter(default=[77208141, 247783, 248875])
+    kato_ids = luigi.ListParameter(default=[77208141, 247783, 248875, 250502, 252311, 253160, 255577, 77208139, 256619, 258742, 260099, 260907, 263009, 264023, 20243032, 77208140, 264990])
+    # kato_ids = luigi.ListParameter(default=[77208141, 247783, 248875])
     prev_period_index = luigi.IntParameter(default=0)
     timeout = luigi.IntParameter(default=200)
 
@@ -358,6 +358,15 @@ class SgovRcutByKatoJuridical(luigi.WrapperTask):
         yield SgovRcutByKatoJuridicalRunner(name=f'sgov_{rcut_legal_branches}')
         yield SgovRcutByKatoJuridicalRunner(name=f'sgov_{rcut_foreign_branches}')
         yield SgovRcutByKatoJuridicalRunner(name=f'sgov_{rcut_entrepreneurs}')
+
+
+class SgovRcutByKatoActiveJuridical(luigi.WrapperTask):
+    def requires(self):
+        yield SgovRcutByKatoJuridicalRunner(name=f'sgov_active_{rcut_legal_entities}')
+        yield SgovRcutByKatoJuridicalRunner(name=f'sgov_active_{rcut_joint_ventures}')
+        yield SgovRcutByKatoJuridicalRunner(name=f'sgov_active_{rcut_legal_branches}')
+        yield SgovRcutByKatoJuridicalRunner(name=f'sgov_active_{rcut_foreign_branches}')
+        yield SgovRcutByKatoJuridicalRunner(name=f'sgov_active_{rcut_entrepreneurs}')
 
 
 if __name__ == '__main__':
