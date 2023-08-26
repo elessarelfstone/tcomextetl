@@ -8,7 +8,7 @@ networks:
 
 x-airflow-common:
   &airflow-common
-  image: apache/airflow:2.7.0
+  image: apache/airflow:2.3.3
   environment:
     - AIRFLOW__CORE__EXECUTOR=LocalExecutor
     - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@db:5432/airflow
@@ -16,6 +16,7 @@ x-airflow-common:
     - AIRFLOW__CORE__LOAD_EXAMPLES=False
     - AIRFLOW__CORE__LOGGING_LEVEL=INFO
     - AIRFLOW__CORE__HOME=/opt/airflow/
+    - TZ=Asia/Oral
   volumes:
     - ./dags:/opt/airflow/dags
     - ~/airflow_data/logs:/opt/airflow/logs
