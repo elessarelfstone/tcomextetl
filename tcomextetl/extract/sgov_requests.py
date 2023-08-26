@@ -52,7 +52,7 @@ class SgovApiRCutParser(HttpRequest):
                            'stringForMD5': 'string',
                            'cutId': self.rcuts_list[self.which_last]})
 
-        r = self.request(f'https://{sgov_host}/api/sbr/request', data=data)
+        r = self.request(f'https://{sgov_host}/api/sbr/request?gov', data=data)
 
         payload = r.json()
         order_id = payload.get('obj')
