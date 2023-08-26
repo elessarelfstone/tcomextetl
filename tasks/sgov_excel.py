@@ -341,6 +341,7 @@ class SgovRcutByKatoJuridicalFtpOutput(FtpUploadedOutput):
 class SgovRcutByKatoJuridicalRunner(Runner):
 
     name = luigi.Parameter()
+    date = luigi.DateParameter(default=datetime.today().replace(day=1).date())
 
     @property
     def params(self):
