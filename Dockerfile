@@ -18,13 +18,6 @@ RUN mkdir /code /data /temp /config
 
 WORKDIR /code
 
-COPY tasks /code/tasks
-COPY tcomextetl /code/tcomextetl
-COPY misc /code/misc
-COPY settings.py /code/
-COPY tasks_params.yml /code/tasks_params.yml
-
-COPY conf/luigi.cfg /etc/luigi/luigi.cfg
 
 #COPY misc/unrar /usr/bin/unrar
 
@@ -40,6 +33,14 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt && rm /tmp/requirements.
 
 VOLUME /temp
 VOLUME /data
+
+COPY tasks /code/tasks
+COPY tcomextetl /code/tcomextetl
+COPY misc /code/misc
+COPY settings.py /code/
+COPY tasks_params.yml /code/tasks_params.yml
+
+COPY conf/luigi.cfg /etc/luigi/luigi.cfg
 
 ARG UNAME=airflow
 ARG UID=50000
