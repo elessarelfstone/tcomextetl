@@ -1,5 +1,5 @@
 sgov_kato:
-  url: https://stat.gov.kz/upload/iblock/ec7/xxlndmrgvlp1duughfpkd1gde8rtw39c/КАТО_19.06.2023.xls
+  url: https://stat.gov.kz/upload/iblock/d5e/zdybncxejbbg6e0gxwcw48kiwf5a251t/%D0%9A%D0%90%D0%A2%D0%9E_18.08.2023.xls
   skiptop: 1
   usecolumns: A:I
   ftp_directory: sgov
