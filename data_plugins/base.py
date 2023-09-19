@@ -51,14 +51,18 @@ class FlattenedDict:
         out = {}
 
         def flatten(x, name=''):
+
+            # another deep dive for nested dict
             if type(x) is dict:
                 for a in x:
                     flatten(x[a], a)
             elif type(x) is list:
+                # iterate over nested list
                 i = 0
                 _x = [True if type(i) in [list, dict] else False for i in x]
                 if all(_x):
                     for a in x:
+                        # build new key for each item in list
                         flatten(a, name + str(i) + self._sep)
                         i += 1
                 else:
