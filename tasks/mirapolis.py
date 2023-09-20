@@ -50,6 +50,8 @@ class MirapolisOutput(CsvFileOutput):
 
     def run(self):
 
+        super(CsvFileOutput, self).run()
+
         parser = MirapolisRequests(
             url_templ,
             self.report_id,
