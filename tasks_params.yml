@@ -515,3 +515,13 @@ telecomkz_reps_conversions_lk2:
 
 iot_stat:
   ftp_directory: iot
+
+
+mirapolis_offline_study:
+  report_id: 974
+  report_group_id: 2036
+
+
+mirapolis_online_study:
+  report_id: 964
+  report_group_id: 24
