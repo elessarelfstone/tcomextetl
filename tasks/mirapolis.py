@@ -64,7 +64,7 @@ class MirapolisOutput(CsvFileOutput):
             row_count += 1
 
         stat = parser.stat
-        # stat.update(json_body)
+        stat.update(self.request_params)
         stat.update({'parsed': row_count})
         rewrite_file(self.success_fpath, json.dumps(stat))
 
