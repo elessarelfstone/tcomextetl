@@ -261,7 +261,7 @@ dgov_addrreg_drooms_types:
 
 
 samruk_suppliers:
-  endpoint: data/suppliers/supplierList
+  endpoint: eprocsearch/unified-api/suppliers
   ftp_directory: samruk
 
 samruk_bad_suppliers:
