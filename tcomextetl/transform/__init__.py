@@ -85,13 +85,14 @@ StructRegister.add('dgov_addrreg_spb', DgovAddrRegSPbRow)
 # samruk
 StructRegister.add('samruk_suppliers', SamrukSupplierRow)
 StructRegister.add('samruk_bad_suppliers', SamrukBadSupplierRow)
-StructRegister.add('samruk_kzt_purchases', SamrukPurchaseRow)
-StructRegister.add('samruk_kzt_contracts', SamrukKztContractRow)
+StructRegister.add('samruk_purchases', SamrukPurchaseRow)
+StructRegister.add('samruk_contracts', SamrukKztContractRow)
 StructRegister.add('samruk_kzt_contract_subjects', SamrukKztContractSubjectsRow)
-StructRegister.add('samruk_kzt_plans', SamrukKztPlanRow)
+StructRegister.add('samruk_plans', SamrukKztPlanRow)
 StructRegister.add('samruk_kzt_plan_items', SamrukKztPlanItemRow)
 StructRegister.add('samruk_certs', SamrukCertRow)
 StructRegister.add('samruk_dicts', SamrukDictRow)
+StructRegister.add('samruk_participation_lots', SamrukParticipationLotRow)
 
 
 # infobip

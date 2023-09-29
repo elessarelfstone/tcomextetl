@@ -276,31 +276,31 @@ samruk_suppliers:
   ftp_directory: samruk
 
 samruk_bad_suppliers:
-  endpoint: data/bad-supplier/badSupplierList
+  endpoint: eprocsearch/unified-api/suppliers-bad
   ftp_directory: samruk
 
-samruk_certs:
-  endpoint: data/stkz-certificate/stkzCertificateList
+samruk_participation_lots:
+  endpoint: eprocsearch/unified-api/participation-lots
   ftp_directory: samruk
 
 samruk_dicts:
-  endpoint: data/dictionary/dictionaryList
+  endpoint: eprocsearch/unified-api/dictionaries
   ftp_directory: samruk
 
-samruk_kzt_purchases:
-  endpoint: data/purchases/purchaseList
+samruk_purchases:
+  endpoint: eprocsearch/unified-api/purchases
   ftp_directory: samruk
 
-samruk_kzt_contracts:
-  endpoint: data/contract/contractList
+samruk_contracts:
+  endpoint: eprocsearch/unified-api/contract-cards
   ftp_directory: samruk
 
 samruk_kzt_contract_subjects:
   endpoint: data/contract/contractSubjectList
   ftp_directory: samruk
 
-samruk_kzt_plans:
-  endpoint: proxy/planproxy/esb-api/plan
+samruk_plans:
+  endpoint: eprocsearch/unified-api/plans
   ftp_directory: samruk
 
 samruk_kzt_plan_items:

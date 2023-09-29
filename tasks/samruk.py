@@ -59,14 +59,19 @@ class SamrukOutput(ApiToCsv):
         m_from = '{}T00:00:00%2B06:00'
         m_to = '{}T23:59:59.00Z'
 
-        return dict(
+        params = dict(
             token=self.token,
             identifier=self.company_id,
             page=0,
-            size=self.limit,
-            modifiedFrom=m_from.format(self.from_to[0]),
-            modifiedTo=m_to.format(self.from_to[1])
+            size=self.limit
         )
+
+        if self.from_to:
+            params['modifiedFrom'] = m_from.format(self.from_to[0])
+            params['modifiedTo'] = m_to.format(self.from_to[1])
+
+        return params
+
 
     def run(self):
 
@@ -98,10 +103,12 @@ class SamrukRunner(Runner):
 
     def requires(self):
         params = self.params
-        params['from_to'] = (
-            self.start_date.strftime(DEFAULT_FORMAT),
-            self.end_date.strftime(DEFAULT_FORMAT)
-        )
+        if not self.all_data:
+
+            params['from_to'] = (
+                self.start_date.strftime(DEFAULT_FORMAT),
+                self.end_date.strftime(DEFAULT_FORMAT)
+            )
         return SamrukFtpOutput(**params)
 
 
@@ -115,61 +122,29 @@ class SamrukBadSuppliers(SamrukRunner):
     name = luigi.Parameter('samruk_bad_suppliers')
 
 
-class SamrukKztPurchases(SamrukRunner):
+class SamrukPurchases(SamrukRunner):
 
-    name = luigi.Parameter('samruk_kzt_purchases')
-
-    def requires(self):
-        params = self.params
-        return SamrukFtpOutput(after=self.range, is_kzt=True, **params)
+    name = luigi.Parameter('samruk_purchases')
 
 
-class SamrukKztContracts(SamrukRunner):
+class SamrukContracts(SamrukRunner):
 
-    name = luigi.Parameter('samruk_kzt_contracts')
-
-    def requires(self):
-        params = self.params
-        return SamrukFtpOutput(after=self.range, is_kzt=True,
-                               company_id=SAMRUK_API_COMPANY_ID, **params)
+    name = luigi.Parameter('samruk_contracts')
 
 
-class SamrukKztContractSubjects(SamrukRunner):
+class SamrukParticipationLots(SamrukRunner):
 
-    name = luigi.Parameter('samruk_kzt_contract_subjects')
-
-    def requires(self):
-        params = self.params
-        return SamrukFtpOutput(after=self.range, is_kzt=True,
-                               company_id=SAMRUK_API_COMPANY_ID, **params)
-
-
-class SamrukCerts(SamrukRunner):
-
-    name = luigi.Parameter('samruk_certs')
-
-    def requires(self):
-        params = self.params
-        return SamrukFtpOutput(after=self.range, **params)
+    name = luigi.Parameter('samruk_participation_lots')
 
 
 class SamrukDicts(SamrukRunner):
 
     name = luigi.Parameter('samruk_dicts')
 
-    def requires(self):
-        params = self.params
-        return SamrukFtpOutput(after=self.range, **params)
 
+class SamrukPlans(SamrukRunner):
 
-class SamrukKztPlans(SamrukRunner):
-
-    name = luigi.Parameter('samruk_kzt_plans')
-
-    def requires(self):
-        params = self.params
-        return SamrukFtpOutput(after=self.range, is_kzt=True,
-                               company_id=SAMRUK_API_COMPANY_ID, **params)
+    name = luigi.Parameter('samruk_plans')
 
 
 class SamrukKztPlanItemsOutput(SamrukOutput):
