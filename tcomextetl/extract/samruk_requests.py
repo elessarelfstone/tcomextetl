@@ -1,12 +1,14 @@
 from tcomextetl.extract.api_requests import ApiRequests
 
 
-class SamrukRestApiParser(ApiRequests):
+class SamrukParser(ApiRequests):
     def __init__(self, url, entity='content', **kwargs):
         super().__init__(**kwargs)
 
-        self.url = url
+        self._url = url
         self.entity = entity
+        self._params = self.params
+        self.params = {}
 
     @property
     def total(self):
@@ -14,22 +16,36 @@ class SamrukRestApiParser(ApiRequests):
 
     @property
     def page(self):
-        return self._raw['page']
+        return self._raw['number']
 
     @property
     def size(self):
         return self._raw['size']
 
     def load(self, params):
-        r = self.request(self.url, params=params)
+
+        key_value_pairs = []
+        for key, value in self.next_page_params.items():
+            key_value_pairs.append(f"{key}={value}")
+
+        url = self._url + '?' + "&".join(key_value_pairs)
+
+        r = self.request(url)
+        print(url)
         return r.json()
 
     def parse(self):
         return self._raw.get(self.entity)
 
     @property
+    def is_last(self):
+        return self._raw['last']
+
+    @property
     def next_page_params(self):
-        params = self.params
+        params = self._params
+
+        # is it first request
         if self._raw is None:
             return params
 
@@ -37,7 +53,7 @@ class SamrukRestApiParser(ApiRequests):
             params['page'] = self.page + 1
 
             # prevent next request
-            if ((self.page + 1) * self.size) >= self.total:
+            if self.is_last:
                 params = {}
         else:
             params = {}
@@ -45,7 +61,7 @@ class SamrukRestApiParser(ApiRequests):
         return params
 
 
-class SamrukPlansRestApiParser(SamrukRestApiParser):
+class SamrukPlansRestApiParser(SamrukParser):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

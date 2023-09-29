@@ -5,11 +5,12 @@ import luigi
 from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
-from settings import SAMRUK_API_HOST, SAMRUK_USER, SAMRUK_PASSWORD, SAMRUK_API_COMPANY_ID
+from settings import SAMRUK_API_HOST, SAMRUK_TOKEN, SAMRUK_API_COMPANY_ID
 
 from tasks.base import ApiToCsv, FtpUploadedOutput, Runner, ExternalCsvLocalInput
 from tcomextetl.common.csv import save_csvrows, dict_to_row
-from tcomextetl.extract.samruk_requests import SamrukRestApiParser, SamrukPlansRestApiParser
+from tcomextetl.common.dates import n_days_ago, DEFAULT_FORMAT
+from tcomextetl.extract.samruk_requests import SamrukParser, SamrukPlansRestApiParser
 from tcomextetl.common.utils import rewrite_file
 
 
@@ -29,7 +30,7 @@ class SamrukParsersFabric:
             raise ValueError(name)
 
 
-SamrukParsersFabric.add('regular', SamrukRestApiParser)
+SamrukParsersFabric.add('regular', SamrukParser)
 SamrukParsersFabric.add('plans', SamrukPlansRestApiParser)
 
 
@@ -40,13 +41,10 @@ def yesterday():
 class SamrukOutput(ApiToCsv):
 
     endpoint = luigi.Parameter()
-    user = luigi.Parameter(default=SAMRUK_USER, visibility=ParameterVisibility.HIDDEN)
-    password = luigi.Parameter(default=SAMRUK_PASSWORD, visibility=ParameterVisibility.HIDDEN)
-
+    from_to = luigi.TupleParameter(default=())
+    token = luigi.Parameter(default=SAMRUK_TOKEN, visibility=ParameterVisibility.HIDDEN)
     entity = luigi.Parameter(default='content', visibility=ParameterVisibility.HIDDEN)
-    after = luigi.DateParameter(default=None)
-    is_kzt = luigi.BoolParameter(default=False, visibility=ParameterVisibility.HIDDEN)
-    company_id = luigi.IntParameter(default=0)
+    company_id = luigi.Parameter(default='941240000193')
 
     limit = luigi.IntParameter(default=100)
     timeout = luigi.IntParameter(default=2)
@@ -57,29 +55,31 @@ class SamrukOutput(ApiToCsv):
 
     @property
     def params(self):
-        p = dict(page=0, size=self.limit)
 
-        if self.after:
-            p['after'] = self.after
+        m_from = '{}T00:00:00%2B06:00'
+        m_to = '{}T23:59:59.00Z'
 
-        if self.is_kzt:
-            p['login'] = self.user
+        params = dict(
+            token=self.token,
+            identifier=self.company_id,
+            page=0,
+            size=self.limit
+        )
 
-        if self.company_id:
-            p['companyIdentifier'] = self.company_id
+        if self.from_to:
+            params['modifiedFrom'] = m_from.format(self.from_to[0])
+            params['modifiedTo'] = m_to.format(self.from_to[1])
 
-        return p
+        return params
+
 
     def run(self):
 
-        auth = {'user': self.user, 'password': self.password}
-
-        parser = SamrukRestApiParser(self.url, params=self.params,
-                                     auth=auth, timeout=self.timeout)
-
-        if 'plan' in self.url:
-            parser = SamrukPlansRestApiParser(self.url, params=self.params,
-                                              auth=auth, timeout=self.timeout)
+        parser = SamrukParser(
+            self.url,
+            params=self.params,
+            timeout=self.timeout
+        )
 
         for data in parser:
             save_csvrows(self.output_fpath,
@@ -98,18 +98,18 @@ class SamrukFtpOutput(FtpUploadedOutput):
 
 class SamrukRunner(Runner):
 
-    after = luigi.DateParameter(default=Runner.yesterday())
-
-    @property
-    def range(self):
-        if self.period == 'range':
-            return self.after
-
-        return None
+    start_date = luigi.DateParameter(default=n_days_ago())
+    end_date = luigi.DateParameter(default=n_days_ago())
 
     def requires(self):
         params = self.params
-        return SamrukFtpOutput(after=self.range, **params)
+        if not self.all_data:
+
+            params['from_to'] = (
+                self.start_date.strftime(DEFAULT_FORMAT),
+                self.end_date.strftime(DEFAULT_FORMAT)
+            )
+        return SamrukFtpOutput(**params)
 
 
 class SamrukSuppliers(SamrukRunner):
@@ -122,61 +122,29 @@ class SamrukBadSuppliers(SamrukRunner):
     name = luigi.Parameter('samruk_bad_suppliers')
 
 
-class SamrukKztPurchases(SamrukRunner):
+class SamrukPurchases(SamrukRunner):
 
-    name = luigi.Parameter('samruk_kzt_purchases')
-
-    def requires(self):
-        params = self.params
-        return SamrukFtpOutput(after=self.range, is_kzt=True, **params)
+    name = luigi.Parameter('samruk_purchases')
 
 
-class SamrukKztContracts(SamrukRunner):
+class SamrukContracts(SamrukRunner):
 
-    name = luigi.Parameter('samruk_kzt_contracts')
-
-    def requires(self):
-        params = self.params
-        return SamrukFtpOutput(after=self.range, is_kzt=True,
-                               company_id=SAMRUK_API_COMPANY_ID, **params)
+    name = luigi.Parameter('samruk_contracts')
 
 
-class SamrukKztContractSubjects(SamrukRunner):
+class SamrukParticipationLots(SamrukRunner):
 
-    name = luigi.Parameter('samruk_kzt_contract_subjects')
-
-    def requires(self):
-        params = self.params
-        return SamrukFtpOutput(after=self.range, is_kzt=True,
-                               company_id=SAMRUK_API_COMPANY_ID, **params)
-
-
-class SamrukCerts(SamrukRunner):
-
-    name = luigi.Parameter('samruk_certs')
-
-    def requires(self):
-        params = self.params
-        return SamrukFtpOutput(after=self.range, **params)
+    name = luigi.Parameter('samruk_participation_lots')
 
 
 class SamrukDicts(SamrukRunner):
 
     name = luigi.Parameter('samruk_dicts')
 
-    def requires(self):
-        params = self.params
-        return SamrukFtpOutput(after=self.range, **params)
 
+class SamrukPlans(SamrukRunner):
 
-class SamrukKztPlans(SamrukRunner):
-
-    name = luigi.Parameter('samruk_kzt_plans')
-
-    def requires(self):
-        params = self.params
-        return SamrukFtpOutput(after=self.range, is_kzt=True,
-                               company_id=SAMRUK_API_COMPANY_ID, **params)
+    name = luigi.Parameter('samruk_plans')
 
 
 class SamrukKztPlanItemsOutput(SamrukOutput):

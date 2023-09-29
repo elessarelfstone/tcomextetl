@@ -244,3 +244,11 @@ class SamrukDictRow:
     ru = field(default='')
     kk = field(default='')
     version = field(default='')
+
+
+@define
+class SamrukParticipationLotRow:
+    id = field(default='')
+    finish_date = field(default='')
+    bin_iin = field(default='')
+    price = field(default='')

@@ -2,14 +2,19 @@ import csv
 from datetime import datetime
 from math import floor
 from time import sleep
+from urllib.parse import urlparse
 
 import attr
 import json
 import luigi
 import pandas as pd
+import requests
+from bs4 import BeautifulSoup
 from luigi.util import requires
 
-from tasks.base import Base, FtpUploadedOutput, Runner, CsvFileOutput
+
+
+from tasks.base import Base, ArchivedWebDataFileInput, WebDataFileInput, FtpUploadedOutput, Runner, CsvFileOutput
 from tasks.xls import WebExcelFileParsingToCsv, ArchivedWebExcelFileParsingToCsv
 from tcomextetl.extract.http_requests import Downloader
 from tcomextetl.extract.sgov_requests import SgovApiRCutParser
@@ -29,19 +34,64 @@ rcut_foreign_branches = 'foreign_branches'
 rcut_entrepreneurs = 'entrepreneurs'
 
 
-class SgovExcelRunner(Runner):
+class SgovDictOutput(WebDataFileInput):
 
-    date = luigi.DateParameter(default=first_day_of_month())
-    resume = luigi.BoolParameter(default=False)
+    html_container_id = luigi.Parameter()
+    format = luigi.Parameter(default='xlsx')
+
+    @property
+    def downloader(self):
+        print(self.url)
+        if self._downloader is None:
+            self._downloader = Downloader(self._parse_link())
+        return self._downloader
+
+    def _parse_link(self):
+
+        def get_href(val):
+            return val.get('href')
+
+        parsed_uri = urlparse(self.url)
+        url_start = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+        req = requests.get(self.url)
+        soup = BeautifulSoup(req.text, 'lxml')
+        data = soup.find('div', id=self.html_container_id)
+        url_part = [j for i in data.find_all('a') if (j := get_href(i)).split('.')[-1] == self.format][0]
+        return url_start + url_part
+
+    def run(self):
+        p = self.output().path
+        self.downloader.download(p)
 
 
-class SgovKatoOutput(WebExcelFileParsingToCsv):
+@requires(SgovDictOutput)
+class SgovArchivedDictOutput(ArchivedWebDataFileInput):
+    pass
+
+
+@requires(SgovDictOutput)
+class WebExcelSgovFileParsingToCsv(WebExcelFileParsingToCsv):
+    pass
+
+
+@requires(SgovArchivedDictOutput)
+class WebArchivedExcelSgovFileParsingToCsv(ArchivedWebExcelFileParsingToCsv):
+    pass
+
+
+class SgovKatoOutput(WebExcelSgovFileParsingToCsv):
     pass
 
 
 @requires(SgovKatoOutput)
 class SgovKatoFtpOutput(FtpUploadedOutput):
     pass
+
+
+class SgovExcelRunner(Runner):
+
+    date = luigi.DateParameter(default=first_day_of_month())
+    resume = luigi.BoolParameter(default=False)
 
 
 class SgovKato(SgovExcelRunner):
@@ -55,8 +105,7 @@ class SgovKato(SgovExcelRunner):
 # class SgovOkedOutput(WebExcelFileParsingToCsv):
 #     pass
 
-
-class SgovOkedOutput(WebExcelFileParsingToCsv):
+class SgovOkedOutput(WebExcelSgovFileParsingToCsv):
 
     def run(self):
 
@@ -101,7 +150,7 @@ class SgovOked(SgovExcelRunner):
         return SgovOkedFtpOutput(**self.params)
 
 
-class SgovMkeisOutput(WebExcelFileParsingToCsv):
+class SgovMkeisOutput(WebExcelSgovFileParsingToCsv):
     pass
 
 
@@ -118,7 +167,7 @@ class SgovMkeis(SgovExcelRunner):
         return SgovMkeisFtpOutput(**self.params)
 
 
-class SgovKurkOutput(ArchivedWebExcelFileParsingToCsv):
+class SgovKurkOutput(WebArchivedExcelSgovFileParsingToCsv):
     pass
 
 
@@ -135,7 +184,7 @@ class SgovKurk(SgovExcelRunner):
         return SgovKurkFtpOutput(**self.params)
 
 
-class SgovKpvedOutput(WebExcelFileParsingToCsv):
+class SgovKpvedOutput(WebExcelSgovFileParsingToCsv):
     pass
 
 

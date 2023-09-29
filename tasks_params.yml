@@ -1,32 +1,43 @@
 sgov_kato:
-  url: https://stat.gov.kz/upload/iblock/ec7/xxlndmrgvlp1duughfpkd1gde8rtw39c/КАТО_19.06.2023.xls
+  url: https://stat.gov.kz/ru/classifiers/statistical/21/
   skiptop: 1
   usecolumns: A:I
+  html_container_id: classifiers-199
+  format: xls
   ftp_directory: sgov
 
+
 sgov_oked:
-  url: https://stat.gov.kz/upload/iblock/7c4/avpvdw6e8ab31c77pgk1emb0mtnr2r1z.xlsx
+  url: https://stat.gov.kz/ru/classifiers/statistical/21/
   skiptop: 3
   usecolumns: A:C
+  html_container_id: classifiers-197
+  format: xlsx
   ftp_directory: sgov
 
 sgov_mkeis:
-  url: https://old.stat.gov.kz/api/getFile/?docId=ESTAT316776
-  skiptop: 4
+  url: https://stat.gov.kz/ru/classifiers/statistical/20/
+  skiptop: 13
   usecolumns: A:C
+  html_container_id: classifiers-194
+  format: xlsx
   ftp_directory: sgov
 
 sgov_kurk:
-  url: https://stat.gov.kz/upload/iblock/812/p6c51ws9i7hr02yyd2qllj934s96six2.rar
+  url: https://stat.gov.kz/ru/classifiers/statistical/23/
   skiptop: 16
   usecolumns: A:C
   skipbottom: 4
+  html_container_id: classifiers-218
+  format: rar
   ftp_directory: sgov
 
 sgov_kpved:
-  url: https://stat.gov.kz/upload/iblock/558/zpgw5k0pb4fg02jmtzqxd5saplm69vrm.xls
+  url: https://stat.gov.kz/ru/classifiers/statistical/21/
   skiptop: 3
   usecolumns: A:C
+  html_container_id: classifiers-198
+  format: xls
   ftp_directory: sgov
 
 kgd_bankrupt:
@@ -261,35 +272,35 @@ dgov_addrreg_drooms_types:
 
 
 samruk_suppliers:
-  endpoint: data/suppliers/supplierList
+  endpoint: eprocsearch/unified-api/suppliers
   ftp_directory: samruk
 
 samruk_bad_suppliers:
-  endpoint: data/bad-supplier/badSupplierList
+  endpoint: eprocsearch/unified-api/suppliers-bad
   ftp_directory: samruk
 
-samruk_certs:
-  endpoint: data/stkz-certificate/stkzCertificateList
+samruk_participation_lots:
+  endpoint: eprocsearch/unified-api/participation-lots
   ftp_directory: samruk
 
 samruk_dicts:
-  endpoint: data/dictionary/dictionaryList
+  endpoint: eprocsearch/unified-api/dictionaries
   ftp_directory: samruk
 
-samruk_kzt_purchases:
-  endpoint: data/purchases/purchaseList
+samruk_purchases:
+  endpoint: eprocsearch/unified-api/purchases
   ftp_directory: samruk
 
-samruk_kzt_contracts:
-  endpoint: data/contract/contractList
+samruk_contracts:
+  endpoint: eprocsearch/unified-api/contract-cards
   ftp_directory: samruk
 
 samruk_kzt_contract_subjects:
   endpoint: data/contract/contractSubjectList
   ftp_directory: samruk
 
-samruk_kzt_plans:
-  endpoint: proxy/planproxy/esb-api/plan
+samruk_plans:
+  endpoint: eprocsearch/unified-api/plans
   ftp_directory: samruk
 
 samruk_kzt_plan_items:
@@ -515,3 +526,15 @@ telecomkz_reps_conversions_lk2:
 
 iot_stat:
   ftp_directory: iot
+
+
+mirapolis_offline_study:
+  report_id: 974
+  report_group_id: 2036
+  ftp_directory: mirapolis
+
+
+mirapolis_online_study:
+  report_id: 964
+  report_group_id: 24
+  ftp_directory: mirapolis
