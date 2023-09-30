@@ -156,14 +156,14 @@ class BaseDataPlugin(ABC):
     @abstractmethod
     def __init__(self, context: dict):
         self._raw = None
-        self._context = DotDict(context)
+        self._context = context
 
     @property
     def context(self):
-        return self._context
+        return DotDict(self._context)
 
     @abstractmethod
-    def data(self, meta: dict | None = None) -> Iterator[list[tuple]]:
+    def data(self, meta: dict | None = None) -> Iterator[list[dict]]:
         pass
 
     @abstractmethod
@@ -181,3 +181,9 @@ class BaseDataPlugin(ABC):
     @abstractmethod
     def progress_status(self) -> tuple[int, str]:
         pass
+
+    def scheme_validate(self, data: list[tuple]):
+        pass
+
+
+

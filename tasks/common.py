@@ -1,14 +1,28 @@
+from datetime import datetime
 from pathlib import Path
 
 
 import luigi
+import yaml
 from luigi.contrib.ftp import RemoteTarget, RemoteFileSystem
 from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 
-from data_plugins.base import FlattenedDict
+
+from data_plugins.base import DotDict
 from data_plugins.goszakup import GoszakupDataPlugin
-from settings import DATA_PATH
+from settings import DATA_PATH, FTP_PATH, FTP_HOST, FTP_USER, FTP_PASS, FTP_EXPORT_PATH
+
+
+def file_path(
+    directory: str,
+    name: str,
+    ext: str,
+    suff: str = None
+) -> Path:
+
+    path = Path(directory) / '_'.join([name, suff]) if suff else name
+    return path.absolute().with_suffix(ext)
 
 
 class DataPluginRegister:
@@ -34,50 +48,116 @@ class CsvFtpOutput(luigi.Task):
 
     context = luigi.DictParameter(default={})
 
-    @staticmethod
-    def _build_fpath(file_name: str) -> Path:
-        path = Path(DATA_PATH) / file_name
-        return path.absolute()
+    @property
+    def _context(self):
+        return DotDict(self.context)
 
     @property
     def ftp_host(self):
-        _context = FlattenedDict()(self.context)
-        return _context.ftp_host
+        return self._context.ftp_host
 
     @property
     def ftp_creds(self):
-        _context = FlattenedDict()(self.context)
-        return {'username': _context.ftp_host, 'password': _context.ftp_pass}
+        return dict(
+            username=self._context.ftp_user,
+            password=self._context.ftp_pass
+        )
 
-    def output(self):
+    @property
+    def ftp_path(self):
 
-        def gzip_name(file_name: str) -> str:
-            p = Path(file_name)
-            return p.with_suffix(p.suffix + '.gzip').name
+        os_sep = self._context.os_sep
+        root = self._context.ftp_path
 
-        _context = FlattenedDict()(self.context)
-
-        os_sep = _context.os_sep
-        root = _context.ftp_path
-
-        # use str.sep.join to avoid problems
-        # OS specific separator
-        if _context.ftp_directory:
-            path = os_sep.join([root, _context.ftp_directory])
+        # use sep.join to avoid problems
+        # with OS specific separator
+        if self._context.ftp_directory:
+            path = os_sep.join([root, self._context.ftp_directory])
         else:
             path = root
 
-        # TODO done building ftp path
-        return [RemoteTarget(self._build_fpath(f), self.ftp_host, **self.ftp_creds) for f in _context.files]
+        return path
+
+    @property
+    def _output(self):
+        """ Returns a list of files for uploading to FTP """
+        def _name(file_name: str) -> str:
+
+            if self._context.compress:
+                return Path(file_name).with_suffix('.gzip').name
+            else:
+                return Path(file_name).name
+
+        os_sep = self._context.os_sep
+
+        return [os_sep.join([self.ftp_path, _name(f)]) for f in self._context.csv_files.values()]
+
+    def output(self):
+        return [RemoteTarget(f, self.ftp_host, **self.ftp_creds) for f in self._output]
 
     def run(self):
         # TODO implement
         pass
 
-        plugin = Plugin()
 
+class CsvFtpRunner(luigi.WrapperTask):
 
+    name = luigi.Parameter()
+    date = luigi.DateParameter(default=datetime.today())
+    ext = luigi.Parameter(default='.csv')
+    compress = luigi.BoolParameter(default=True)
 
+    @property
+    def file_date(self) -> str:
+        """ Returns the run date in the YYYYMMDD format """
+        return '{date:%Y%m%d}'.format(date=self.date)
 
+    @property
+    def ftp_config(self):
+        return dict(
+            ftp_host=FTP_HOST,
+            ftp_user=FTP_USER,
+            ftp_pass=FTP_PASS,
+            ftp_path=FTP_PATH
+        )
 
+    def _file_path(
+        self,
+        directory: str,
+        ext: str,
+        suff: str = None
+    ) -> Path:
 
+        return file_path(
+            directory=directory,
+            name=self.name,
+            ext=ext,
+            suff=suff
+        )
+
+    @property
+    def csv_fpath(self):
+        return self._file_path(DATA_PATH, self.ext, self.file_date)
+
+    @property
+    def csv_files(self) -> dict:
+        return dict(main=self.csv_fpath)
+
+    def get_context(self) -> dict:
+        """ Returns all the context needed for retrieval, validation, transformation, and upload """
+
+        config_dir = Path(__file__).parent / 'config'
+        config_fpath = self._file_path(config_dir, '.yml')
+
+        # most of the context is stored in a yaml file
+        # request parameters, data scheme, location on ftp, etc
+        with open(config_fpath, 'r', encoding='utf-8') as file:
+            config_context = yaml.safe_load(file)
+
+        extra_context = dict(
+            csv_files=self.csv_files,
+            compress=self.compress,
+            **self.ftp_config
+        )
+
+        return config_context | extra_context

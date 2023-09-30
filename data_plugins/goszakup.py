@@ -83,7 +83,7 @@ class GoszakupDataPlugin(BaseDataPlugin, HttpRequest):
 
         return params
 
-    def data(self, meta: dict | None = None) -> Iterator[list[tuple]]:
+    def data(self, meta: dict | None = None) -> Iterator[list[dict]]:
 
         while self._next_page_params:
             self._raw = self._load(self._next_page_params)
