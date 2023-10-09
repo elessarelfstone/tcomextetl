@@ -1,4 +1,4 @@
 pytest
-apache-airflow
+apache-airflow==2.6.3
 docker
 apache-airflow-providers-docker

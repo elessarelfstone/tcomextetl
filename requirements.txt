@@ -2,7 +2,7 @@ attrs==22.1.0
 luigi==3.3.0
 openpyxl==3.0.10
 rarfile
-numpy==1.21.2
+numpy==1.25
 pandas==1.5.2
 PyYAML==6.0
 beautifulsoup4==4.11.1
