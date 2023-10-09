@@ -1,17 +1,16 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 
 import luigi
+import pandas as pd
 import yaml
-from luigi.contrib.ftp import RemoteTarget, RemoteFileSystem
-from luigi.parameter import ParameterVisibility
-from luigi.util import requires
-
+from luigi.contrib.ftp import RemoteTarget
+from luigi.cmdline import luigi_run
 
 from data_plugins.base import DotDict
 from data_plugins.goszakup import GoszakupDataPlugin
-from settings import DATA_PATH, FTP_PATH, FTP_HOST, FTP_USER, FTP_PASS, FTP_EXPORT_PATH
+from settings import DATA_PATH, FTP_PATH, FTP_HOST, FTP_USER, FTP_PASS
 
 
 def file_path(
@@ -19,10 +18,16 @@ def file_path(
     name: str,
     ext: str,
     suff: str = None
-) -> Path:
+) -> str:
 
-    path = Path(directory) / '_'.join([name, suff]) if suff else name
-    return path.absolute().with_suffix(ext)
+    if suff:
+        p = Path(directory) / '_'.join([name, suff])
+    else:
+        p = Path(directory) / '_'.join([name])
+
+    # path = Path(directory) / '_'.join([name, suff]) if suff else name
+    p = Path(p).absolute().with_suffix(ext)
+    return str(p)
 
 
 class DataPluginRegister:
@@ -39,9 +44,6 @@ class DataPluginRegister:
             return cls._plugins[name]
         except KeyError:
             raise ValueError(name)
-
-
-DataPluginRegister.add('goszakup', GoszakupDataPlugin)
 
 
 class CsvFtpOutput(luigi.Task):
@@ -96,15 +98,24 @@ class CsvFtpOutput(luigi.Task):
         return [RemoteTarget(f, self.ftp_host, **self.ftp_creds) for f in self._output]
 
     def run(self):
-        # TODO implement
-        pass
+
+        data_plugin = DataPluginRegister.get(self._context.name)
+        data_plugin = data_plugin(self.context)
+
+        for data_chunk in data_plugin.data():
+            df = pd.DataFrame(data_chunk)
+            df.to_csv(self._context.csv_files.main)
 
 
 class CsvFtpRunner(luigi.WrapperTask):
 
     name = luigi.Parameter()
     date = luigi.DateParameter(default=datetime.today())
+    since = luigi.DateParameter(default=datetime.today() - timedelta(days=1))
+    until = luigi.DateParameter(default=datetime.today() - timedelta(days=1))
     ext = luigi.Parameter(default='.csv')
+    csv_sep = luigi.Parameter(default=';')
+    os_sep = luigi.Parameter(default='/')
     compress = luigi.BoolParameter(default=True)
 
     @property
@@ -136,17 +147,20 @@ class CsvFtpRunner(luigi.WrapperTask):
         )
 
     @property
-    def csv_fpath(self):
+    def csv_fpath(self) -> Path:
         return self._file_path(DATA_PATH, self.ext, self.file_date)
 
     @property
     def csv_files(self) -> dict:
+
+        # there could be another csv files
+        # by default there is only one, with .csv extension
         return dict(main=self.csv_fpath)
 
     def get_context(self) -> dict:
         """ Returns all the context needed for retrieval, validation, transformation, and upload """
 
-        config_dir = Path(__file__).parent / 'config'
+        config_dir = Path(__file__).parent.parent / 'config'
         config_fpath = self._file_path(config_dir, '.yml')
 
         # most of the context is stored in a yaml file
@@ -155,9 +169,25 @@ class CsvFtpRunner(luigi.WrapperTask):
             config_context = yaml.safe_load(file)
 
         extra_context = dict(
+            name=self.name,
+            csv_sep=self.csv_sep,
+            os_sep=self.os_sep,
             csv_files=self.csv_files,
             compress=self.compress,
             **self.ftp_config
         )
 
         return config_context | extra_context
+
+
+class GoszakupCompanies(CsvFtpRunner):
+
+    name = 'goszakup_companies'
+
+    def requires(self):
+        DataPluginRegister.add(self.name, GoszakupDataPlugin)
+        return CsvFtpOutput(self.get_context())
+
+
+if __name__ == '__main__':
+    code = luigi_run()

@@ -12,12 +12,12 @@ class GoszakupDataPlugin(BaseDataPlugin, HttpRequest):
         super(GoszakupDataPlugin, self).__init__(context)
         self._url = self.context.url
         self._entity = self.context.entity
-        self._gql = self.context.gql
         self.last_id = None
-        self._flatten = FlattenedDict()
-
+        self._flatten_tool = FlattenedDict()
+        # d = **self.context.request
         super(HttpRequest, self).__init__(
-            **self.context.request
+            # TODO fix exception
+            self.context.request
         )
 
     @property
@@ -30,6 +30,7 @@ class GoszakupDataPlugin(BaseDataPlugin, HttpRequest):
         e = self._raw.get('extensions')
         return e['pageInfo']['hasNextPage']
 
+    @property
     def _qraphql(self) -> str:
         name = self._context['name']
         gql_fpath = Path(__file__).parent / 'misc' / 'gql' / f'{name}.gql'
@@ -43,7 +44,7 @@ class GoszakupDataPlugin(BaseDataPlugin, HttpRequest):
             variables['after'] = self._last_id
 
         payload = {
-            'query': self._qraphql(),
+            'query': self._qraphql,
             'variables': variables
         }
 
@@ -67,7 +68,7 @@ class GoszakupDataPlugin(BaseDataPlugin, HttpRequest):
         if data is None:
             return []
 
-        return [self._flatten(d) for d in data]
+        return [self._flatten_tool(d) for d in data]
 
     @property
     def _next_page_params(self):

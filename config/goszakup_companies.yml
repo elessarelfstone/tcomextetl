@@ -1,0 +1,33 @@
+url: https://ows.goszakup.gov.kz
+entity: Subjects
+endpoint: /v3/subject/all
+descr: Реестр участников
+ftp_directory: goszakup
+request:
+  params:
+    limit: 200
+scheme:
+  pid:
+    type: int
+    default: null
+    orderno: 1
+  bin:
+    type: int
+    default: null
+    orderno: 2
+  iin:
+    type: int
+    default: null
+    orderno: 3
+  inn:
+    type: int
+    default: null
+    orderno: 4
+  unp:
+    type: int
+    default: null
+    orderno: 5
+  regdate:
+    type: str
+    default: null
+    orderno: 6
