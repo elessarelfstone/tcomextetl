@@ -150,7 +150,7 @@ class SamrukPlans(SamrukRunner):
 class SamrukKztPlanItemsOutput(SamrukOutput):
 
     def requires(self):
-        return ExternalCsvLocalInput(name='samruk_kzt_plans')
+        return ExternalCsvLocalInput(name='samruk_plans')
 
     def _plans_ids(self):
         _ids = []
@@ -163,8 +163,6 @@ class SamrukKztPlanItemsOutput(SamrukOutput):
 
     def run(self):
 
-        auth = {'user': self.user, 'password': self.password}
-
         p_ids = self._plans_ids()
         parsed_plans_count = 0
         for p_id in p_ids:
@@ -172,16 +170,11 @@ class SamrukKztPlanItemsOutput(SamrukOutput):
             params = self.params
             params['planId'] = p_id
             self.set_progress_percentage(0)
-            parser = SamrukPlansRestApiParser(self.url, params=params,
-                                              auth=auth, timeout=self.timeout)
+            parser = SamrukParser(self.url, params=params, timeout=self.timeout)
 
             for data in parser:
-                _data = []
-                for d in data:
-                    _data.append({**d, **{'planId': p_id}})
-
                 save_csvrows(self.output_fpath,
-                             [dict_to_row(d, self.struct) for d in _data],
+                             [dict_to_row(d, self.struct) for d in data],
                              quotechar='"')
 
                 s, p = parser.status_percent
@@ -203,11 +196,11 @@ class SamrukKztPlanItemsOutput(FtpUploadedOutput):
 
 class SamrukKztPlansItems(SamrukRunner):
 
-    name = luigi.Parameter(default='samruk_kzt_plan_items')
+    name = luigi.Parameter(default='samruk_plan_items')
 
     def requires(self):
         params = self.params
-        return SamrukKztPlanItemsOutput(after=self.range, **params)
+        return SamrukKztPlanItemsOutput(**params)
 
 
 if __name__ == '__main__':

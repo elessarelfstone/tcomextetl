@@ -303,8 +303,8 @@ samruk_plans:
   endpoint: eprocsearch/unified-api/plans
   ftp_directory: samruk
 
-samruk_kzt_plan_items:
-  endpoint: proxy/planproxy/esb-api/plan-item
+samruk_plan_items:
+  endpoint: eprocsearch/unified-api/plan-items
   ftp_directory: samruk
 
 infobip_agents:
