@@ -1,4 +1,5 @@
 import csv
+import json
 from datetime import datetime, timedelta
 
 import luigi
@@ -86,7 +87,7 @@ class SamrukOutput(ApiToCsv):
                          [dict_to_row(d, self.struct) for d in data],
                          quotechar='"')
             self.set_status_info(*parser.status_percent)
-            rewrite_file(self.stat_fpath, str(parser.stat))
+            rewrite_file(self.stat_fpath, json.dumps(parser.stat))
 
         self.finalize()
 
@@ -182,7 +183,7 @@ class SamrukKztPlanItemsOutput(SamrukOutput):
                 status = f'{status} \n {s}'
 
                 self.set_status_info(status, p)
-                rewrite_file(self.stat_fpath, str(parser.stat))
+                rewrite_file(self.stat_fpath, json.dumps(parser.stat))
 
             parsed_plans_count += 1
 
