@@ -287,6 +287,10 @@ samruk_dicts:
   endpoint: eprocsearch/unified-api/dictionaries
   ftp_directory: samruk
 
+samruk_entries:
+  endpoint: eprocsearch/unified-api/entries
+  ftp_directory: samruk
+
 samruk_purchases:
   endpoint: eprocsearch/unified-api/purchases
   ftp_directory: samruk
@@ -295,8 +299,8 @@ samruk_contracts:
   endpoint: eprocsearch/unified-api/contract-cards
   ftp_directory: samruk
 
-samruk_kzt_contract_subjects:
-  endpoint: data/contract/contractSubjectList
+samruk_contract_items:
+  endpoint: eprocsearch/unified-api/contract-items
   ftp_directory: samruk
 
 samruk_plans:

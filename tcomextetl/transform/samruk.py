@@ -110,7 +110,7 @@ class SamrukBadSupplierRow:
 
 
 @define
-class SamrukKztPlanRow:
+class SamrukPlanRow:
     id = field(default='')
     identifier = field(default='')
     year = field(default='')
@@ -125,7 +125,7 @@ class SamrukKztPlanRow:
 
 # Empty api
 @define
-class SamrukKztContractSubjectsRow:
+class SamrukContractItemsRow:
     id = field(default='')
     count = field(default='')
     execution_sum_nds = field(default='')
@@ -162,9 +162,13 @@ class SamrukKztContractSubjectsRow:
     sum_no_nds_year = field(default='')
 
 
+@define
+class SamrukContractItemDeliveries:
+    # couldn't retrieve correct structure
+    contract_item_id = field(default='')
 
 @define
-class SamrukKztPlanItemRow:
+class SamrukPlanItemRow:
     id = field(default='')
     deliveryLocation = field(default='')
     durationMonth = field(default='')
@@ -294,3 +298,18 @@ class SamrukParticipationLotRow:
     price = field(default='')
     create_date = field(default='')
     last_modified_date = field(default='')
+
+
+@define
+class SamrukEntriesRow:
+    id = field(default='')
+    deleted = field(default='')
+    code = field(default='')
+    kk = field(default='')
+    ru = field(default='')
+    en = field(default='')
+    dictionary_id = field(default='')
+    parent_entry_id = field(default='')
+    final_entry = field(default='')
+    measure_unit_id = field(default='')
+    rank = field(default='')

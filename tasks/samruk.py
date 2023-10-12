@@ -1,6 +1,7 @@
 import csv
 import json
 from datetime import datetime, timedelta
+from math import floor
 
 import luigi
 from luigi.parameter import ParameterVisibility
@@ -148,14 +149,17 @@ class SamrukPlans(SamrukRunner):
     name = luigi.Parameter('samruk_plans')
 
 
-class SamrukKztPlanItemsOutput(SamrukOutput):
+class SamrukDetailOutput(SamrukOutput):
+
+    master_dataset_name = luigi.Parameter()
+    foreign_key_param = luigi.Parameter()
 
     def requires(self):
-        return ExternalCsvLocalInput(name='samruk_plans')
+        return ExternalCsvLocalInput(name=self.master_dataset_name)
 
     def _plans_ids(self):
         _ids = []
-        with open(self.input().path) as csv_file:
+        with open(self.input().path, encoding='utf-8') as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=self.sep)
             for row in csv_reader:
                 _ids.append(row[0])
@@ -165,12 +169,11 @@ class SamrukKztPlanItemsOutput(SamrukOutput):
     def run(self):
 
         p_ids = self._plans_ids()
-        parsed_plans_count = 0
-        for p_id in p_ids:
+        parsed_count = 0
+        for i, p_id in enumerate(p_ids):
 
             params = self.params
-            params['planId'] = p_id
-            self.set_progress_percentage(0)
+            params[self.foreign_key_param] = p_id
             parser = SamrukParser(self.url, params=params, timeout=self.timeout)
 
             for data in parser:
@@ -178,33 +181,69 @@ class SamrukKztPlanItemsOutput(SamrukOutput):
                              [dict_to_row(d, self.struct) for d in data],
                              quotechar='"')
 
-                s, p = parser.status_percent
-                status = f'Total plans: {len(p_ids)}.  Plan ID: {p_id}. Parsed plans: {parsed_plans_count}'
-                status = f'{status} \n {s}'
+                status = f'Total: {len(p_ids)}. Parsed: {parsed_count}'
+                p = floor((i * 100) / len(p_ids))
 
                 self.set_status_info(status, p)
                 rewrite_file(self.stat_fpath, json.dumps(parser.stat))
 
-            parsed_plans_count += 1
+            parsed_count += 1
 
         self.finalize()
 
 
-@requires(SamrukKztPlanItemsOutput)
-class SamrukKztPlanItemsOutput(FtpUploadedOutput):
+@requires(SamrukDetailOutput)
+class SamrukFtpDetailOutput(FtpUploadedOutput):
     pass
 
 
-class SamrukKztPlansItems(SamrukRunner):
+class SamrukPlanItems(SamrukRunner):
 
     name = luigi.Parameter(default='samruk_plan_items')
+    all_data = luigi.BoolParameter(default=True)
 
     def requires(self):
         params = self.params
-        return SamrukKztPlanItemsOutput(**params)
+        return SamrukFtpDetailOutput(master_dataset_name='samruk_plans',
+                                     foreign_key_param='planId',
+                                     **params)
+
+
+class SamrukContractItems(SamrukRunner):
+
+    name = luigi.Parameter(default='samruk_contract_items')
+    all_data = luigi.BoolParameter(default=True)
+
+    def requires(self):
+        params = self.params
+        return SamrukFtpDetailOutput(master_dataset_name='samruk_contracts',
+                                     foreign_key_param='contractCardId',
+                                     **params)
+
+
+class SamrukContractItemDeliveries(SamrukRunner):
+
+    name = luigi.Parameter(default='samruk_contract_item_deliveries')
+    all_data = luigi.BoolParameter(default=True)
+
+    def requires(self):
+        params = self.params
+        return SamrukFtpDetailOutput(master_dataset_name='samruk_contract_items',
+                                     foreign_key_param='contractItemId',
+                                     **params)
+
+
+class SamrukEntries(SamrukRunner):
+
+    name = luigi.Parameter(default='samruk_entries')
+    all_data = luigi.BoolParameter(default=True)
+
+    def requires(self):
+        params = self.params
+        return SamrukFtpDetailOutput(master_dataset_name='samruk_dicts',
+                                     foreign_key_param='dictionaryId',
+                                     **params)
 
 
 if __name__ == '__main__':
     luigi.run()
-
-
