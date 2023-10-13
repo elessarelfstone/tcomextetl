@@ -14,7 +14,7 @@ with DAG(
         dag_id='samruk_plan_items',
         catchup=False,
         start_date=pendulum.now(tz=f'{Variable.get("TZ")}').subtract(days=1),
-        schedule_interval='@daily',
+        schedule_interval='0 1 * * *',
         tags=['samruk']
      ) as dag:
 
