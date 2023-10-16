@@ -1,5 +1,6 @@
 import csv
 import json
+import os.path
 from datetime import datetime, timedelta
 from math import floor
 
@@ -155,6 +156,10 @@ class SamrukDetailOutput(SamrukOutput):
     foreign_key_param = luigi.Parameter()
 
     def requires(self):
+        external_input = ExternalCsvLocalInput(name=self.master_dataset_name)
+        if os.path.getsize(external_input.output().path) == 0:
+            rewrite_file(external_input.output().path, '0')
+
         return ExternalCsvLocalInput(name=self.master_dataset_name)
 
     def _plans_ids(self):
