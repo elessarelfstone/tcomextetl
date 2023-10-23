@@ -527,6 +527,38 @@ telecomkz_reps_conversions_lk2:
   timeout_ban: !!float 10
   ftp_file_mask: telecomkz_reps_conversions_lk2_*
 
+telecomkz_logs_conversions_lk2:
+  entity: stat/v1/data.csv
+  id: 62132932
+  metrics: ym:s:goal{0}conversionRate,ym:s:goal{0}reaches,ym:s:goal{0}visits,ym:s:goal{0}converted<currency>Revenue,ym:s:goal{0}users,ym:s:goal{0}pageviews,ym:s:goal{0}percentNewVisitors,ym:s:goal{0}bounceRate,ym:s:goal{0}pageDepth,ym:s:goal{0}avgVisitDurationSeconds,ym:s:visits
+  dimensions: ym:s:date
+  ftp_directory: telecomkz
+  timeout: !!float 30
+  timeout_ban: !!float 10
+  ftp_file_mask: telecomkz_reps_conversions_lk2_*
+
+telecomkz_logs_main_visits:
+  counter_id: 49372510
+  fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
+
+telecomkz_logs_lk1_visits:
+  counter_id: 52550719
+  fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
+
+
+telecomkz_logs_lk2_visits:
+  counter_id: 62132932
+  fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
+
+
+telecomkz_logs_yam2_visits:
+  counter_id: 92978096
+  fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
+
+telecomkz_logs_terminal_visits:
+  counter_id: 95016194
+  fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
+
 
 iot_stat:
   ftp_directory: iot

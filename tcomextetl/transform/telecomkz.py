@@ -102,3 +102,20 @@ class TelecomkzConversionsLK2Row:
     avg_visit_duration_seconds = field(default='')
     visits1 = field(default='')
 
+
+@define
+class TelecomkzLogsRow:
+    visit_id = field(default='')
+    counter_id = field(default='')
+    watch_ids = field(default='')
+    date = field(default='')
+    date_time = field(default='')
+    is_new_user = field(default='')
+    page_views = field(default='')
+    visit_duration = field(default='')
+    bounce = field(default='')
+    client_id = field(default='')
+    counter_user_id_hash = field(default='')
+    goals_id = field(default='')
+    goals_date_time = field(default='')
+    refere = field(default='')
