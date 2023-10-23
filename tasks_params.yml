@@ -551,8 +551,13 @@ telecomkz_logs_lk2_visits:
   fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
 
 
-telecomkz_logs_yam2_visits:
+telecomkz_logs_lk2_yam2_visits:
   counter_id: 92978096
+  fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
+
+
+telecomkz_logs_yam2_visits:
+  counter_id: 90605336
   fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
 
 telecomkz_logs_terminal_visits:
