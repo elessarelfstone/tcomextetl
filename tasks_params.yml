@@ -540,30 +540,32 @@ telecomkz_logs_conversions_lk2:
 telecomkz_logs_main_visits:
   counter_id: 49372510
   fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
+  ftp_directory: telecomkz
 
 telecomkz_logs_lk1_visits:
   counter_id: 52550719
   fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
-
+  ftp_directory: telecomkz
 
 telecomkz_logs_lk2_visits:
   counter_id: 62132932
   fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
-
+  ftp_directory: telecomkz
 
 telecomkz_logs_lk2_yam2_visits:
   counter_id: 92978096
   fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
-
+  ftp_directory: telecomkz
 
 telecomkz_logs_yam2_visits:
   counter_id: 90605336
   fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
+  ftp_directory: telecomkz
 
 telecomkz_logs_terminal_visits:
   counter_id: 95016194
   fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
-
+  ftp_directory: telecomkz
 
 iot_stat:
   ftp_directory: iot
