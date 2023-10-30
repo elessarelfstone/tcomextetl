@@ -46,7 +46,7 @@ class InfobipOutput(ApiToCsv):
             u_after = datetime.strptime(u_after, DEFAULT_FORMAT).isoformat() + '.000UTC'
             u_before = datetime.strptime(u_before, DEFAULT_FORMAT)
             u_before = u_before.replace(hour=23, minute=59, second=59).isoformat() + '.000UTC'
-            params['updatedAfter'], params['updatedBefore'] = u_after, u_before
+            params['closedAfter'], params['closedBefore'] = u_after, u_before
 
         # resume if there were fails
         if self.resume and os.path.exists(self.stat_fpath):
