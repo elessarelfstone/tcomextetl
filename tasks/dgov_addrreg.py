@@ -1,4 +1,6 @@
+import json
 import os
+from calendar import monthrange
 from datetime import datetime
 from time import sleep
 
@@ -6,7 +8,7 @@ import luigi
 
 from luigi.util import requires
 from tcomextetl.common.csv import dict_to_row, save_csvrows
-from tcomextetl.common.dates import month_as_range, previous_month, yesterday
+from tcomextetl.common.dates import month_as_range, previous_month, yesterday, first_day_of_month, last_day_of_month, DEFAULT_DATETIME_FORMAT
 from tcomextetl.common.utils import read_lines, append_file, rewrite_file
 from tcomextetl.extract.dgov_requests import DgovParser
 from tasks.base import ApiToCsv, Runner, FtpUploadedOutput
@@ -49,7 +51,7 @@ class DgovAddrRegOutput(ApiToCsv):
             append_file(self.parsed_ids_fpath, parser.curr_chunk)
             sleep(self.timeout)
 
-        rewrite_file(self.success_fpath, parser.status_percent[0])
+        rewrite_file(self.success_fpath, json.dumps(parser.stat))
 
 
 @requires(DgovAddrRegOutput)
@@ -62,11 +64,12 @@ class DgovAddrRegRunner(Runner):
     month = luigi.Parameter(default=previous_month())
 
     def requires(self):
+
         def date_as_datetime(dt):
             return datetime(year=dt.year, month=dt.month, day=dt.day).strftime('%Y-%m-%d %H:%M:%S')
 
         params = self.params
-        if self.period == 'month':
+        if not self.all_data:
             from_to = month_as_range(self.month)
             params['from_to'] = (date_as_datetime(from_to[0]), date_as_datetime(from_to[1]))
         return DgovAddrRegFtpOutput(**params)

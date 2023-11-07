@@ -15,6 +15,11 @@ def first_day_of_month() -> date:
     return _date.replace(day=1)
 
 
+def last_day_of_month() -> date:
+    _date = datetime.today()
+    return _date.replace(monthrange(_date.year, _date.month)[1])
+
+
 def yesterday(frmt=DEFAULT_FORMAT):
     y = datetime.today() - timedelta(days=1)
     return y.strftime(frmt)

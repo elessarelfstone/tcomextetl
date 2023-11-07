@@ -138,6 +138,10 @@ class DgovParser(HttpRequest):
             s += f'From: {f} to: {t}'
         return s, p
 
+    @property
+    def stat(self):
+        return {"parsed": self._parsed_count}
+
     def __iter__(self):
         while self._chunks:
             self._from = self._chunks.popleft()
