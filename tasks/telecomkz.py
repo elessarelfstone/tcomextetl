@@ -422,7 +422,7 @@ class TelecomkzYandexMetricaLogsOutput(CsvFileOutput):
         params = {}
         for d in data:
             data_part = pd.read_csv(StringIO(d), header=None, sep="\t", skiprows=1)
-            data_part.to_csv(self.output_fpath, float_format='%.0f', sep=";", header=False, index=False)
+            data_part.to_csv(self.output_fpath, mode='a', float_format='%.0f', sep=";", header=False, index=False)
             parsed_count += len(data_part)
             params = self.request_params
             params.update(dict(parsed=parsed_count))
