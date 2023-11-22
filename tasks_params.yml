@@ -112,6 +112,7 @@ sgov_companies:
 sgov_foreign_branches:
   juridical_type_id: !!int 742684
   timeout: 90
+  usecolumns: A:K, R:V
   skiptop: 2
   ftp_directory: sgov
 
@@ -135,12 +136,14 @@ sgov_entrepreneurs:
 
 sgov_legal_branches:
   juridical_type_id: !!int 742680
+  usecolumns: A:K, R:V
   timeout: 90
   skiptop: 2
   ftp_directory: sgov
 
 sgov_active_foreign_branches:
   juridical_type_id: !!int 742684
+  usecolumns: A:K, R:V
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
   skiptop: 2
@@ -169,6 +172,7 @@ sgov_active_entrepreneurs:
 
 sgov_active_legal_branches:
   juridical_type_id: !!int 742680
+  usecolumns: A:K, R:V
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
   skiptop: 2
