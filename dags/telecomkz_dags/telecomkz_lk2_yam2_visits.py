@@ -14,7 +14,7 @@ with DAG(
         dag_id='telecomkz_lk2_yam2_visits',
         catchup=False,
         start_date=pendulum.now(tz=f'{Variable.get("TZ")}').subtract(days=1),
-        schedule_interval='0 1 * * *',
+        schedule_interval='45 1 * * *',
         tags=['telecomkz']
      ) as dag:
 
