@@ -1,7 +1,9 @@
 import csv
 import json
 from math import floor
+from datetime import datetime, timedelta
 from time import sleep
+
 
 import luigi
 import pandas as pd
@@ -14,15 +16,16 @@ from tcomextetl.common.csv import save_csvrows, dict_to_row, CSV_QUOTECHAR
 from tcomextetl.common.dates import DEFAULT_FORMAT, n_days_ago
 from tcomextetl.common.utils import build_fpath, append_file, rewrite_file
 from tcomextetl.extract.aitu_requests import AituRequests
-from settings import TEMP_PATH, SPEEDTEST_USER, SPEEDTEST_PASS
+from settings import AITU_API_KEY, AITU_SECRET_KEY
 
 api_url = f"https://amplitude.com/api/2/export"
+amplitude_id = 505199
 
 
 class AituOutput(CsvFileOutput):
     from_to = luigi.TupleParameter(default=())
-    user = luigi.Parameter(default=SPEEDTEST_USER, visibility=ParameterVisibility.HIDDEN)
-    password = luigi.Parameter(default=SPEEDTEST_PASS, visibility=ParameterVisibility.HIDDEN)
+    user = luigi.Parameter(default=AITU_API_KEY, visibility=ParameterVisibility.HIDDEN)
+    password = luigi.Parameter(default=AITU_SECRET_KEY, visibility=ParameterVisibility.HIDDEN)
 
     @property
     def auth(self):
@@ -39,17 +42,54 @@ class AituOutput(CsvFileOutput):
         }
 
         parser = AituRequests(
+            amplitude_id,
             api_url,
             params=params,
             auth=self.auth
         )
 
-        data = parser.load()
-        for d in data:
-            save_csvrows(self.output_fpath,
-                         [dict_to_row(d, self.struct) for d in data],
-                         quotechar='"')
-            self.set_status_info(*parser.status_percent)
-            rewrite_file(self.stat_fpath, json.dumps(parser.stat))
+        for d in parser:
 
-        self.finalize()
+            save_csvrows(self.output_fpath,
+                         [dict_to_row(_d, self.struct, '$') for _d in d],
+                         quotechar='"')
+
+            self.set_status_info(*parser.status_percent)
+
+        rewrite_file(self.success_fpath, json.dumps(parser.stat))
+
+
+@requires(AituOutput)
+class AituFtpOutput(FtpUploadedOutput):
+    pass
+
+
+class AituRunner(Runner):
+    start_date = luigi.DateParameter(default=n_days_ago())
+    end_date = luigi.DateParameter(default=n_days_ago())
+
+    @property
+    def params(self):
+        params = super(AituRunner, self).params
+
+        start = self.start_date.strftime('%Y%m%dT%H')
+        end = (self.end_date + timedelta(days=1)).strftime('%Y%m%dT%H')
+
+        params['from_to'] = (
+            start,
+            end
+        )
+
+        return params
+
+    def requires(self):
+        return AituFtpOutput(**self.params)
+
+
+class AituLogs(AituRunner):
+
+    name = luigi.Parameter('aitu_logs')
+
+
+if __name__ == '__main__':
+    luigi.run()

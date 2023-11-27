@@ -589,3 +589,6 @@ mirapolis_online_study:
   report_id: 964
   report_group_id: 24
   ftp_directory: mirapolis
+
+aitu_logs:
+  ftp_directory: aitu_dags
