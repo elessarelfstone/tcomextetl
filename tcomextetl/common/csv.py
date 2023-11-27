@@ -53,7 +53,7 @@ def dict_to_row(p_dict, data_class, strip_chars=None):
         _strip_chars = strip_chars
 
     # cast each keys's name of dict to lower case
-    _dict = {k.lower(): v for k, v in p_dict.items() if k.lower().ltrim(_strip_chars)}
+    _dict = {k.lower().lstrip(_strip_chars): v for k, v in p_dict.items() if k.lower()}
 
     # get fields of structure
     keys = [a.name for a in attr.fields(data_class)]
