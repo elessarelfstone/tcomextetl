@@ -591,4 +591,4 @@ mirapolis_online_study:
   ftp_directory: mirapolis
 
 aitu_logs:
-  ftp_directory: aitu_dags
+  ftp_directory: aitu

@@ -37,7 +37,7 @@ class AituRequests(HttpRequest):
         r = self.request(url)
         zip_file = io.BytesIO(r.content)
 
-        root_path = Path(TEMP_PATH) / 'aitu_dags'
+        root_path = Path(TEMP_PATH) / 'aitu'
 
         with zipfile.ZipFile(zip_file, 'r') as z:
             z.extractall(root_path)
