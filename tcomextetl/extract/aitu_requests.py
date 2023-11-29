@@ -1,3 +1,4 @@
+import glob
 import json
 import io
 import os
@@ -37,7 +38,7 @@ class AituRequests(HttpRequest):
         r = self.request(url)
         zip_file = io.BytesIO(r.content)
 
-        root_path = Path(TEMP_PATH) / 'aitu'
+        root_path = Path(TEMP_PATH) / 'aitu' / datetime.now().strftime('%Y%m%d%H%M%S')
 
         with zipfile.ZipFile(zip_file, 'r') as z:
             z.extractall(root_path)
