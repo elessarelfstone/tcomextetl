@@ -70,6 +70,14 @@ StructRegister.add('goszakup_plans_kato', GoszakupPlanKatoRow)
 StructRegister.add('goszakup_contract_units', GoszakupContractUnitsRow)
 StructRegister.add('goszakup_trd_app_offers', GoszakupTrdAppOffersRow)
 
+StructRegister.add('goszakup_lots_status', GoszakupLotsStatusRow)
+StructRegister.add('goszakup_ref_trade_methods', GoszakupRefTradeMethodsRow)
+StructRegister.add('goszakup_ref_pln_point_status', GoszakupRefPlnPointStatusRow)
+StructRegister.add('goszakup_ref_subject_type', GoszakupRefSubjectTypeRow)
+StructRegister.add('goszakup_ref_buy_status', GoszakupRefBuyStatusRow)
+StructRegister.add('goszakup_ref_po_st', GoszakupRefPriceOfferStatusRow)
+
+
 
 # data.egov.kz
 StructRegister.add('dgov_addrreg_dats_types', DgovAddrRegDAtsTypes)

@@ -592,3 +592,39 @@ mirapolis_online_study:
 
 aitu_logs:
   ftp_directory: aitu
+
+goszakup_budget_type:
+  entity: Subjects
+  descr: Справочник Вид Бюджета
+  ftp_directory: goszakup
+
+goszakup_lots_status:
+  endpoint: /v3/refs/ref_lots_status
+  descr: Статусы лотов
+  ftp_directory: goszakup
+
+goszakup_ref_trade_methods:
+  endpoint: /v3/refs/ref_trade_methods
+  descr: Способ закупки
+  ftp_directory: goszakup
+
+goszakup_ref_pln_point_status:
+  endpoint: /v3/refs/ref_pln_point_status
+  descr: Статусы пуктов планов
+  ftp_directory: goszakup
+
+goszakup_ref_subject_type:
+  endpoint: /v3/refs/ref_subject_type
+  descr: Вид предмета закупки
+  ftp_directory: goszakup
+
+goszakup_ref_buy_status:
+  endpoint: /v3/refs/ref_buy_status
+  descr: Статус объявления
+  ftp_directory: goszakup
+
+goszakup_ref_po_st:
+  endpoint: /v3/refs/ref_po_st
+  descr: Статусы ценовых предложений
+  ftp_directory: goszakup
+

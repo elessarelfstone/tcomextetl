@@ -46,6 +46,7 @@ class GoszakupRestApiParser(ApiRequests):
 
     def load(self, params):
         r = self.request(self.url, params=params)
+        print('!!!' + r.text + '!!!')
         return r.json()
 
     def parse(self):
