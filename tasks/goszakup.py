@@ -198,5 +198,43 @@ class GoszakupTrdAppOffers(GoszakupRunner):
         return GoszakupFtpOutput(**self.params)
 
 
+class GoszakupLotsStatus(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_lots_status')
+    use_rest = luigi.BoolParameter(True)
+
+
+class GoszakupRefTradeMethods(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_trade_methods')
+    use_rest = luigi.BoolParameter(True)
+
+
+class GoszakupRefPlnPointStatus(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_pln_point_status')
+    use_rest = luigi.BoolParameter(True)
+
+
+class GoszakupRefSubjectPointStatus(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_subject_type')
+    use_rest = luigi.BoolParameter(True)
+
+
+class GoszakupRefBuyStatus(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_buy_status')
+    use_rest = luigi.BoolParameter(True)
+
+
+class GoszakupRefPriceOfferStatus(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_po_st')
+    use_rest = luigi.BoolParameter(True)
+
+
+
+
 if __name__ == '__main__':
     code = luigi_run()

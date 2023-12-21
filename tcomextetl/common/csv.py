@@ -43,12 +43,17 @@ def save_csvrows(fpath: str, rows, delimiter=None, quotechar=CSV_QUOTECHAR):
     return len(rows)
 
 
-def dict_to_row(p_dict, data_class):
+def dict_to_row(p_dict, data_class, strip_chars=None):
     """ Convert given dict into tuple using
     given data class(attr class). """
 
+    _strip_chars = ''
+
+    if strip_chars:
+        _strip_chars = strip_chars
+
     # cast each keys's name of dict to lower case
-    _dict = {k.lower(): v for k, v in p_dict.items() if k.lower()}
+    _dict = {k.lower().lstrip(_strip_chars): v for k, v in p_dict.items() if k.lower()}
 
     # get fields of structure
     keys = [a.name for a in attr.fields(data_class)]

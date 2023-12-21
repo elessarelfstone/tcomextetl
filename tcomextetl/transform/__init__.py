@@ -10,6 +10,8 @@ from tcomextetl.transform.speedtest import *
 from tcomextetl.transform.crmsensor import *
 from tcomextetl.transform.iot import *
 from tcomextetl.transform.mirapolis import *
+from tcomextetl.transform.aitu import *
+
 from tcomextetl.transform.tvplus import *
 
 class StructRegister:
@@ -68,6 +70,14 @@ StructRegister.add('goszakup_plan_points', GoszakupPlanPointRow)
 StructRegister.add('goszakup_plans_kato', GoszakupPlanKatoRow)
 StructRegister.add('goszakup_contract_units', GoszakupContractUnitsRow)
 StructRegister.add('goszakup_trd_app_offers', GoszakupTrdAppOffersRow)
+
+StructRegister.add('goszakup_lots_status', GoszakupLotsStatusRow)
+StructRegister.add('goszakup_ref_trade_methods', GoszakupRefTradeMethodsRow)
+StructRegister.add('goszakup_ref_pln_point_status', GoszakupRefPlnPointStatusRow)
+StructRegister.add('goszakup_ref_subject_type', GoszakupRefSubjectTypeRow)
+StructRegister.add('goszakup_ref_buy_status', GoszakupRefBuyStatusRow)
+StructRegister.add('goszakup_ref_po_st', GoszakupRefPriceOfferStatusRow)
+
 
 
 # data.egov.kz
@@ -151,6 +161,8 @@ StructRegister.add('mirapolis_online_study', MirapolisRow)
 
 #tvplus
 StructRegister.add('tvplus_cinema_start', TvPlusCinemaStartRow)
+
+StructRegister.add('aitu_logs', AituMetricLog)
 
 StructRegister.add('tvplus_cinema_kazvod', TvPlusCinemaKazvodRow)
 

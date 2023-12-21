@@ -395,3 +395,58 @@ class GoszakupTrdAppOffersRow:
     app_date_apply = field(default='')
     app_system_id = field(default='')
     app_index_date = field(default='')
+
+
+@define
+class GoszakupLotsStatusRow:
+    id = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+    code = field(default='')
+
+
+@define
+class GoszakupRefTradeMethodsRow:
+    code = field(default='')
+    name_kz = field(default='')
+    name_ru = field(default='')
+    is_active = field(default='')
+    type = field(default='')
+    symbol_code = field(default='')
+    f1 = field(default='')
+    ord = field(default='')
+    f2 = field(default='')
+    id = field(default='')
+
+
+@define
+class GoszakupRefPlnPointStatusRow:
+    id = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+    code = field(default='')
+
+
+@define
+class GoszakupRefSubjectTypeRow:
+    id = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+
+
+@define
+class GoszakupRefBuyStatusRow:
+    id = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+    code = field(default='')
+
+
+@define
+class GoszakupRefPriceOfferStatusRow:
+    id = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+    code = field(default='')
+
+
