@@ -4,6 +4,7 @@ from datetime import date, datetime, timedelta
 DEFAULT_FORMAT = '%Y-%m-%d'
 DEFAULT_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 DEFAULT_MONTH_FORMAT = '%Y-%m'
+DEFAULT_DATETIME_FORMAT_WITHT = "%Y-%m-%dT%H:%M:%S"
 
 
 def today():

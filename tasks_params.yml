@@ -589,3 +589,18 @@ mirapolis_online_study:
   report_id: 964
   report_group_id: 24
   ftp_directory: mirapolis
+
+tvplus_cinema_start:
+  ftp_directory: tvplus
+  endpoint: vod/v2/start/titles
+
+tvplus_cinema_kazvod:
+  ftp_directory: tvplus
+  endpoint: vod/v2/kazvod/titles
+
+tvplus_cinema_megogo:
+  ftp_directory: tvplus
+  endpoint: vod/v2/megogo/titles
+
+tvplus_programs:
+  ftp_directory: tvplus

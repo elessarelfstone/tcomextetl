@@ -10,7 +10,7 @@ from tcomextetl.transform.speedtest import *
 from tcomextetl.transform.crmsensor import *
 from tcomextetl.transform.iot import *
 from tcomextetl.transform.mirapolis import *
-
+from tcomextetl.transform.tvplus import *
 
 class StructRegister:
 
@@ -149,4 +149,11 @@ StructRegister.add('iot_stat', IotStatRow)
 StructRegister.add('mirapolis_offline_study', MirapolisRow)
 StructRegister.add('mirapolis_online_study', MirapolisRow)
 
+#tvplus
+StructRegister.add('tvplus_cinema_start', TvPlusCinemaStartRow)
 
+StructRegister.add('tvplus_cinema_kazvod', TvPlusCinemaKazvodRow)
+
+StructRegister.add('tvplus_cinema_megogo', TvPlusCinemaMegogoRow)
+
+StructRegister.add('tvplus_programs', TvPlusProgramsRow)
