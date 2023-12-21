@@ -132,6 +132,7 @@ sgov_joint_ventures:
 
 sgov_entrepreneurs:
   juridical_type_id: !!int 742681
+  usecolumns: A:K,R:V
   timeout: 90
   skiptop: 2
   ftp_directory: sgov
@@ -169,6 +170,7 @@ sgov_active_joint_ventures:
 
 sgov_active_entrepreneurs:
   juridical_type_id: !!int 742681
+  usecolumns: A:K,R:V
   statuses: !!python/list [39354,39355,39356]
   timeout: 90
   skiptop: 2
