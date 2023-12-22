@@ -12,6 +12,7 @@ from tcomextetl.transform.iot import *
 from tcomextetl.transform.mirapolis import *
 from tcomextetl.transform.aitu import *
 
+from tcomextetl.transform.tvplus import *
 
 class StructRegister:
 
@@ -158,6 +159,13 @@ StructRegister.add('iot_stat', IotStatRow)
 StructRegister.add('mirapolis_offline_study', MirapolisRow)
 StructRegister.add('mirapolis_online_study', MirapolisRow)
 
+#tvplus
+StructRegister.add('tvplus_cinema_start', TvPlusCinemaStartRow)
 
 StructRegister.add('aitu_logs', AituMetricLog)
 
+StructRegister.add('tvplus_cinema_kazvod', TvPlusCinemaKazvodRow)
+
+StructRegister.add('tvplus_cinema_megogo', TvPlusCinemaMegogoRow)
+
+StructRegister.add('tvplus_programs', TvPlusProgramsRow)

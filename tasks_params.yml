@@ -630,3 +630,19 @@ goszakup_ref_po_st:
   descr: Статусы ценовых предложений
   ftp_directory: goszakup
 
+
+
+tvplus_cinema_start:
+  ftp_directory: tvplus
+  endpoint: vod/v2/start/titles
+
+tvplus_cinema_kazvod:
+  ftp_directory: tvplus
+  endpoint: vod/v2/kazvod/titles
+
+tvplus_cinema_megogo:
+  ftp_directory: tvplus
+  endpoint: vod/v2/megogo/titles
+
+tvplus_programs:
+  ftp_directory: tvplus
