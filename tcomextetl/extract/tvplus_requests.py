@@ -34,10 +34,3 @@ class TvPlusProgramsParser(HttpRequest):
     def load(self, params=None):
         r = self.request(self.url, params=params)
         return r.text
-
-url = 'https://kt.server-api.lfstrm.tv/channels/5d385e7355153152ba34f5f1/programs?period=1702404000:1703095199'
-parser = TvPlusParser(
-    url
-)
-parser_json = parser.load()
-print(parser_json)
