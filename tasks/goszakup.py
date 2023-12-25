@@ -234,6 +234,28 @@ class GoszakupRefPriceOfferStatus(GoszakupRunner):
     use_rest = luigi.BoolParameter(True)
 
 
+class GoszakupRefKato(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_kato')
+    use_rest = luigi.BoolParameter(True)
+
+
+class GoszakupRefJustification(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_justification')
+    use_rest = luigi.BoolParameter(True)
+
+
+class GoszakupRefTypeTrade(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_type_trade')
+    use_rest = luigi.BoolParameter(True)
+
+
+class GoszakupRefContractStatus(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_contract_status')
+    use_rest = luigi.BoolParameter(True)
 
 
 if __name__ == '__main__':

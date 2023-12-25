@@ -450,3 +450,39 @@ class GoszakupRefPriceOfferStatusRow:
     code = field(default='')
 
 
+@define
+class GoszakupRefKatoRow:
+    ab = field(default='')
+    cd = field(default='')
+    ef = field(default='')
+    hij = field(default='')
+    k = field(default='')
+    name_kz = field(default='')
+    name_ru = field(default='')
+    level = field(default='')
+    full_name_ru = field(default='')
+    full_name_kz = field(default='')
+    code = field(default='')
+    parent_code = field(default='')
+
+@define
+class GoszakupRefJustificationRow:
+    id = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+    ref_trade_methods_id = field(default='')
+
+@define
+class GoszakupRefTypeTradeRow:
+    id = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+    ref_trade_method_id = field(default='')
+
+@define
+class GoszakupRefContractStatusRow:
+    id = field(default='')
+    code = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+
