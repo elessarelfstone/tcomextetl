@@ -77,6 +77,11 @@ StructRegister.add('goszakup_ref_pln_point_status', GoszakupRefPlnPointStatusRow
 StructRegister.add('goszakup_ref_subject_type', GoszakupRefSubjectTypeRow)
 StructRegister.add('goszakup_ref_buy_status', GoszakupRefBuyStatusRow)
 StructRegister.add('goszakup_ref_po_st', GoszakupRefPriceOfferStatusRow)
+StructRegister.add('goszakup_ref_kato', GoszakupRefKatoRow)
+StructRegister.add('goszakup_ref_justification', GoszakupRefJustificationRow)
+StructRegister.add('goszakup_ref_type_trade', GoszakupRefTypeTradeRow)
+StructRegister.add('goszakup_ref_contract_status', GoszakupRefContractStatusRow)
+
 
 
 

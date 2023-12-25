@@ -630,7 +630,25 @@ goszakup_ref_po_st:
   descr: Статусы ценовых предложений
   ftp_directory: goszakup
 
+goszakup_ref_kato:
+  endpoint: /v3/refs/ref_kato
+  descr: КАТО
+  ftp_directory: goszakup
 
+goszakup_ref_justification:
+  endpoint: /v3/refs/ref_justification
+  descr: Обоснование применения способа закупки
+  ftp_directory: goszakup
+
+goszakup_ref_type_trade:
+  endpoint: /v3/refs/ref_type_trade
+  descr: Тип закупки
+  ftp_directory: goszakup
+
+goszakup_ref_contract_status:
+  endpoint: /v3/refs/ref_contract_status
+  descr: Статус договора
+  ftp_directory: goszakup
 
 tvplus_cinema_start:
   ftp_directory: tvplus
