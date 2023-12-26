@@ -14,7 +14,7 @@ with DAG(
         dag_id='tvplus_programs',
         catchup=False,
         start_date=pendulum.datetime(2023, 2, 1, tz=f'{Variable.get("TZ")}'),
-        schedule_interval='@weekly',
+        schedule_interval='15 4 * * 1',
         tags=['tvplus']
      ) as dag:
 
