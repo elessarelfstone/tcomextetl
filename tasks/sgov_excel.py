@@ -53,7 +53,7 @@ class SgovDictOutput(WebDataFileInput):
 
         parsed_uri = urlparse(self.url)
         url_start = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
-        req = requests.get(self.url)
+        req = requests.get(self.url, verify=False)
         soup = BeautifulSoup(req.text, 'lxml')
         data = soup.find('div', id=self.html_container_id)
         url_part = [j for i in data.find_all('a') if (j := get_href(i)).split('.')[-1] == self.format][0]
