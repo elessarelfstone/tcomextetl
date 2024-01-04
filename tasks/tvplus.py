@@ -14,7 +14,7 @@ from luigi.util import requires
 from tcomextetl.common.csv import dict_to_row, save_csvrows
 from tcomextetl.common.utils import rewrite_file
 from tcomextetl.extract.tvplus_requests import TvPlusParser, TvPlusProgramsParser
-from tcomextetl.common.dates import DEFAULT_DATETIME_FORMAT_WITHT, n_days_ago
+from tcomextetl.common.dates import DEFAULT_DATETIME_FORMAT_WITHT, today
 
 start_host = 'https://kt.server-api.lfstrm.tv'
 programs_host = 'https://tv.telecom.kz/channels'
@@ -125,8 +125,7 @@ class TvPlusProgramsOutput(CsvFileOutput):
 
             try:
                 for i in range(len(dataframe['programs'])):
-                    if str(datetime.fromtimestamp(dataframe['programs'][i]['scheduleInfo']['start'])) > str(date_to)[
-                                                                                                        :10]:
+                    if datetime.fromtimestamp(dataframe['programs'][i]['scheduleInfo']['start']) > date_to_format:
                         continue
                     info = []
                     if dataframe['programs'][i]['scheduleInfo']['start'] < 0:
@@ -182,8 +181,8 @@ class TvPlusProgramsOutputFtpOutput(FtpUploadedOutput):
 class TvPlusProgramsRunner(Runner):
 
     name = luigi.Parameter()
-    start_date = luigi.DateParameter(default=n_days_ago() - timedelta(days=7))
-    end_date = luigi.DateParameter(default=n_days_ago())
+    start_date = luigi.DateParameter(default=today() - timedelta(days=7))
+    end_date = luigi.DateParameter(default=today())
     timeout = luigi.IntParameter(default=2)
 
     @property
