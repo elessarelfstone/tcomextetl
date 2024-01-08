@@ -181,7 +181,7 @@ class TvPlusProgramsOutputFtpOutput(FtpUploadedOutput):
 class TvPlusProgramsRunner(Runner):
 
     name = luigi.Parameter()
-    start_date = luigi.DateParameter(default=today() - timedelta(days=7))
+    start_date = luigi.DateParameter(default=today() - timedelta(days=1))
     end_date = luigi.DateParameter(default=today())
     timeout = luigi.IntParameter(default=2)
 
