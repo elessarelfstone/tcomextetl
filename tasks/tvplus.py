@@ -141,6 +141,7 @@ class TvPlusProgramsOutput(CsvFileOutput):
                     else:
                         upd = str(datetime.fromtimestamp(dataframe['programs'][i]['updateInfo']['mtime']))
                     channel_row = {'channel_id': dataframe['id'],
+                                   'channel': channels[channels['channel_id']==j]['channel'].values[0],
                                    'program_id': dataframe['programs'][i]['id'],
                                    'program': dataframe['programs'][i]['metaInfo']['title'],
                                    'description': dataframe['programs'][i]['metaInfo']['description'],
@@ -155,6 +156,7 @@ class TvPlusProgramsOutput(CsvFileOutput):
 
             except:
                 channel_row = {'channel_id': dataframe['id'],
+                               'channel': channels[channels['channel_id'] == j]['channel'].values[0],
                                'program_id': np.nan,
                                'program': np.nan,
                                'description': np.nan,
@@ -190,7 +192,7 @@ class TvPlusProgramsRunner(Runner):
         params = super(TvPlusProgramsRunner, self).params
         # noinspection PyTypeChecker
         s_date = datetime.combine(self.start_date, datetime.min.time()).isoformat()
-        e_date = datetime.combine(self.end_date, time(23, 59, 59)).isoformat()
+        e_date = datetime.combine(self.end_date, datetime.min.time()).isoformat()
         params['from_to'] = (
             s_date,
             e_date
