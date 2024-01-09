@@ -36,6 +36,7 @@ class TvPlusCinemaMegogoRow:
 @define
 class TvPlusProgramsRow:
     channel_id = field(default='')
+    channel = field(default='')
     program_id = field(default='')
     program = field(default='')
     description = field(default='')
