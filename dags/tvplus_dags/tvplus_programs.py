@@ -24,7 +24,7 @@ with DAG(
         dag=dag,
         do_xcom_push=False,
         op_kwargs={
-            'n_days_delta': 7
+            'n_days_delta': 1
         }
     )
 
@@ -32,7 +32,7 @@ with DAG(
         task_id='tvplus_programs',
         luigi_module='tvplus',
         luigi_task='TvPlusProgramsCheckList',
-        #luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
+        luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
         pool='tvplus',
         do_xcom_push=False
     )

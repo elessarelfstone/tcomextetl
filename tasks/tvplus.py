@@ -14,7 +14,7 @@ from luigi.util import requires
 from tcomextetl.common.csv import dict_to_row, save_csvrows
 from tcomextetl.common.utils import rewrite_file
 from tcomextetl.extract.tvplus_requests import TvPlusParser, TvPlusProgramsParser
-from tcomextetl.common.dates import DEFAULT_DATETIME_FORMAT_WITHT, today
+from tcomextetl.common.dates import DEFAULT_DATETIME_FORMAT_WITHT, n_days_ago
 
 start_host = 'https://kt.server-api.lfstrm.tv'
 programs_host = 'https://tv.telecom.kz/channels'
@@ -183,8 +183,8 @@ class TvPlusProgramsOutputFtpOutput(FtpUploadedOutput):
 class TvPlusProgramsRunner(Runner):
 
     name = luigi.Parameter()
-    start_date = luigi.DateParameter(default=today() - timedelta(days=1))
-    end_date = luigi.DateParameter(default=today())
+    start_date = luigi.DateParameter(default=n_days_ago())
+    end_date = luigi.DateParameter(default=n_days_ago())
     timeout = luigi.IntParameter(default=2)
 
     @property
@@ -192,7 +192,7 @@ class TvPlusProgramsRunner(Runner):
         params = super(TvPlusProgramsRunner, self).params
         # noinspection PyTypeChecker
         s_date = datetime.combine(self.start_date, datetime.min.time()).isoformat()
-        e_date = datetime.combine(self.end_date, datetime.min.time()).isoformat()
+        e_date = datetime.combine(self.end_date, time(23, 59, 59)).isoformat()
         params['from_to'] = (
             s_date,
             e_date
