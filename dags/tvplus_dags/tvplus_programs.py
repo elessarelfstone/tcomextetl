@@ -37,4 +37,4 @@ with DAG(
         do_xcom_push=False
     )
 
-    tvplus_programs
+    command_args >> tvplus_programs
