@@ -58,3 +58,26 @@ class AituMetricLog:
     user_properties = field(default='')
     uuid = field(default='')
     version_name = field(default='')
+
+
+@define
+class AituNotificationMetricLog:
+    push_id = field(default='')
+    push_request_id = field(default='')
+    platform_type = field(default='')
+    token_type = field(default='')
+    action_type = field(default='')
+    status = field(default='')
+    server_time = field(default='')
+    device_time = field(default='')
+    mini_app_id = field(default='')
+    installation_id = field(default='')
+    user_id = field(default='')
+    application_version = field(default='')
+    fork_id = field(default='')
+    is_notification_disable = field(default='')
+    token_date = field(default='')
+    token_freshness_days = field(default='')
+    os = field(default='')
+    device = field(default='')
+    push_localized_title = field(default='')
