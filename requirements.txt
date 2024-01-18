@@ -1,4 +1,4 @@
-attrs~=23.1.0
+attrs~=22.1.0
 luigi~=3.4.0
 openpyxl==3.0.10
 rarfile~=4.1
@@ -16,7 +16,3 @@ lxml
 google-cloud-bigquery[pandas]==2.34.3
 google-cloud
 google-auth
-pendulum~=3.0.0
-docker~=7.0.0
-bs4~=0.0.1
-pytest~=7.4.3
