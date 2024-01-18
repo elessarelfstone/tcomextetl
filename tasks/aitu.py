@@ -15,12 +15,25 @@ from tcomextetl.common.arch import extract_by_wildcard
 from tcomextetl.common.csv import save_csvrows, dict_to_row, CSV_QUOTECHAR
 from tcomextetl.common.dates import DEFAULT_FORMAT, n_days_ago
 from tcomextetl.common.utils import build_fpath, append_file, rewrite_file
-from tcomextetl.extract.aitu_requests import AituRequests
-from settings import AITU_API_KEY, AITU_SECRET_KEY
+from tcomextetl.extract.aitu_requests import AituRequests, AituNotificationRequests
+from settings import AITU_API_KEY, AITU_SECRET_KEY, AITU_PUSH_NOTIFICATIONS_PROJECT_ID, AITU_PUSH_NOTIFICATIONS_PRIVATE_KEY_ID, AITU_PUSH_NOTIFICATIONS_PRIVATE_KEY, AITU_PUSH_NOTIFICATIONS_CLIENT_ID
 
 api_url = f"https://amplitude.com/api/2/export"
 amplitude_id = 505199
 
+scopes=["https://www.googleapis.com/auth/cloud-platform"]
+creds_dict = {
+    "type": "service_account",
+    "client_email": "kt-411@asiachat-8dd78.iam.gserviceaccount.com",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/kt-411%40asiachat-8dd78.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+}
+query = """
+    SELECT * FROM `asiachat-8dd78.telecom.push_raw_data`
+"""
 
 class AituOutput(CsvFileOutput):
     from_to = luigi.TupleParameter(default=())
@@ -89,6 +102,53 @@ class AituRunner(Runner):
 class AituLogs(AituRunner):
 
     name = luigi.Parameter('aitu_logs')
+
+
+class AituNotificationOutput(CsvFileOutput):
+    project_id = luigi.TupleParameter(default=AITU_PUSH_NOTIFICATIONS_PROJECT_ID, visibility=ParameterVisibility.HIDDEN)
+    private_key_id = luigi.Parameter(default=AITU_PUSH_NOTIFICATIONS_PRIVATE_KEY_ID, visibility=ParameterVisibility.HIDDEN)
+    private_key = luigi.Parameter(default=AITU_PUSH_NOTIFICATIONS_PRIVATE_KEY, visibility=ParameterVisibility.HIDDEN)
+    client_id = luigi.Parameter(default=AITU_PUSH_NOTIFICATIONS_CLIENT_ID, visibility=ParameterVisibility.HIDDEN)
+
+    def run(self):
+        creds_dict['project_id'] = self.project_id
+        creds_dict['private_key_id'] = self.private_key_id
+        creds_dict['private_key'] = self.private_key
+        creds_dict['client_id'] = self.client_id
+
+        parser = AituNotificationRequests(creds_dict, scopes, self.project_id, query)
+        df_aitu = parser.load()
+        rows_count = 0
+
+        for row in df_aitu:
+            aitu_row = dict(row)
+            data = dict_to_row(aitu_row, self.struct)
+            save_csvrows(self.output_fpath, [data], delimiter=';')
+            rows_count += 1
+
+        stat = parser.stat
+        stat.update({'parsed': rows_count})
+        rewrite_file(self.success_fpath, json.dumps(stat))
+
+
+@requires(AituNotificationOutput)
+class AituNotificationOutputFtpOutput(FtpUploadedOutput):
+    pass
+
+
+class AituNotificationRunner(Runner):
+
+    @property
+    def params(self):
+        params = super(AituNotificationRunner, self).params
+        return params
+
+    def requires(self):
+        return AituNotificationOutputFtpOutput(**self.params)
+
+
+class AituNotification(AituNotificationRunner):
+    name = luigi.Parameter('aitu_notifications')
 
 
 if __name__ == '__main__':

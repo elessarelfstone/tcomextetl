@@ -595,6 +595,9 @@ mirapolis_online_study:
 aitu_logs:
   ftp_directory: aitu
 
+aitu_notifications:
+  ftp_directory: aitu
+
 goszakup_budget_type:
   entity: Subjects
   descr: Справочник Вид Бюджета
@@ -664,3 +667,4 @@ tvplus_cinema_megogo:
 
 tvplus_programs:
   ftp_directory: tvplus
+

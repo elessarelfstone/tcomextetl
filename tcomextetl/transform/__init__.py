@@ -14,6 +14,7 @@ from tcomextetl.transform.aitu import *
 
 from tcomextetl.transform.tvplus import *
 
+
 class StructRegister:
 
     _handlers = {}
@@ -81,9 +82,6 @@ StructRegister.add('goszakup_ref_kato', GoszakupRefKatoRow)
 StructRegister.add('goszakup_ref_justification', GoszakupRefJustificationRow)
 StructRegister.add('goszakup_ref_type_trade', GoszakupRefTypeTradeRow)
 StructRegister.add('goszakup_ref_contract_status', GoszakupRefContractStatusRow)
-
-
-
 
 # data.egov.kz
 StructRegister.add('dgov_addrreg_dats_types', DgovAddrRegDAtsTypes)
@@ -164,13 +162,10 @@ StructRegister.add('iot_stat', IotStatRow)
 StructRegister.add('mirapolis_offline_study', MirapolisRow)
 StructRegister.add('mirapolis_online_study', MirapolisRow)
 
-#tvplus
 StructRegister.add('tvplus_cinema_start', TvPlusCinemaStartRow)
+StructRegister.add('tvplus_cinema_kazvod', TvPlusCinemaKazvodRow)
+StructRegister.add('tvplus_cinema_megogo', TvPlusCinemaMegogoRow)
+StructRegister.add('tvplus_programs', TvPlusProgramsRow)
 
 StructRegister.add('aitu_logs', AituMetricLog)
-
-StructRegister.add('tvplus_cinema_kazvod', TvPlusCinemaKazvodRow)
-
-StructRegister.add('tvplus_cinema_megogo', TvPlusCinemaMegogoRow)
-
-StructRegister.add('tvplus_programs', TvPlusProgramsRow)
+StructRegister.add('aitu_notifications', AituNotificationMetricLog)

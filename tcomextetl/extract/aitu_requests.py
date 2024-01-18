@@ -1,16 +1,14 @@
-import glob
 import json
 import io
 import os
 import zipfile
 import gzip
-from datetime import datetime, timedelta
+from datetime import datetime
+from google.cloud import bigquery
+from google.oauth2 import service_account
 from math import floor
 from pathlib import Path
 
-import pandas as pd
-
-from tcomextetl.common.exceptions import ExternalSourceError
 from tcomextetl.extract.http_requests import HttpRequest
 
 from settings import TEMP_PATH
@@ -19,13 +17,13 @@ from settings import TEMP_PATH
 class AituRequests(HttpRequest):
 
     def __init__(
-        self,
-        project_id,
-        url,
-        params=None,
-        headers=None,
-        auth=None,
-        timeout=None
+            self,
+            project_id,
+            url,
+            params=None,
+            headers=None,
+            auth=None,
+            timeout=None
     ):
         super().__init__(
             params=params,
@@ -85,3 +83,25 @@ class AituRequests(HttpRequest):
                     yield data
                     self._parsed_count += len(data)
                     self._parsed_files += 1
+
+
+class AituNotificationRequests(HttpRequest):
+
+    def __init__(self, creds_dict, scopes, project, query):
+        super(AituNotificationRequests, self).__init__()
+        self.creds_dict = creds_dict
+        self.scopes = scopes
+        self.project = project
+        self.query = query
+
+    @property
+    def stat(self) -> dict:
+        return {}
+
+    def load(self):
+        credentials = service_account.Credentials.from_service_account_info(
+            self.creds_dict,
+            scopes=self.scopes)
+        client = bigquery.Client(credentials=credentials, project=credentials.project_id)
+        query_job = client.query(self.query)
+        return query_job.result()
