@@ -32,7 +32,7 @@ with DAG(
         task_id='aitu_notifications',
         luigi_module='aitu',
         luigi_task='AituNotification',
-        # luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
+        luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
         env_vars={'AITU_PUSH_NOTIFICATIONS_PROJECT_ID': Variable.get('AITU_PUSH_NOTIFICATIONS_PROJECT_ID'),
                   'AITU_PUSH_NOTIFICATIONS_PRIVATE_KEY_ID': Variable.get('AITU_PUSH_NOTIFICATIONS_PRIVATE_KEY_ID'),
                   'AITU_PUSH_NOTIFICATIONS_PRIVATE_KEY': Variable.get('AITU_PUSH_NOTIFICATIONS_PRIVATE_KEY'),
@@ -41,4 +41,4 @@ with DAG(
         do_xcom_push=False
     )
 
-    aitu_notifications
+    command_args >> aitu_notifications
