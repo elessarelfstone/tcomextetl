@@ -1,8 +1,6 @@
-import csv
 from datetime import datetime
-from math import floor
 from time import sleep
-from urllib.parse import urlparse
+from urllib.parse import urljoin, quote
 
 import attr
 import json
@@ -11,15 +9,11 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from luigi.util import requires
-
-
-
-from tasks.base import Base, ArchivedWebDataFileInput, WebDataFileInput, FtpUploadedOutput, Runner, CsvFileOutput
+from tasks.base import ArchivedWebDataFileInput, WebDataFileInput, FtpUploadedOutput, Runner, CsvFileOutput
 from tasks.xls import WebExcelFileParsingToCsv, ArchivedWebExcelFileParsingToCsv
 from tcomextetl.extract.http_requests import Downloader
 from tcomextetl.extract.sgov_requests import SgovApiRCutParser
 from tcomextetl.common.arch import extract_by_wildcard
-from tcomextetl.common.csv import CSV_QUOTECHAR
 from tcomextetl.common.csv import save_csvrows
 from tcomextetl.common.dates import first_day_of_month
 from tcomextetl.common.excel import SimpleExcelDataReader
@@ -48,16 +42,28 @@ class SgovDictOutput(WebDataFileInput):
 
     def _parse_link(self):
 
-        def get_href(val):
-            return val.get('href')
+        # Вспомогательная функция для проверки соответствия формата ссылки
+        def is_correct_format(href, format_list):
+            return any(href.endswith(fmt) for fmt in format_list)
 
-        parsed_uri = urlparse(self.url)
-        url_start = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+        # Преобразовываем строку format в список, разделяя по запятым, и удаляем лишние пробелы
+        formats = [form for form in self.format.split(',')]
         req = requests.get(self.url, verify=False)
         soup = BeautifulSoup(req.text, 'lxml')
-        data = soup.find('div', id=self.html_container_id)
-        url_part = [j for i in data.find_all('a') if (j := get_href(i)).split('.')[-1] == self.format][0]
-        return url_start + url_part
+        links = soup.find('div', id=self.html_container_id).find_all('a', href=True)
+
+        # Поиск первой подходящей ссылки
+        relative_path = None
+        for link in links:
+            if is_correct_format(link['href'], formats):
+                relative_path = link['href']
+                break
+
+        # Закодируем часть пути URL-адреса, содержащую кириллические символы
+        path_quoted = quote(relative_path)
+        full_url = urljoin(self.url, path_quoted)
+
+        return full_url
 
     def run(self):
         p = self.output().path
@@ -101,9 +107,6 @@ class SgovKato(SgovExcelRunner):
     def requires(self):
         return SgovKatoFtpOutput(**self.params)
 
-
-# class SgovOkedOutput(WebExcelFileParsingToCsv):
-#     pass
 
 class SgovOkedOutput(WebExcelSgovFileParsingToCsv):
 
@@ -319,7 +322,7 @@ class SgovRcutByKatoJuridicalOutput(CsvFileOutput):
     usecolumns = luigi.Parameter(default=None)
     sheets = luigi.Parameter(default=None)
     statuses = luigi.ListParameter(default=[39354, 39355, 39356, 39358, 534829, 39359])
-    kato_ids = luigi.ListParameter(default=[77208141, 247783, 248875, 250502, 252311, 253160, 255577, 77208139, 256619, 258742, 260099, 260907, 263009, 264023, 20243032, 77208140, 264990])
+    kato_ids = luigi.ListParameter(default=[77208141, 247783, 248875, 250502, 252311, 253160, 255577, 77208139, 256619, 258742, 260099, 260907, 263009, 264023, 20243032, 77208140, 264990, 268012, 268020, 20242100])
     # kato_ids = luigi.ListParameter(default=[77208141, 247783, 248875])
     prev_period_index = luigi.IntParameter(default=0)
     timeout = luigi.IntParameter(default=200)

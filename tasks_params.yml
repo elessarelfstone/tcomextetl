@@ -3,7 +3,7 @@ sgov_kato:
   skiptop: 1
   usecolumns: A:I
   html_container_id: classifiers-199
-  format: xls
+  format: xlsx,xls
   ftp_directory: sgov
 
 
@@ -12,7 +12,7 @@ sgov_oked:
   skiptop: 3
   usecolumns: A:C
   html_container_id: classifiers-197
-  format: xlsx
+  format: xlsx,xls
   ftp_directory: sgov
 
 sgov_mkeis:
@@ -20,7 +20,7 @@ sgov_mkeis:
   skiptop: 13
   usecolumns: A:C
   html_container_id: classifiers-194
-  format: xlsx
+  format: xlsx,xls
   ftp_directory: sgov
 
 sgov_kurk:
@@ -37,7 +37,7 @@ sgov_kpved:
   skiptop: 3
   usecolumns: A:C
   html_container_id: classifiers-198
-  format: xls
+  format: xlsx,xls
   ftp_directory: sgov
 
 kgd_bankrupt:
@@ -583,9 +583,8 @@ iot_stat:
 
 mirapolis_offline_study:
   report_id: 974
-  report_group_id: 2036
+  report_group_id: 2040
   ftp_directory: mirapolis
-
 
 mirapolis_online_study:
   report_id: 964
