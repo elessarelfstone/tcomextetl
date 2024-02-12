@@ -319,7 +319,7 @@ class SgovRcutByKatoJuridicalOutput(CsvFileOutput):
     usecolumns = luigi.Parameter(default=None)
     sheets = luigi.Parameter(default=None)
     statuses = luigi.ListParameter(default=[39354, 39355, 39356, 39358, 534829, 39359])
-    kato_ids = luigi.ListParameter(default=[77208141, 247783, 248875, 250502, 252311, 253160, 255577, 77208139, 256619, 258742, 260099, 260907, 263009, 264023, 20243032, 77208140, 264990])
+    kato_ids = luigi.ListParameter(default=[77208141, 247783, 248875, 250502, 252311, 253160, 255577, 77208139, 256619, 258742, 260099, 260907, 263009, 264023, 20243032, 77208140, 264990, 268020, 20242100, 268012])
     # kato_ids = luigi.ListParameter(default=[77208141, 247783, 248875])
     prev_period_index = luigi.IntParameter(default=0)
     timeout = luigi.IntParameter(default=200)
