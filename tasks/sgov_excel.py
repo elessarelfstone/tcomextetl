@@ -2,7 +2,7 @@ import csv
 from datetime import datetime
 from math import floor
 from time import sleep
-from urllib.parse import urlparse
+from urllib.parse import urljoin, quote
 
 import attr
 import json
@@ -11,8 +11,6 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from luigi.util import requires
-
-
 
 from tasks.base import Base, ArchivedWebDataFileInput, WebDataFileInput, FtpUploadedOutput, Runner, CsvFileOutput
 from tasks.xls import WebExcelFileParsingToCsv, ArchivedWebExcelFileParsingToCsv
@@ -37,7 +35,7 @@ rcut_entrepreneurs = 'entrepreneurs'
 class SgovDictOutput(WebDataFileInput):
 
     html_container_id = luigi.Parameter()
-    format = luigi.Parameter(default='xlsx')
+    format = luigi.Parameter(default='xlsx,xls')
 
     @property
     def downloader(self):
@@ -48,16 +46,28 @@ class SgovDictOutput(WebDataFileInput):
 
     def _parse_link(self):
 
-        def get_href(val):
-            return val.get('href')
+        # Вспомогательная функция для проверки соответствия формата ссылки
+        def is_correct_format(href, format_list):
+            return any(href.endswith(fmt) for fmt in format_list)
 
-        parsed_uri = urlparse(self.url)
-        url_start = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+        # Преобразовываем строку format в список, разделяя по запятым, и удаляем лишние пробелы
+        formats = [form for form in self.format.split(',')]
         req = requests.get(self.url, verify=False)
         soup = BeautifulSoup(req.text, 'lxml')
-        data = soup.find('div', id=self.html_container_id)
-        url_part = [j for i in data.find_all('a') if (j := get_href(i)).split('.')[-1] == self.format][0]
-        return url_start + url_part
+        links = soup.find('div', id=self.html_container_id).find_all('a', href=True)
+
+        # Поиск первой подходящей ссылки
+        relative_path = None
+        for link in links:
+            if is_correct_format(link['href'], formats):
+                relative_path = link['href']
+                break
+
+        # Закодируем часть пути URL-адреса, содержащую кириллические символы
+        path_quoted = quote(relative_path)
+        full_url = urljoin(self.url, path_quoted)
+
+        return full_url
 
     def run(self):
         p = self.output().path
