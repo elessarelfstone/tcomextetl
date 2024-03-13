@@ -13,7 +13,7 @@ from dags.dgov_dags.common import get_command_args
 with DAG(
         dag_id='dgov_address_register_sgrounds',
         catchup=False,
-        start_date=pendulum.now(tz=f'{Variable.get("TZ")}').subtract(days=1),
+        start_date=pendulum.datetime(2024, 3, 1, tz=f'{Variable.get("TZ")}'),
         schedule_interval='@monthly',
         tags=['dgov_address']
      ) as dag:
