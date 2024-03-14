@@ -47,6 +47,36 @@ class TvPlusProgramsOutput(CsvFileOutput):
         params['dateFrom'], params['dateTo'] = self.from_to
         return params
 
+    @staticmethod
+    def extract_json_from_soup(soup, start_str="tvChannels"):
+        script = soup.find(lambda tag: tag.name == "script" and start_str in tag.text)
+        if not script:
+            return None
+
+        script_text = script.text
+        start_pos = script_text.find(start_str)
+        if start_pos == -1:
+            return None
+
+        start_pos = script_text.find('{', start_pos)
+
+        bracket_count = 0
+        json_str = ''
+
+        # Проходим по символам строки, начиная с позиции начала JSON
+        for char in script_text[start_pos:]:
+            if char == '{':
+                bracket_count += 1
+            elif char == '}':
+                bracket_count -= 1
+            json_str += char
+
+            if bracket_count == 0:
+                break
+
+        json_obj = json.loads(json_str)
+        return json_obj
+
     def run(self):
 
         headers = dict()
@@ -61,49 +91,44 @@ class TvPlusProgramsOutput(CsvFileOutput):
         parser_text = parser.load()
 
         soup = BeautifulSoup(parser_text, "html.parser")
-        script = soup.findAll('script')
-        data = str(script[3])
-        start_index = data.find('{')
-        end_index = data.rfind('}', 0, -30)
-        text_for_json = data[start_index:end_index + 1]
+        data_json = self.extract_json_from_soup(soup)
 
-        json_data = json.loads(text_for_json)
-        programs_df = pd.DataFrame(json_data['tvChannels']['list']).T.reset_index().drop(columns=['index'])
-        date_from = self.programs_params['dateFrom']
-        date_to = self.programs_params['dateTo']
+        programs_df = pd.DataFrame(data_json["list"]).T.reset_index().drop(columns=["index"])
+        date_from = self.programs_params["dateFrom"]
+        date_to = self.programs_params["dateTo"]
         date_from_format = datetime.strptime(date_from, DEFAULT_DATETIME_FORMAT_WITHT)
         date_to_format = datetime.strptime(date_to, DEFAULT_DATETIME_FORMAT_WITHT)
         timestamp_from = int(datetime.combine(date_from_format, time.min).timestamp())
         timestamp_to = int(datetime.combine(date_to_format, time.max).timestamp())
         channels = pd.DataFrame(
-            columns=['channel_id', 'channel', 'channel_description', 'channel_genres', 'channel_age_rating',
-                     'channel_start_time', 'channel_stop_time'])
+            columns=["channel_id", "channel", "channel_description", "channel_genres", "channel_age_rating",
+                     "channel_start_time", "channel_stop_time"])
         for i in range(len(programs_df)):
 
-            temp = programs_df.iloc[i]['info']
+            temp = programs_df.iloc[i]["info"]
             info = []
 
-            if temp['EPGBounds']['min'] < 0:
+            if temp["EPGBounds"]["min"] < 0:
                 min_time = str(date_to)
             else:
-                min_time = str(datetime.fromtimestamp(temp['EPGBounds']['min']))
+                min_time = str(datetime.fromtimestamp(temp["EPGBounds"]["min"]))
             if temp['EPGBounds']['max'] < 0:
                 max_time = str(date_to)
             else:
-                max_time = str(datetime.fromtimestamp(temp['EPGBounds']['max']))
-            info.append([programs_df.iloc[i]['id'],
-                         temp['metaInfo']['title'],
-                         temp['metaInfo']['description'],
-                         temp['metaInfo']['genres'],
-                         temp['metaInfo']['age_rating'],
+                max_time = str(datetime.fromtimestamp(temp["EPGBounds"]["max"]))
+            info.append([programs_df.iloc[i]["id"],
+                         temp["metaInfo"]["title"],
+                         temp["metaInfo"]['description'],
+                         temp["metaInfo"]["genres"],
+                         temp["metaInfo"]["age_rating"],
                          min_time,
                          max_time])
             channels = pd.concat([channels,
-                                  pd.DataFrame(info, columns=['channel_id', 'channel', 'channel_description',
-                                                              'channel_genres', 'channel_age_rating',
-                                                              'channel_start_time', 'channel_stop_time'])])
+                                  pd.DataFrame(info, columns=["channel_id", "channel", "channel_description",
+                                                              "channel_genres", "channel_age_rating",
+                                                              "channel_start_time", "channel_stop_time"])])
 
-        for j in channels['channel_id']:
+        for j in channels["channel_id"]:
             stp = False
             for t in range(5):
                 try:
@@ -124,11 +149,11 @@ class TvPlusProgramsOutput(CsvFileOutput):
             rows_count = 0
 
             try:
-                for i in range(len(dataframe['programs'])):
-                    if datetime.fromtimestamp(dataframe['programs'][i]['scheduleInfo']['start']) > date_to_format:
+                for i in range(len(dataframe["programs"])):
+                    if datetime.fromtimestamp(dataframe["programs"][i]["scheduleInfo"]["start"]) > date_to_format:
                         continue
                     info = []
-                    if dataframe['programs'][i]['scheduleInfo']['start'] < 0:
+                    if dataframe["programs"][i]["scheduleInfo"]["start"] < 0:
                         min_time = np.nan
                     else:
                         min_time = str(datetime.fromtimestamp(dataframe['programs'][i]['scheduleInfo']['start']))
@@ -170,7 +195,7 @@ class TvPlusProgramsOutput(CsvFileOutput):
                 rows_count += 1
 
         stat = parser.stat
-        stat.update({'parsed': rows_count})
+        stat.update({"parsed": rows_count})
         rewrite_file(self.success_fpath, json.dumps(stat))
         sleep(self.timeout)
 
