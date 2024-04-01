@@ -48,7 +48,7 @@ class SgovDictOutput(WebDataFileInput):
 
         # Вспомогательная функция для проверки соответствия формата ссылки
         def is_correct_format(href, format_list):
-            return any(href.endswith(fmt) for fmt in format_list)
+            return any(href.lower().endswith(fmt) for fmt in format_list)
 
         # Преобразовываем строку format в список, разделяя по запятым, и удаляем лишние пробелы
         formats = [form for form in self.format.split(',')]
