@@ -1,0 +1,46 @@
+from attrs import define, field
+
+
+@define
+class GosreestrKzCompanyRow:
+    gosreest_id = field(default='')
+    business_id = field(default='')
+    rnn = field(default='')
+    okpo = field(default='')
+    name_rus = field(default='')
+    name_kaz = field(default='')
+    opf = field(default='')
+    kfsl4 = field(default='')
+    kfs = field(default='')
+    registration_number = field(default='')
+    registration_date = field(default='')
+    creation_date = field(default='')
+    status = field(default='')
+    block = field(default='')
+    manager = field(default='')
+    owner = field(default='')
+    okedl0 = field(default='')
+    okedl3 = field(default='')
+    company_id = field(default='')
+    contact_id = field(default='')
+
+@define
+class GosreestrKzContactRow:
+    gosreest_id = field(default='')
+    business_id = field(default='')
+    rnn = field(default='')
+    okpo = field(default='')
+    name_rus = field(default='')
+    head = field(default='')
+    accountant = field(default='')
+    country = field(default='')
+    index = field(default='')
+    area = field(default='')
+    region = field(default='')
+    address = field(default='')
+    phone = field(default='')
+    fax = field(default='')
+    email = field(default='')
+    website = field(default='')
+    company_id = field(default='')
+    contact_id = field(default='')
