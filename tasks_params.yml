@@ -667,3 +667,15 @@ tvplus_cinema_megogo:
 tvplus_programs:
   ftp_directory: tvplus
 
+gosreestrkz_company:
+  ftp_file_mask: gosreestrkz_companies_ids_for_*.csv
+  timeout: !!float 1.5
+  timeout_ban: !!float 10
+  ftp_directory: gosreestrkz
+
+gosreestrkz_contact:
+  ftp_file_mask: gosreestrkz_companies_ids_for_*.csv
+  timeout: !!float 1.5
+  timeout_ban: !!float 10
+  ftp_directory: gosreestrkz
+

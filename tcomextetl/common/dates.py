@@ -39,3 +39,18 @@ def previous_month():
 def month_as_range(month):
     d = datetime.strptime(month, DEFAULT_MONTH_FORMAT)
     return d.date(), date(d.year, d.month, monthrange(d.year, d.month)[1])
+
+
+def first_day_of_previous_month() -> date:
+    _date = datetime.today()
+    first_day_of_current_month = _date.replace(day=1)
+    last_day_previous_month = first_day_of_current_month - timedelta(days=1)
+    first_day_previous_month = last_day_previous_month.replace(day=1)
+    return first_day_previous_month.date()
+
+
+def last_day_of_previous_month() -> date:
+    _date = datetime.today()
+    first_day_of_current_month = _date.replace(day=1)
+    last_day_previous_month = first_day_of_current_month - timedelta(days=1)
+    return last_day_previous_month.date()

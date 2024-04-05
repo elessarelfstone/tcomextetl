@@ -1,8 +1,10 @@
 import re
+import csv
 from pathlib import Path
 from collections import namedtuple
 
 from yaml import load
+
 try:
     from yaml import CLoader as Loader
 except ImportError:
@@ -167,3 +169,19 @@ def clean(d):
 
 def dict_keys_to_snake_case(d: dict):
     return {re.sub(r'(?<!^)(?=[A-Z])', '_', key).lower(): value for (key, value) in d.items()}
+
+
+def read_csv_tuples(fpath: str, delimiter=';', encoding="utf-8") -> list[tuple]:
+    """Return rows of csv file as list of tuples."""
+    with open(fpath, "r", encoding=encoding) as f:
+        reader = csv.reader(f, delimiter=delimiter)
+        # Преобразование каждой строки в кортеж и добавление в список
+        lines = [tuple(row) for row in reader]
+
+    return lines
+
+
+def append_file_tuple(fpath: str, data: tuple):
+    data_str = ','.join(map(str, data))
+    with open(fpath, 'a+', encoding="utf8") as f:
+        f.write(data_str + '\n')
