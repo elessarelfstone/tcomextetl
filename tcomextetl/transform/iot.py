@@ -12,3 +12,5 @@ class IotStatRow:
     product_num = field(default='')
     product_offer_struct_id = field(default='')
     filial_id = field(default='')
+    total_nodes = field(default='')
+    total_msg = field(default='')
