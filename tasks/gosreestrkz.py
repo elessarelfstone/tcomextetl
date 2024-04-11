@@ -103,7 +103,6 @@ class GosreestrKzCompanyOutput(ApiToCsv):
     from_to = luigi.TupleParameter(default=())
     timeout = luigi.FloatParameter(default=1.5)
     timeout_ban = luigi.FloatParameter(default=5.0)
-    print(from_to)
 
     @property
     def dates_params(self):
@@ -186,7 +185,7 @@ class GosreestrKzCompanyOutput(ApiToCsv):
                 append_file_tuple(self.parsed_ids_fpath, (company_id, contact_id))
                 parsed_cnt += 1
 
-            s = f'Total: {ids_manager.total}. Parsed: {parsed_cnt}. BIN: {_id}' + '\n'
+            s = f'Total: {ids_manager.total}. Parsed: {parsed_cnt}. BIN: {_id[0]}. Company_ID: {_id[1]}. Contact_ID: {_id[2]}' + '\n'
             stat = {'total': ids_manager.total, 'parsed': parsed_cnt}
             rewrite_file(self.stat_fpath, json.dumps(stat))
 
@@ -372,7 +371,7 @@ class GosreestrKzContactOutput(ApiToCsv):
                 append_file_tuple(self.parsed_ids_fpath, (company_id, contact_id))
                 parsed_cnt += 1
 
-            s = f'Total: {ids_manager.total}. Parsed: {parsed_cnt}. BIN: {_id}' + '\n'
+            s = f'Total: {ids_manager.total}. Parsed: {parsed_cnt}. BIN: {_id[0]}. Company_ID: {_id[1]}. Contact_ID: {_id[2]}' + '\n'
             stat = {'total': ids_manager.total, 'parsed': parsed_cnt}
             rewrite_file(self.stat_fpath, json.dumps(stat))
 
