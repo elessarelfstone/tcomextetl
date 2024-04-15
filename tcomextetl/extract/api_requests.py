@@ -89,5 +89,3 @@ class ApiRequests(ABC, HttpRequest):
                 except ReadTimeout:
                     sleep(exp_backoff)
                     exp_backoff *= 2
-                else:
-                    raise
