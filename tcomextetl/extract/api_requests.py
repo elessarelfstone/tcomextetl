@@ -76,7 +76,7 @@ class ApiRequests(ABC, HttpRequest):
         self._start_date = datetime.now()
         exp_backoff = self.timeout
         while self.next_page_params:
-            for _ in range(self._max_retries):
+            for retry in range(self._max_retries):
                 try:
                     self._raw = self.load(self.next_page_params)
                     data = self.parse()
@@ -87,5 +87,7 @@ class ApiRequests(ABC, HttpRequest):
                         sleep(self.timeout_ban)
                     break
                 except ReadTimeout:
+                    if retry == self._max_retries - 1:
+                        raise ReadTimeout
                     sleep(exp_backoff)
                     exp_backoff *= 2
