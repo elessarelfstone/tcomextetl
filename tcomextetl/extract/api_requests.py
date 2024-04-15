@@ -19,7 +19,6 @@ class ApiRequests(ABC, HttpRequest):
         self._parsed_count = 0
         self._start_date: datetime = datetime.now()
         self._end_date: datetime = datetime.now()
-        self._max_retries = 5
 
     def set_parsed_count(self, count: int):
         self._parsed_count = count
@@ -74,20 +73,14 @@ class ApiRequests(ABC, HttpRequest):
     def __iter__(self):
 
         self._start_date = datetime.now()
-        exp_backoff = self.timeout
         while self.next_page_params:
-            for retry in range(self._max_retries):
-                try:
-                    self._raw = self.load(self.next_page_params)
-                    data = self.parse()
-                    self._parsed_count += len(data)
-                    self._end_date = datetime.now()
-                    yield data
-                    if self.timeout_ban:
-                        sleep(self.timeout_ban)
-                    break
-                except ReadTimeout:
-                    if retry == self._max_retries - 1:
-                        raise ReadTimeout
-                    sleep(exp_backoff)
-                    exp_backoff *= 2
+            try:
+                self._raw = self.load(self.next_page_params)
+                data = self.parse()
+                self._parsed_count += len(data)
+                self._end_date = datetime.now()
+                yield data
+                if self.timeout_ban:
+                    sleep(self.timeout_ban)
+            except ReadTimeout:
+                sleep(self.timeout)
