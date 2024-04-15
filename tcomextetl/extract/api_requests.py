@@ -74,7 +74,7 @@ class ApiRequests(ABC, HttpRequest):
     def __iter__(self):
 
         self._start_date = datetime.now()
-        exp_backoff = 3
+        exp_backoff = self.timeout_ban
         while self.next_page_params:
             for _ in range(self._max_retries):
                 try:
