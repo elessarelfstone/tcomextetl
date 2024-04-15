@@ -31,8 +31,10 @@ class InfobipRestApiParser(ApiRequests):
     def parse(self):
 
         data = self._raw.get(self.entity)
+
         if data is None:
             return []
+
         normalized_data = [flatten_dict(d) for d in data]
 
         return [clean(d) for d in normalized_data if '_' not in d.keys()]
@@ -44,7 +46,7 @@ class InfobipRestApiParser(ApiRequests):
         if self._raw is None:
             return params
 
-        if self.entity in self._raw and self._raw[self.entity]:
+        if self._raw.get(self.entity):
             params['page'] = self.page + 1
 
             # prevent next request
