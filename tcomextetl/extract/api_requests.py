@@ -82,6 +82,5 @@ class ApiRequests(ABC, HttpRequest):
                 yield data
                 if self.timeout_ban:
                     sleep(self.timeout_ban)
-                break
             except ReadTimeout:
                 sleep(self.timeout)
