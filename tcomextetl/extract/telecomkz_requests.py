@@ -33,6 +33,7 @@ class TelecomkzYandexMetricsLogsRequests(HttpRequest):
         # make order
         order_url = f'{self.host}/management/v1/counter/{counter_id}/logrequests'
         r = self.request(order_url, data=data)
+        print(r)
         request_id = r.json()['log_request']['request_id']
 
         # check order
@@ -40,6 +41,7 @@ class TelecomkzYandexMetricsLogsRequests(HttpRequest):
         r = self.request(check_url)
         ready = False
         while (not r.status_code == 200) or (not r.json()['log_request']['status'] == 'processed'):
+            print(r.status_code, r.json())
             sleep(self.timeout_ban)
             r = self.request(check_url)
 
@@ -47,6 +49,7 @@ class TelecomkzYandexMetricsLogsRequests(HttpRequest):
                 r.raise_for_status()
 
         parts = r.json()['log_request']['parts']
+        print(parts)
 
         # requests to retrieve data
         data = []
@@ -54,5 +57,6 @@ class TelecomkzYandexMetricsLogsRequests(HttpRequest):
             data_url = f'{self.host}/management/v1/counter/{counter_id}/logrequest/{request_id}/part/{str(p)}/download'
             r = self.request(data_url)
             data.append(r.text)
+
 
         return data
