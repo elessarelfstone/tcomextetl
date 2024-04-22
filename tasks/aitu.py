@@ -31,6 +31,15 @@ creds_dict = {
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/kt-411%40asiachat-8dd78.iam.gserviceaccount.com",
     "universe_domain": "googleapis.com"
 }
+creds_dict = {
+    "type": "service_account",
+    "client_email": "kt-411@asiachat-8dd78.iam.gserviceaccount.com",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/kt-411%40asiachat-8dd78.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+}
 query = """SELECT * FROM `asiachat-8dd78.telecom.push_raw_data`"""
 query_date = """WHERE TIMESTAMP_TRUNC(server_time, DAY) = TIMESTAMP("{}")"""
 
