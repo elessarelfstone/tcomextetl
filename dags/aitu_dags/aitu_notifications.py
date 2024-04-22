@@ -14,7 +14,7 @@ with DAG(
         dag_id='aitu_notifications',
         catchup=False,
         start_date=pendulum.now(tz=f'{Variable.get("TZ")}').subtract(days=1),
-        schedule_interval='0 12 * * *',
+        schedule_interval='0 1 * * *',
         tags=['aitu']
      ) as dag:
 
