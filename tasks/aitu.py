@@ -132,6 +132,7 @@ class AituNotificationOutput(CsvFileOutput):
 
         if df_aitu:
             for row in df_aitu:
+                print(row)
                 aitu_row = dict(row)
                 data = dict_to_row(aitu_row, self.struct)
                 save_csvrows(self.output_fpath, [data], delimiter=';')
