@@ -19,7 +19,9 @@ from tcomextetl.common.utils import rewrite_file, append_file
 from settings import (TELECOMOBKZ_YANDEX_APP_METRICA_TOKEN,
                       TELECOMKZ_YANDEX_METRICA_TOKEN,
                       TELECOMKZ_YANDEX_METRICA_LOGS_YAM2_TOKEN,
-                      TELECOMKZ_YANDEX_METRICA_LOGS_TERMINAL_TOKEN
+                      TELECOMKZ_YANDEX_METRICA_LOGS_TERMINAL_TOKEN,
+                      TELECOMKZ_YANDEX_METRICA_LOGS_REDESIGN_TOKEN,
+                      TELECOMKZ_YANDEX_METRICA_LOGS_WFM_TOKEN
                       )
 
 app_metrika_host = 'https://api.appmetrica.yandex.ru'
@@ -29,7 +31,6 @@ reps_api_url = 'https://api.appmetrica.yandex.ru/stat/v1/data.csv'
 
 
 class TelecomobYandexMetricaLogsOutput(CsvFileOutput):
-
     app_id = luigi.IntParameter()
     from_to = luigi.TupleParameter()
     entity = luigi.Parameter(default='')
@@ -62,10 +63,10 @@ class TelecomobYandexMetricaLogsOutput(CsvFileOutput):
         headers['Authorization'] = self.token
         url = f'{app_metrika_host}/{self.entity}'
         parser = TelecomkzYandexMetricsRequests(
-                    url,
-                    headers=headers,
-                    timeout=self.timeout,
-                    timeout_ban=self.timeout_ban
+            url,
+            headers=headers,
+            timeout=self.timeout,
+            timeout_ban=self.timeout_ban
         )
         data = parser.load(self.request_params)
         data = data.decode('utf-8').strip()
@@ -83,7 +84,6 @@ class TelecomobYandexMetricaLogsFtpOutput(FtpUploadedOutput):
 
 
 class TelecomkzYandexMetricaLogsRunner(Runner):
-
     name = luigi.Parameter()
     start_date = luigi.DateParameter(default=n_days_ago())
     end_date = luigi.DateParameter(default=n_days_ago())
@@ -105,22 +105,18 @@ class TelecomkzYandexMetricaLogsRunner(Runner):
 
 
 class TelecomobkzYandexMetricaLogsProfiles(TelecomkzYandexMetricaLogsRunner):
-
     name = luigi.Parameter('telecomobkz_logs_profiles')
 
 
 class TelecomobkzYandexMetricaLogsEvents(TelecomkzYandexMetricaLogsRunner):
-
     name = luigi.Parameter('telecomobkz_logs_events')
 
 
 class TelecomobkzYandexMetricaLogsCrushes(TelecomkzYandexMetricaLogsRunner):
-
     name = luigi.Parameter('telecomobkz_logs_crashes')
 
 
 class TelecomYandexMetricaRepsOutput(CsvFileOutput):
-
     host = luigi.IntParameter()
     id = luigi.IntParameter()
     entity = luigi.Parameter()
@@ -157,10 +153,10 @@ class TelecomYandexMetricaRepsOutput(CsvFileOutput):
         headers['Authorization'] = self.token
         url = f'{self.host}/{self.entity}'
         parser = TelecomkzYandexMetricsRequests(
-                    url,
-                    headers=headers,
-                    timeout=self.timeout,
-                    timeout_ban=self.timeout_ban
+            url,
+            headers=headers,
+            timeout=self.timeout,
+            timeout_ban=self.timeout_ban
         )
         data = parser.load(self.request_params)
         data = data.decode('utf-8').strip()
@@ -182,7 +178,6 @@ class TelecomYandexMetricaRepsFtpOutput(FtpUploadedOutput):
 
 
 class TelecomobkzYandexMetricaRepsRunner(Runner):
-
     name = luigi.Parameter()
     timeout = luigi.FloatParameter(default=10.0)
     start_date = luigi.DateParameter(default=n_days_ago())
@@ -205,22 +200,18 @@ class TelecomobkzYandexMetricaRepsRunner(Runner):
 
 
 class TelecomobkzYandexMetricaRepsAcquisitions(TelecomobkzYandexMetricaRepsRunner):
-
     name = luigi.Parameter('telecomobkz_reps_acquisitions')
 
 
 class TelecomobkzYandexMetricaRepsDau(TelecomobkzYandexMetricaRepsRunner):
-
     name = luigi.Parameter('telecomobkz_reps_dau')
 
 
 class TelecomobkzYandexMetricaRepsEvents(TelecomobkzYandexMetricaRepsRunner):
-
     name = luigi.Parameter('telecomobkz_reps_events')
 
 
 class TelecomkzYandexMetricaRepsRunner(Runner):
-
     name = luigi.Parameter()
     start_date = luigi.DateParameter(default=n_days_ago())
     end_date = luigi.DateParameter(default=n_days_ago())
@@ -243,47 +234,38 @@ class TelecomkzYandexMetricaRepsRunner(Runner):
 
 
 class TelecomkzYandexMetricaRepsMainVisits(TelecomkzYandexMetricaRepsRunner):
-
     name = luigi.Parameter('telecomkz_reps_main_visits')
 
 
 class TelecomkzYandexMetricaRepsMainUsers(TelecomkzYandexMetricaRepsRunner):
-
     name = luigi.Parameter('telecomkz_reps_main_users')
 
 
 class TelecomkzYandexMetricaRepsLK1Visits(TelecomkzYandexMetricaRepsRunner):
-
     name = luigi.Parameter('telecomkz_reps_lk1_visits')
 
 
 class TelecomkzYandexMetricaRepsLK1Users(TelecomkzYandexMetricaRepsRunner):
-
     name = luigi.Parameter('telecomkz_reps_lk1_users')
 
 
 class TelecomkzYandexMetricaRepsLK2Visits(TelecomkzYandexMetricaRepsRunner):
-
     name = luigi.Parameter('telecomkz_reps_lk2_visits')
 
 
 class TelecomkzYandexMetricaRepsLK2Users(TelecomkzYandexMetricaRepsRunner):
-
     name = luigi.Parameter('telecomkz_reps_lk2_users')
 
 
 class TelecomkzYandexMetricaRepsLK2Yam2Visits(TelecomkzYandexMetricaRepsRunner):
-
     name = luigi.Parameter('telecomkz_reps_lk2_yam2_visits')
 
 
 class TelecomkzYandexMetricaRepsLK2Yam2Users(TelecomkzYandexMetricaRepsRunner):
-
     name = luigi.Parameter('telecomkz_reps_lk2_yam2_users')
 
 
 class TelecomkzYandexConversionsMetricaRepsOutput(TelecomYandexMetricaRepsOutput):
-
     conversion_id = None
 
     ftp_file_mask = luigi.Parameter(visibility=ParameterVisibility.HIDDEN)
@@ -353,7 +335,6 @@ class TelecomYandexConversionsMetricaRepsFtpOutput(FtpUploadedOutput):
 
 
 class TelecomkzYandexConversionsMetricaRepsRunner(Runner):
-
     name = luigi.Parameter()
     start_date = luigi.DateParameter(default=n_days_ago())
     end_date = luigi.DateParameter(default=n_days_ago())
@@ -388,7 +369,6 @@ class TelecomkzYandexConversionsMetricaRepsLK2(TelecomkzYandexConversionsMetrica
 
 
 class TelecomkzYandexMetricaLogsOutput(CsvFileOutput):
-
     counter_id = luigi.IntParameter()
     source = luigi.IntParameter(default='visits')
     fields = luigi.Parameter(default='')
@@ -411,10 +391,10 @@ class TelecomkzYandexMetricaLogsOutput(CsvFileOutput):
         headers = dict()
         headers['Authorization'] = self.token
         parser = TelecomkzYandexMetricsLogsRequests(
-                    ya_metrika_host,
-                    headers=headers,
-                    timeout=self.timeout,
-                    timeout_ban=self.timeout_ban
+            ya_metrika_host,
+            headers=headers,
+            timeout=self.timeout,
+            timeout_ban=self.timeout_ban
         )
 
         data = parser.load(self.counter_id, self.request_params)
@@ -436,7 +416,6 @@ class TelecomkzYandexMetricaLogsFtpOutput(FtpUploadedOutput):
 
 
 class TelecomkzYandexMetricaApiLogsRunner(Runner):
-
     name = luigi.Parameter()
     start_date = luigi.DateParameter(default=n_days_ago())
     end_date = luigi.DateParameter(default=n_days_ago())
@@ -452,7 +431,6 @@ class TelecomkzYandexMetricaApiLogsRunner(Runner):
 
 
 class TelecomkzYandexMetricaLogsMainVisits(TelecomkzYandexMetricaApiLogsRunner):
-
     name = luigi.Parameter('telecomkz_logs_main_visits')
 
     def requires(self):
@@ -462,7 +440,6 @@ class TelecomkzYandexMetricaLogsMainVisits(TelecomkzYandexMetricaApiLogsRunner):
 
 
 class TelecomkzYandexMetricaLogsLK1Visits(TelecomkzYandexMetricaApiLogsRunner):
-
     name = luigi.Parameter('telecomkz_logs_lk1_visits')
 
     def requires(self):
@@ -472,7 +449,6 @@ class TelecomkzYandexMetricaLogsLK1Visits(TelecomkzYandexMetricaApiLogsRunner):
 
 
 class TelecomkzYandexMetricaLogsLK2Visits(TelecomkzYandexMetricaApiLogsRunner):
-
     name = luigi.Parameter('telecomkz_logs_lk2_visits')
 
     def requires(self):
@@ -482,7 +458,6 @@ class TelecomkzYandexMetricaLogsLK2Visits(TelecomkzYandexMetricaApiLogsRunner):
 
 
 class TelecomkzYandexMetricaLogsLK2Yam2Visits(TelecomkzYandexMetricaApiLogsRunner):
-
     name = luigi.Parameter('telecomkz_logs_lk2_yam2_visits')
 
     def requires(self):
@@ -492,7 +467,6 @@ class TelecomkzYandexMetricaLogsLK2Yam2Visits(TelecomkzYandexMetricaApiLogsRunne
 
 
 class TelecomkzYandexMetricaLogsYam2Visits(TelecomkzYandexMetricaApiLogsRunner):
-
     name = luigi.Parameter('telecomkz_logs_yam2_visits')
 
     def requires(self):
@@ -503,12 +477,41 @@ class TelecomkzYandexMetricaLogsYam2Visits(TelecomkzYandexMetricaApiLogsRunner):
 
 
 class TelecomkzYandexMetricaLogsTerminalVisits(TelecomkzYandexMetricaApiLogsRunner):
-
     name = luigi.Parameter('telecomkz_logs_terminal_visits')
 
     def requires(self):
         return TelecomkzYandexMetricaLogsFtpOutput(
             token=TELECOMKZ_YANDEX_METRICA_LOGS_TERMINAL_TOKEN,
+            **self.params
+        )
+
+
+class TelecomkzYandexMetricaLogsRedesignVisits(TelecomkzYandexMetricaApiLogsRunner):
+    name = luigi.Parameter('telecomkz_logs_redesign_visits')
+
+    def requires(self):
+        return TelecomkzYandexMetricaLogsFtpOutput(
+            token=TELECOMKZ_YANDEX_METRICA_LOGS_REDESIGN_TOKEN,
+            **self.params
+        )
+
+
+class TelecomkzYandexMetricaLogsRedesign2Visits(TelecomkzYandexMetricaApiLogsRunner):
+    name = luigi.Parameter('telecomkz_logs_redesign2_visits')
+
+    def requires(self):
+        return TelecomkzYandexMetricaLogsFtpOutput(
+            token=TELECOMKZ_YANDEX_METRICA_LOGS_REDESIGN_TOKEN,
+            **self.params
+        )
+
+
+class TelecomkzYandexMetricaLogsWfmVisits(TelecomkzYandexMetricaApiLogsRunner):
+    name = luigi.Parameter('telecomkz_logs_wfm_visits')
+
+    def requires(self):
+        return TelecomkzYandexMetricaLogsFtpOutput(
+            token=TELECOMKZ_YANDEX_METRICA_LOGS_WFM_TOKEN,
             **self.params
         )
 
