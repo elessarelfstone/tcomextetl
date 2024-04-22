@@ -48,7 +48,6 @@ class CrmSensorOutput(CsvFileOutput):
         super().run()
         row_count = 0
         for rows in parser:
-            print(rows)
             data = [dict_to_row(d, self.struct) for d in rows]
             save_csvrows(self.output_fpath, data)
             row_count += len(rows)
