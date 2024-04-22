@@ -104,10 +104,4 @@ class AituNotificationRequests(HttpRequest):
             scopes=self.scopes)
         client = bigquery.Client(credentials=credentials, project=credentials.project_id)
         query_job = client.query(self.query)
-        results = query_job.result()
-
-        # Checking empty result
-        if results.total_rows == 0:
-            return []
-
-        return results
+        return query_job.result()

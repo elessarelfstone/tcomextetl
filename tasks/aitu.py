@@ -130,14 +130,11 @@ class AituNotificationOutput(CsvFileOutput):
         df_aitu = parser.load()
         rows_count = 0
 
-        if df_aitu:
-            for row in df_aitu:
-                aitu_row = dict(row)
-                data = dict_to_row(aitu_row, self.struct)
-                save_csvrows(self.output_fpath, [data], delimiter=';')
-                rows_count += 1
-        else:
-            open(self.output_fpath, 'w').close()
+        for row in df_aitu:
+            aitu_row = dict(row)
+            data = dict_to_row(aitu_row, self.struct)
+            save_csvrows(self.output_fpath, [data], delimiter=';')
+            rows_count += 1
 
         stat = parser.stat
         stat.update({'parsed': rows_count})
