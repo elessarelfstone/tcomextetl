@@ -694,3 +694,8 @@ gosreestrkz_contact:
   timeout_ban: !!float 10
   ftp_directory: gosreestrkz
 
+amplitude_telecomkz_logs:
+  ftp_directory: amplitude
+
+amplitude_egov_logs:
+  ftp_directory: amplitude
