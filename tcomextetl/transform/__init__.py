@@ -12,6 +12,7 @@ from tcomextetl.transform.iot import *
 from tcomextetl.transform.mirapolis import *
 from tcomextetl.transform.aitu import *
 from tcomextetl.transform.gosreestrkz import *
+from tcomextetl.transform.amplitude import *
 
 from tcomextetl.transform.tvplus import *
 
@@ -173,3 +174,6 @@ StructRegister.add('aitu_notifications', AituNotificationMetricLog)
 
 StructRegister.add('gosreestrkz_company', GosreestrKzCompanyRow)
 StructRegister.add('gosreestrkz_contact', GosreestrKzContactRow)
+
+StructRegister.add('amplitude_egov_logs', AmplitudeEgovLogsRow)
+StructRegister.add('amplitude_telecomkz_logs', AmplitudeTelecomkzLogsRow)
