@@ -13,6 +13,7 @@ from tcomextetl.transform.mirapolis import *
 from tcomextetl.transform.aitu import *
 from tcomextetl.transform.gosreestrkz import *
 from tcomextetl.transform.cloudpayments import *
+from tcomextetl.transform.amplitude import *
 from tcomextetl.transform.tvplus import *
 
 
@@ -174,3 +175,6 @@ StructRegister.add('gosreestrkz_company', GosreestrKzCompanyRow)
 StructRegister.add('gosreestrkz_contact', GosreestrKzContactRow)
 
 StructRegister.add('cloud_payments_list', CloudPaymentsRow)
+
+StructRegister.add('amplitude_egov_logs', AmplitudeEgovLogsRow)
+StructRegister.add('amplitude_telecomkz_logs', AmplitudeTelecomkzLogsRow)

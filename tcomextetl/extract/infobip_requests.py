@@ -12,7 +12,7 @@ class InfobipRestApiParser(ApiRequests):
     @property
     def total(self):
         pagination = self._raw.get('pagination')
-        return pagination['totalItems']
+        return pagination['totalItems'] if pagination else 0
 
     @property
     def page(self):
@@ -46,7 +46,7 @@ class InfobipRestApiParser(ApiRequests):
         if self._raw is None:
             return params
 
-        if self._raw[self.entity]:
+        if self._raw.get(self.entity):
             params['page'] = self.page + 1
 
             # prevent next request
