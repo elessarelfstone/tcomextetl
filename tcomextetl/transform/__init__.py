@@ -12,12 +12,11 @@ from tcomextetl.transform.iot import *
 from tcomextetl.transform.mirapolis import *
 from tcomextetl.transform.aitu import *
 from tcomextetl.transform.gosreestrkz import *
-
+from tcomextetl.transform.cloudpayments import *
 from tcomextetl.transform.tvplus import *
 
 
 class StructRegister:
-
     _handlers = {}
 
     @classmethod
@@ -148,7 +147,9 @@ StructRegister.add('telecomkz_reps_conversions_lk1', TelecomkzConversionsLK1Row)
 StructRegister.add('telecomkz_reps_conversions_lk2', TelecomkzConversionsLK2Row)
 
 StructRegister.add('telecomkz_logs_main_visits', TelecomkzLogsRow)
-
+StructRegister.add('telecomkz_logs_redesign_visits', TelecomkzRedesignLogsRow)
+StructRegister.add('telecomkz_logs_redesign2_visits', TelecomkzRedesignLogsRow)
+StructRegister.add('telecomkz_logs_wfm_visits', TelecomkzWfmLogsRow)
 # speed test
 StructRegister.add('speedtest_sensitive_data', SpeedtestSensitiveDataRow)
 StructRegister.add('speedtest_fixed_network_performance', FixedNetworkPerformanceRow)
@@ -156,9 +157,7 @@ StructRegister.add('speedtest_fixed_network_performance', FixedNetworkPerformanc
 # crmsensor
 StructRegister.add('crmsensor_checklist', CrmsensorChecklistRow)
 
-
 StructRegister.add('iot_stat', IotStatRow)
-
 
 StructRegister.add('mirapolis_offline_study', MirapolisRow)
 StructRegister.add('mirapolis_online_study', MirapolisRow)
@@ -173,3 +172,5 @@ StructRegister.add('aitu_notifications', AituNotificationMetricLog)
 
 StructRegister.add('gosreestrkz_company', GosreestrKzCompanyRow)
 StructRegister.add('gosreestrkz_contact', GosreestrKzContactRow)
+
+StructRegister.add('cloud_payments_list', CloudPaymentsRow)
