@@ -73,7 +73,6 @@ class ApiRequests(ABC, HttpRequest):
     def __iter__(self):
 
         self._start_date = datetime.now()
-        errors_count = 0
         while self.next_page_params:
             try:
                 self._raw = self.load(self.next_page_params)
@@ -84,8 +83,4 @@ class ApiRequests(ABC, HttpRequest):
                 if self.timeout_ban:
                     sleep(self.timeout_ban)
             except ReadTimeout:
-                if errors_count <= 10:
-                    sleep(self.timeout * errors_count)
-                    errors_count += 1
-                else:
-                    raise
+                sleep(self.timeout)

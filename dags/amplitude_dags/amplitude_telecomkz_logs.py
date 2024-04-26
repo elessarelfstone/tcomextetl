@@ -11,11 +11,11 @@ from dags.docker_runner import ExternalEtlDockerRunner as Runner
 from dags.common import get_command_args
 
 with DAG(
-        dag_id='aitu_notifications',
+        dag_id='amplitude_telecomkz_logs',
         catchup=False,
         start_date=pendulum.now(tz=f'{Variable.get("TZ")}').subtract(days=1),
-        schedule_interval='0 15 * * *',
-        tags=['aitu']
+        schedule_interval='30 1 * * *',
+        tags=['amplitude']
      ) as dag:
 
     command_args = PythonOperator(
@@ -28,17 +28,15 @@ with DAG(
         }
     )
 
-    aitu_notifications = Runner(
-        task_id='aitu_notifications',
-        luigi_module='aitu',
-        luigi_task='AituNotification',
+    amplitude_telecomkz_logs = Runner(
+        task_id='amplitude_telecomkz_logs',
+        luigi_module='amplitude',
+        luigi_task='AmplitudeTelecomkzLogs',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
-        env_vars={'AITU_PUSH_NOTIFICATIONS_PROJECT_ID': Variable.get('AITU_PUSH_NOTIFICATIONS_PROJECT_ID'),
-                  'AITU_PUSH_NOTIFICATIONS_PRIVATE_KEY_ID': Variable.get('AITU_PUSH_NOTIFICATIONS_PRIVATE_KEY_ID'),
-                  'AITU_PUSH_NOTIFICATIONS_PRIVATE_KEY': Variable.get('AITU_PUSH_NOTIFICATIONS_PRIVATE_KEY'),
-                  'AITU_PUSH_NOTIFICATIONS_CLIENT_ID': Variable.get('AITU_PUSH_NOTIFICATIONS_CLIENT_ID')},
-        pool='aitu',
+        env_vars={'AMPLITUDE_TELECOMKZ_LOGS_API_KEY': Variable.get('AMPLITUDE_TELECOMKZ_LOGS_API_KEY'),
+                  'AMPLITUDE_TELECOMKZ_LOGS_SECRET_KEY': Variable.get('AMPLITUDE_TELECOMKZ_LOGS_SECRET_KEY')},
+        pool='amplitude',
         do_xcom_push=False
     )
 
-    command_args >> aitu_notifications
+    command_args >> amplitude_telecomkz_logs

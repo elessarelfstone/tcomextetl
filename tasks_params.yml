@@ -697,3 +697,9 @@ gosreestrkz_contact:
 cloud_payments_list:
   ftp_directory: cloudpayments
   endpoint: /v2/payments/list
+
+amplitude_telecomkz_logs:
+  ftp_directory: amplitude
+
+amplitude_egov_logs:
+  ftp_directory: amplitude
