@@ -3,8 +3,7 @@ import luigi
 from luigi.parameter import ParameterVisibility
 from luigi.util import requires
 from tasks.base import ApiToCsv, FtpUploadedOutput, Runner
-from tcomextetl.common.dates import DEFAULT_FORMAT
-from datetime import datetime
+
 from tcomextetl.common.csv import save_csvrows, dict_to_row
 from tcomextetl.common.utils import rewrite_file
 import json
@@ -30,17 +29,12 @@ class CloudPaymentsListOutput(ApiToCsv):
 
     @property
     def request_params(self):
-        params = dict(PageNumber=1)
-
-        if self.from_to:
-            u_after, u_before = self.from_to
-            params['CreatedDateGte'], params['CreatedDateLte'] = u_after, u_before
-
-        return params
+        return {}
 
     def run(self):
         auth = {'user': self.user, 'password': self.password}
-        parser = CloudPaymentsParser(self.url, params=self.request_params,
+        dates = self.from_to
+        parser = CloudPaymentsParser(self.url, dates, params=self.request_params,
                                      auth=auth, timeout=self.timeout, timeout_ban=self.timeout_ban)
 
         # set parsed rows count if resume
@@ -64,7 +58,7 @@ class CloudPaymentsListFtpOutput(FtpUploadedOutput):
 
 class CloudPaymentsRunner(Runner):
     start_date = luigi.Parameter(default=Runner.yesterday())
-    end_date = luigi.Parameter(default=datetime.today().strftime(DEFAULT_FORMAT))
+    end_date = luigi.Parameter(default=Runner.yesterday())
 
     def requires(self):
         params = self.params
