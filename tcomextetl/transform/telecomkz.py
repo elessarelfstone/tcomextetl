@@ -119,3 +119,43 @@ class TelecomkzLogsRow:
     goals_id = field(default='')
     goals_date_time = field(default='')
     refere = field(default='')
+
+
+@define
+class TelecomkzRedesignLogsRow:
+    visit_id = field(default='')
+    counter_id = field(default='')
+    watch_ids = field(default='')
+    date = field(default='')
+    date_time = field(default='')
+    is_new_user = field(default='')
+    page_views = field(default='')
+    visit_duration = field(default='')
+    bounce = field(default='')
+    client_id = field(default='')
+    counter_user_id_hash = field(default='')
+    goals_id = field(default='')
+    goals_date_time = field(default='')
+    referer = field(default='')
+    browser_language = field(default='')
+    operating_system = field(default='')
+    mobile_phone = field(default='')
+    mobile_phone_model = field(default='')
+
+
+@define
+class TelecomkzWfmLogsRow:
+    visit_id = field(default='')
+    counter_id = field(default='')
+    watch_ids = field(default='')
+    date = field(default='')
+    date_time = field(default='')
+    is_new_user = field(default='')
+    page_views = field(default='')
+    visit_duration = field(default='')
+    bounce = field(default='')
+    client_id = field(default='')
+    counter_user_id_hash = field(default='')
+    goals_id = field(default='')
+    goals_date_time = field(default='')
+    referer = field(default='')

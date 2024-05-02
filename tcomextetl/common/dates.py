@@ -54,3 +54,16 @@ def last_day_of_previous_month() -> date:
     first_day_of_current_month = _date.replace(day=1)
     last_day_previous_month = first_day_of_current_month - timedelta(days=1)
     return last_day_previous_month.date()
+
+
+def dates_between(start_date, end_date) -> [date]:
+    start_date = datetime.strptime(start_date, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date, '%Y-%m-%d')
+
+    dates = []
+    current_date = start_date
+    while current_date <= end_date:
+        dates.append(current_date.strftime('%Y-%m-%d'))
+        current_date += timedelta(days=1)
+
+    return dates
