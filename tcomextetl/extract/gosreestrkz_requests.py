@@ -157,7 +157,9 @@ class GosreestrKzRequests(HttpRequest):
         while attempt < max_attempts:
             try:
                 self._raw = self.get_request_url()
+                print('Get request url SUCCESS')
                 self.data = self.parse_company(company_id, contact_id)
+                print('data parsed SUCCESS')
                 break
             except errors:
                 attempt += 1
@@ -187,6 +189,7 @@ class GosreestrKzRequests(HttpRequest):
     def get_all_bins_json(self):
         final_data_dict = {'bin': [], 'company_id': [], 'contact_id': []}
         for bin_value in self.bins_list:
+            print(f'bin_value = {bin_value}')
             total_pages = 0
             current_page = 0
             # Перебираем страницы с данными о компаниях, пока не достигнем конца.

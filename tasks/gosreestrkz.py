@@ -171,6 +171,7 @@ class GosreestrKzCompanyOutput(ApiToCsv):
 
             try:
                 bin_id, company_id, contact_id = _id
+                print(f'BIN: {bin_id}. Company_ID: {company_id}. Contact_ID: {contact_id}')
                 parser = GosreestrKzRequests(gosreestrkz_company_url.format(company_id))
                 company_data = parser.process_company_id(company_id, contact_id)
 
