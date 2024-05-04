@@ -228,11 +228,13 @@ class GosreestrKzRequests(HttpRequest):
 
                                 except errors:
                                     time.sleep(15)
+                                    current_page += 1
                                 else:
                                     current_page += 1
 
                 except errors:
                     time.sleep(15)
+                    current_page += 1
                 else:
                     current_page += 1
 
