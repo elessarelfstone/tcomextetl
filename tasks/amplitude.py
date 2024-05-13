@@ -48,12 +48,16 @@ class AmplitudeEgovOutput(CsvFileOutput):
             auth=self.auth
         )
 
-        for d in parser:
-            save_csvrows(self.output_fpath,
-                         [dict_to_row(_d, self.struct, '$') for _d in d],
-                         quotechar='"')
+        if parser.valid_zip: # Flag to track ZIP file validity
+            for d in parser:
+                save_csvrows(self.output_fpath,
+                             [dict_to_row(_d, self.struct, '$') for _d in d],
+                             quotechar='"')
 
-            self.set_status_info(*parser.status_percent)
+                self.set_status_info(*parser.status_percent)
+        else:
+            with open(self.output_fpath, 'w') as f:
+                f.write('')  # Write an empty file
 
         rewrite_file(self.success_fpath, json.dumps(parser.stat))
 
@@ -114,12 +118,16 @@ class AmplitudeTelecomkzOutput(CsvFileOutput):
             auth=self.auth
         )
 
-        for d in parser:
-            save_csvrows(self.output_fpath,
-                         [dict_to_row(_d, self.struct, '$') for _d in d],
-                         quotechar='"')
+        if parser.valid_zip: # Flag to track ZIP file validity
+            for d in parser:
+                save_csvrows(self.output_fpath,
+                             [dict_to_row(_d, self.struct, '$') for _d in d],
+                             quotechar='"')
 
-            self.set_status_info(*parser.status_percent)
+                self.set_status_info(*parser.status_percent)
+        else:
+            with open(self.output_fpath, 'w') as f:
+                f.write('')  # Write an empty file
 
         rewrite_file(self.success_fpath, json.dumps(parser.stat))
 

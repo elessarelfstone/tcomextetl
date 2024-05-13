@@ -32,22 +32,28 @@ class AmplitudeRequests(HttpRequest):
             timeout=timeout
         )
 
+        self.valid_zip = False  # Flag to track ZIP file validity
         # retrieve zip body
         r = self.request(url)
         zip_file = io.BytesIO(r.content)
 
         root_path = Path(TEMP_PATH) / 'amplitude' / datetime.now().strftime('%Y%m%d%H%M%S')
 
-        with zipfile.ZipFile(zip_file, 'r') as z:
-            z.extractall(root_path)
+        try:
+            with zipfile.ZipFile(zip_file, 'r') as z:
+                z.extractall(root_path)
+            self.valid_zip = True
+        except zipfile.BadZipFile:
+            print("Failed to open ZIP file. The file may be corrupted or not a zip file at all.")
 
         self._files = []
 
-        project_path = root_path / str(project_id)
-        for filename in os.listdir(project_path):
-            if filename.endswith('.gz'):
-                f_path = Path(project_path) / filename
-                self._files.append(f_path)
+        if self.valid_zip:
+            project_path = root_path / str(project_id)
+            for filename in os.listdir(project_path):
+                if filename.endswith('.gz'):
+                    f_path = Path(project_path) / filename
+                    self._files.append(f_path)
 
         self._parsed_count = 0
         self._parsed_files = 0
