@@ -8,9 +8,11 @@ from datetime import datetime, timedelta, date
 from math import floor
 from pathlib import Path
 from time import sleep
+import logging
 
 import luigi
 from luigi import TupleParameter
+from collections import defaultdict
 from luigi.contrib.ftp import RemoteTarget
 from luigi.parameter import ParameterVisibility
 from luigi.util import requires
@@ -163,6 +165,12 @@ class GosreestrKzCompanyOutput(ApiToCsv):
 
         parsed_cnt = ids_manager.parsed
         failed_ids = deque()
+        length = len(company_deque)
+
+        # Счетчик попыток для каждого идентификатора
+        attempt_counts = defaultdict(int)
+        max_attempts = 5  # Максимальное количество попыток для каждого идентификатора
+
         while company_deque:
             if failed_ids:
                 _id = failed_ids.popleft()
@@ -176,7 +184,12 @@ class GosreestrKzCompanyOutput(ApiToCsv):
                 company_data = parser.process_company_id(company_id, contact_id)
 
             except errors:
-                failed_ids.append(_id)
+                attempt_counts[_id] += 1
+                if attempt_counts[_id] < max_attempts:
+                    failed_ids.append(_id)
+                else:
+                    # Логировать проблемные ID и не добавлять их обратно
+                    logging.error(f"Max attempts reached for bin: {bin_id}")
                 sleep(self.timeout)
 
             else:
@@ -186,8 +199,8 @@ class GosreestrKzCompanyOutput(ApiToCsv):
                 append_file_tuple(self.parsed_ids_fpath, (company_id, contact_id))
                 parsed_cnt += 1
 
-            s = f'Total: {ids_manager.total}. Parsed: {parsed_cnt}. BIN: {_id[0]}. Company_ID: {_id[1]}. Contact_ID: {_id[2]}' + '\n'
-            stat = {'total': ids_manager.total, 'parsed': parsed_cnt}
+            s = f'Total: {length}. Parsed: {parsed_cnt}. BIN: {_id[0]}. Company_ID: {_id[1]}. Contact_ID: {_id[2]}' + '\n'
+            stat = {'total': length, 'parsed': parsed_cnt}
             rewrite_file(self.stat_fpath, json.dumps(stat))
 
             p = floor((parsed_cnt * 100) / ids_manager.total)
@@ -350,6 +363,12 @@ class GosreestrKzContactOutput(ApiToCsv):
 
         failed_ids = deque()
         parsed_cnt = ids_manager.parsed
+        length = len(contact_deque)
+
+        # Счетчик попыток для каждого идентификатора
+        attempt_counts = defaultdict(int)
+        max_attempts = 5  # Максимальное количество попыток для каждого идентификатора
+
         while contact_deque:
             if failed_ids:
                 _id = failed_ids.popleft()
@@ -362,7 +381,12 @@ class GosreestrKzContactOutput(ApiToCsv):
                 contact_data = parser.process_contact_id(company_id, contact_id)
 
             except errors:
-                failed_ids.append(_id)
+                attempt_counts[_id] += 1
+                if attempt_counts[_id] < max_attempts:
+                    failed_ids.append(_id)
+                else:
+                    # Логировать проблемные ID и не добавлять их обратно
+                    logging.error(f"Max attempts reached for ID {_id}")
                 sleep(self.timeout)
 
             else:
@@ -372,8 +396,8 @@ class GosreestrKzContactOutput(ApiToCsv):
                 append_file_tuple(self.parsed_ids_fpath, (company_id, contact_id))
                 parsed_cnt += 1
 
-            s = f'Total: {ids_manager.total}. Parsed: {parsed_cnt}. BIN: {_id[0]}. Company_ID: {_id[1]}. Contact_ID: {_id[2]}' + '\n'
-            stat = {'total': ids_manager.total, 'parsed': parsed_cnt}
+            s = f'Total: {length}. Parsed: {parsed_cnt}. BIN: {_id[0]}. Company_ID: {_id[1]}. Contact_ID: {_id[2]}' + '\n'
+            stat = {'total': length, 'parsed': parsed_cnt}
             rewrite_file(self.stat_fpath, json.dumps(stat))
 
             p = floor((parsed_cnt * 100) / ids_manager.total)
