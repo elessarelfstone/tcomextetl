@@ -203,7 +203,7 @@ class GosreestrKzCompanyOutput(ApiToCsv):
             stat = {'total': length, 'parsed': parsed_cnt}
             rewrite_file(self.stat_fpath, json.dumps(stat))
 
-            p = floor((parsed_cnt * 100) / ids_manager.total)
+            p = floor((parsed_cnt * 100) / length)
             self.set_status_info(s, p)
 
         self.finalize()
@@ -400,7 +400,7 @@ class GosreestrKzContactOutput(ApiToCsv):
             stat = {'total': length, 'parsed': parsed_cnt}
             rewrite_file(self.stat_fpath, json.dumps(stat))
 
-            p = floor((parsed_cnt * 100) / ids_manager.total)
+            p = floor((parsed_cnt * 100) / length)
             self.set_status_info(s, p)
 
         self.finalize()
