@@ -83,7 +83,7 @@ class AituRequests(HttpRequest):
                     yield data
                     self._parsed_count += len(data)
                     self._parsed_files += 1
-
+            os.remove(f) # Delete the file after reading it
 
 class AituNotificationRequests(HttpRequest):
 
