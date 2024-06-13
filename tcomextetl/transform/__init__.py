@@ -175,6 +175,7 @@ StructRegister.add('gosreestrkz_company', GosreestrKzCompanyRow)
 StructRegister.add('gosreestrkz_contact', GosreestrKzContactRow)
 
 StructRegister.add('cloud_payments_list', CloudPaymentsRow)
+StructRegister.add('cloud_payments_no3ds', CloudPaymentsRow)
 
 StructRegister.add('amplitude_egov_logs', AmplitudeEgovLogsRow)
 StructRegister.add('amplitude_telecomkz_logs', AmplitudeTelecomkzLogsRow)
