@@ -1,4 +1,4 @@
-from settings import CLOUDPAYMENTS_USER, CLOUDPAYMENTS_PASS
+from settings import CLOUDPAYMENTS_USER, CLOUDPAYMENTS_PASS, CLOUDPAYMENTS_NO3DS_USER, CLOUDPAYMENTS_NO3DS_PASS
 import luigi
 from luigi.parameter import ParameterVisibility
 from luigi.util import requires
@@ -16,8 +16,8 @@ cloudpayments_url = 'https://api.cloudpayments.kz'
 class CloudPaymentsListOutput(ApiToCsv):
     endpoint = luigi.Parameter()
 
-    user = luigi.Parameter(default=CLOUDPAYMENTS_USER, visibility=ParameterVisibility.HIDDEN)
-    password = luigi.Parameter(default=CLOUDPAYMENTS_PASS, visibility=ParameterVisibility.HIDDEN)
+    user = luigi.Parameter(visibility=ParameterVisibility.HIDDEN)
+    password = luigi.Parameter(visibility=ParameterVisibility.HIDDEN)
 
     from_to = luigi.TupleParameter(default=())
     timeout = luigi.IntParameter(default=4)
@@ -60,17 +60,28 @@ class CloudPaymentsRunner(Runner):
     start_date = luigi.Parameter(default=Runner.yesterday())
     end_date = luigi.Parameter(default=Runner.yesterday())
 
+    user = luigi.Parameter(visibility=ParameterVisibility.HIDDEN)
+    password = luigi.Parameter(visibility=ParameterVisibility.HIDDEN)
+
     def requires(self):
         params = self.params
 
         if not self.all_data:
             params['from_to'] = (self.start_date, self.end_date)
 
-        return CloudPaymentsListFtpOutput(**params)
+        return CloudPaymentsListFtpOutput(user=self.user, password=self.password, **params)
 
 
 class CloudPaymentsList(CloudPaymentsRunner):
     name = luigi.Parameter('cloud_payments_list')
+    user = luigi.Parameter(default=CLOUDPAYMENTS_USER, visibility=ParameterVisibility.HIDDEN)
+    password = luigi.Parameter(default=CLOUDPAYMENTS_PASS, visibility=ParameterVisibility.HIDDEN)
+
+
+class CloudPaymentsNo3ds(CloudPaymentsRunner):
+    name = luigi.Parameter('cloud_payments_no3ds')
+    user = luigi.Parameter(default=CLOUDPAYMENTS_NO3DS_USER, visibility=ParameterVisibility.HIDDEN)
+    password = luigi.Parameter(default=CLOUDPAYMENTS_NO3DS_PASS, visibility=ParameterVisibility.HIDDEN)
 
 
 if __name__ == '__main__':

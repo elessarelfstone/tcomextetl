@@ -698,6 +698,10 @@ cloud_payments_list:
   ftp_directory: cloudpayments
   endpoint: /payments/list
 
+cloud_payments_no3ds:
+  ftp_directory: cloudpayments
+  endpoint: /payments/list
+
 amplitude_telecomkz_logs:
   ftp_directory: amplitude
 
