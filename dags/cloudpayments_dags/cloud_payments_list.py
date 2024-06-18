@@ -14,7 +14,7 @@ with DAG(
         dag_id='cloud_payments_list',
         catchup=False,
         start_date=pendulum.now(tz=f'{Variable.get("TZ")}').subtract(days=1),
-        schedule_interval='10 1 * * *',
+        schedule_interval='10 6 * * *',
         tags=['cloudpayments']
 ) as dag:
     command_args = PythonOperator(
