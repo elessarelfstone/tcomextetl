@@ -11,7 +11,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from luigi.util import requires
-
+from tenacity import retry, wait_fixed, stop_after_attempt
 from tasks.base import Base, ArchivedWebDataFileInput, WebDataFileInput, FtpUploadedOutput, Runner, CsvFileOutput
 from tasks.xls import WebExcelFileParsingToCsv, ArchivedWebExcelFileParsingToCsv
 from tcomextetl.extract.http_requests import Downloader
@@ -31,7 +31,20 @@ rcut_joint_ventures = 'joint_ventures'
 rcut_foreign_branches = 'foreign_branches'
 rcut_entrepreneurs = 'entrepreneurs'
 
-
+headers = {
+    'authority': 'stat.gov.kz',
+    'pragma': 'no-cache',
+    'cache-control': 'no-cache',
+    'accept': 'application/json, text/plain, */*',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36',
+    'content-type': 'application/json;charset=UTF-8',
+    'origin': 'https://stat.gov.kz',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-dest': 'empty',
+    'referer': 'https://stat.gov.kz/jur-search/filter',
+    'accept-language': 'ru,en-US;q=0.9,en;q=0.8',
+}
 class SgovDictOutput(WebDataFileInput):
 
     html_container_id = luigi.Parameter()
@@ -334,6 +347,11 @@ class SgovRcutByKatoJuridicalOutput(CsvFileOutput):
     prev_period_index = luigi.IntParameter(default=0)
     timeout = luigi.IntParameter(default=200)
 
+
+    @retry(wait=wait_fixed(5), stop=stop_after_attempt(5))
+    def downloadZip(self, url, path):
+        d = Downloader(url, headers=headers)
+        d.download(path)
     def run(self):
 
         urls = []
@@ -367,9 +385,8 @@ class SgovRcutByKatoJuridicalOutput(CsvFileOutput):
         row_count = 0
 
         for i, u in enumerate(urls, start=1):
-            d = Downloader(u)
             a_fpath = build_fpath(TEMP_PATH, f'{self.name}_{kato}', '.zip')
-            d.download(a_fpath)
+            self.downloadZip(u, a_fpath)
             f_path, *_ = extract_by_wildcard(a_fpath, wildcard='*.xlsx')
 
             excel_reader = SimpleExcelDataReader(
