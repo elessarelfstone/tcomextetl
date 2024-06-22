@@ -17,3 +17,4 @@ google-cloud-bigquery[pandas]==2.34.3
 google-cloud
 google-auth
 fake_useragent
+tenacity==8.3.0
