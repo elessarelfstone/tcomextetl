@@ -667,6 +667,31 @@ goszakup_ref_contract_status:
   descr: Статус договора
   ftp_directory: goszakup
 
+goszakup_ref_finsource:
+  endpoint: /v3/refs/ref_finsource
+  descr: Источник финансирования
+  ftp_directory: goszakup
+
+goszakup_ref_fkrb_program:
+  endpoint: /v3/refs/ref_fkrb_program
+  descr: Справочник программ ФКР
+  ftp_directory: goszakup
+
+goszakup_ref_fkrb_subprogram:
+  endpoint: /v3/refs/ref_fkrb_subprogram
+  descr: Справочник подпрограмм ФКР
+  ftp_directory: goszakup
+
+goszakup_ref_amendment_agreem_type:
+  endpoint: /v3/refs/ref_amendment_agreem_type
+  descr: Вид дополнительного соглашения
+  ftp_directory: goszakup
+
+goszakup_ref_amendm_agreem_justif:
+  endpoint: /v3/refs/ref_amendm_agreem_justif
+  descr: Основания создания дополнительного соглашения
+  ftp_directory: goszakup
+
 tvplus_cinema_start:
   ftp_directory: tvplus
   endpoint: vod/v2/start/titles
