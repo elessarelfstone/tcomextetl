@@ -84,6 +84,12 @@ StructRegister.add('goszakup_ref_justification', GoszakupRefJustificationRow)
 StructRegister.add('goszakup_ref_type_trade', GoszakupRefTypeTradeRow)
 StructRegister.add('goszakup_ref_contract_status', GoszakupRefContractStatusRow)
 
+StructRegister.add('goszakup_ref_finsource', GoszakupRefFinSourceRow)
+StructRegister.add('goszakup_ref_fkrb_program', GoszakupRefFkrbProgramRow)
+StructRegister.add('goszakup_ref_fkrb_subprogram', GoszakupRefFkrbSubProgramRow)
+StructRegister.add('goszakup_ref_amendment_agreem_type', GoszakupRefAmendmentAgreemTypeRow)
+StructRegister.add('goszakup_ref_amendm_agreem_justif', GoszakupRefAmendmAgreemJustifRow)
+
 # data.egov.kz
 StructRegister.add('dgov_addrreg_dats_types', DgovAddrRegDAtsTypes)
 StructRegister.add('dgov_addrreg_dbuildings_pointers', DgovAddrRegDBuildingsPointers)

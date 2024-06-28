@@ -486,3 +486,40 @@ class GoszakupRefContractStatusRow:
     name_ru = field(default='')
     name_kz = field(default='')
 
+@define
+class GoszakupRefFinSourceRow:
+    id = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+    nogz = field(default='')
+    code = field(default='')
+
+@define
+class GoszakupRefFkrbProgramRow:
+    id = field(default='')
+    prg = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+    code = field(default='')
+
+@define
+class GoszakupRefFkrbSubProgramRow:
+    id = field(default='')
+    prg = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+    code = field(default='')
+
+@define
+class GoszakupRefAmendmentAgreemTypeRow:
+    id = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+
+@define
+class GoszakupRefAmendmAgreemJustifRow:
+    id = field(default='')
+    name_ru = field(default='')
+    name_kz = field(default='')
+    cname_kz = field(default='')
+    cname_ru = field(default='')

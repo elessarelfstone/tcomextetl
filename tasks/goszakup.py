@@ -258,5 +258,35 @@ class GoszakupRefContractStatus(GoszakupRunner):
     use_rest = luigi.BoolParameter(True)
 
 
+class GoszakupRefFinSource(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_finsource')
+    use_rest = luigi.BoolParameter(True)
+
+
+class GoszakupRefFkrbProgram(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_fkrb_program')
+    use_rest = luigi.BoolParameter(True)
+
+
+class GoszakupRefFkrbSubProgram(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_fkrb_subprogram')
+    use_rest = luigi.BoolParameter(True)
+
+
+class GoszakupRefAmendmentAgreemType(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_amendment_agreem_type')
+    use_rest = luigi.BoolParameter(True)
+
+
+class GoszakupRefAmendmAgreemJustif(GoszakupRunner):
+    # don't run for a day
+    name = luigi.Parameter('goszakup_ref_amendm_agreem_justif')
+    use_rest = luigi.BoolParameter(True)
+
+
 if __name__ == '__main__':
     code = luigi_run()
