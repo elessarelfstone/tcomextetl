@@ -31,6 +31,8 @@ with DAG(dag_id='gosreestrkz_company',
         luigi_module='gosreestrkz',
         luigi_task='GosreestrKzCompany',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
+        env_vars={'PROXY_FACTORY_USER': Variable.get('PROXY_FACTORY_USER'),
+                  'PROXY_FACTORY_PASS': Variable.get('PROXY_FACTORY_PASS')},
         pool='gosreestrkz',
         do_xcom_push=False
     )

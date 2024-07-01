@@ -74,7 +74,35 @@ class GosreestrKzRequests(HttpRequest):
         ua = UserAgent()
         return {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-            "User-Agent": str(ua.chrome)}
+            'User-Agent': str(ua.chrome),
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+        }
+
+    def test_url(self):
+        try:
+            response = requests.get(self.url, headers=self.header(), timeout=10)
+            print(f"Status Code: {response.status_code}")
+        except Exception as e:
+            print(f"Failed to access the URL: {e}")
+
+    def test_proxies(self):
+        test_url = 'https://api.ipify.org?format=json'
+        for _ in range(10):
+            proxy = self._proxies.get()
+            try:
+                response = requests.get(
+                    test_url,
+                    proxies={
+                        'http': proxy,
+                        'https': proxy
+                    },
+                    timeout=5
+                )
+            except Exception as e:
+                print(f"Proxy failed: {proxy}, Exception: {e}")
 
     @staticmethod
     def get_total_pages(soup):
@@ -106,6 +134,7 @@ class GosreestrKzRequests(HttpRequest):
         max_attempts = 5
         while attempt < max_attempts:
             try:
+                self.test_proxies()
                 soup = self.get_request_url()
                 search_token = soup.find('input', {'type': 'hidden', 'name': '__RequestVerificationToken'})
                 self.token = search_token['value']
@@ -194,6 +223,7 @@ class GosreestrKzRequests(HttpRequest):
             # Перебираем страницы с данными о компаниях, пока не достигнем конца.
             while current_page < total_pages or current_page == 0:
                 try:
+                    self.test_url()
                     self.url = base_url  # Сброс URL на базовый адрес перед каждым запросом.
                     token = self.get_request_verification_token()  # Получение токена верификации.
                     data = self.payload(current_page, token, bin_value)  # Формирование тела запроса.
