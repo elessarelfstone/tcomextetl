@@ -24,6 +24,7 @@ from tcomextetl.common.utils import append_file_tuple, rewrite_file, read_csv_tu
 from tcomextetl.extract.gosreestrkz_requests import GosreestrKzRequests
 from urllib3.exceptions import MaxRetryError
 from requests.exceptions import ProxyError, SSLError, ReadTimeout, ConnectionError
+from settings import PROXY_FACTORY_USER, PROXY_FACTORY_PASS
 
 base_url = 'https://gr5.gosreestr.kz/p/ru/gr-search/search-objects'
 region_dict = {
@@ -43,16 +44,16 @@ gosreestrkz_contact_url = "https://gr5.gosreestr.kz/p/ru/GrObjects/objects/tease
 
 
 class ProxyFactory:
+    user = luigi.Parameter(default=PROXY_FACTORY_USER, visibility=ParameterVisibility.HIDDEN)
+    password = luigi.Parameter(default=PROXY_FACTORY_PASS, visibility=ParameterVisibility.HIDDEN)
     _proxies = deque()
-    _user = 'spgfj7xv9k'
-    _pass = 'bezqXqZ32xtw1mOyV9'
     _base_address = "gate.smartproxy.com"
 
     def __init__(self):
         ports = range(10000, 10099)
 
         for port in ports:
-            _p = f"http://{self._user}:{self._pass}@{self._base_address}:{port}"
+            _p = f"http://{self.user}:{self.password}@{self._base_address}:{port}"
             self._proxies.append(_p)
 
     def get(self):
