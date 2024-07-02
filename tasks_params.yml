@@ -280,6 +280,10 @@ dgov_addrreg_drooms_types:
   rep_name: d_rooms_types
   ftp_directory: dgov
 
+dgov_datasets_private_schools:
+  rep_name: private_schools
+  rep_ver: v1
+  ftp_directory: dgov_datasets
 
 samruk_suppliers:
   endpoint: eprocsearch/unified-api/suppliers
