@@ -348,7 +348,7 @@ class SgovRcutByKatoJuridicalOutput(CsvFileOutput):
     timeout = luigi.IntParameter(default=200)
 
 
-    @retry(wait=wait_fixed(5), stop=stop_after_attempt(5))
+    @retry(wait=wait_fixed(3), stop=stop_after_attempt(3))
     def downloadZip(self, url, path):
         d = Downloader(url, headers=headers)
         d.download(path)

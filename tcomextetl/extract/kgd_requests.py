@@ -6,6 +6,7 @@ from xml.parsers.expat import ExpatError
 from urllib3.exceptions import ProtocolError
 
 from requests.exceptions import HTTPError, ConnectionError, ReadTimeout
+from tenacity import retry, wait_fixed, stop_after_attempt
 
 from tcomextetl.extract.http_requests import HttpRequest
 from tcomextetl.common.exceptions import ExternalSourceError
@@ -77,6 +78,7 @@ Successes: {} - successfully processed BINs
 
         return True
 
+    @retry(wait=wait_fixed(2), stop=stop_after_attempt(3))
     def load(self, params):
         request_xml = self.request_form.format(*params.values())
         r = self.request(self.url, data=request_xml)
