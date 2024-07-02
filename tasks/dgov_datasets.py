@@ -19,7 +19,7 @@ headers = {'user-agent': 'Apache-HttpClient/4.1.1 (java 1.5)'}
 class DgovDatasets(ApiToCsv):
     rep_name = luigi.Parameter()
     from_to = luigi.TupleParameter(default=())
-    version = luigi.Parameter(default='data')
+    version = luigi.Parameter(default='v1')
     timeout = luigi.FloatParameter(default=2)
 
     def run(self):
