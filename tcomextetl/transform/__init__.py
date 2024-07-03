@@ -15,6 +15,7 @@ from tcomextetl.transform.gosreestrkz import *
 from tcomextetl.transform.cloudpayments import *
 from tcomextetl.transform.amplitude import *
 from tcomextetl.transform.tvplus import *
+from tcomextetl.transform.dgov_datasets import *
 
 
 class StructRegister:
@@ -101,6 +102,9 @@ StructRegister.add('dgov_addrreg_sgeonims', DgovAddrRegSGeonimsRow)
 StructRegister.add('dgov_addrreg_sgrounds', DgovAddrRegSGroundsRow)
 StructRegister.add('dgov_addrreg_sbuildings', DgovAddrRegSBuildingsRow)
 StructRegister.add('dgov_addrreg_spb', DgovAddrRegSPbRow)
+
+# dgov datasets egov.kz
+StructRegister.add('dgov_datasets_private_schools', DgovDatasetsPrivateSchoolsRow)
 
 # samruk
 StructRegister.add('samruk_suppliers', SamrukSupplierRow)
