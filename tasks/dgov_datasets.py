@@ -76,6 +76,5 @@ class DgovDatasetsPrivateSchools(DgovDatasetsRunner):
     name = luigi.Parameter('dgov_datasets_private_schools')
 
 
-
 if __name__ == '__main__':
     luigi.run()
