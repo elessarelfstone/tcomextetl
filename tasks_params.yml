@@ -288,6 +288,15 @@ dgov_datasets_medical_organizations:
   rep_name: medical_organizations
   ftp_directory: dgov_datasets
 
+dgov_datasets_state_schools:
+  rep_name: state_schools
+  ftp_directory: dgov_datasets
+
+dgov_datasets_higher_education_org:
+  rep_name: higher_education_org1
+  ftp_directory: dgov_datasets
+
+
 samruk_suppliers:
   endpoint: eprocsearch/unified-api/suppliers
   ftp_directory: samruk

@@ -80,5 +80,13 @@ class DgovDatasetsMedicalOrg(DgovDatasetsRunner):
     name = luigi.Parameter('dgov_datasets_medical_organizations')
 
 
+class DgovDatasetsStateSchools(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_state_schools')
+
+
+class DgovDatasetsHigherEducationOrg(DgovDatasetsRunner):
+    name = luigi.Parameter('higher_education_org1')
+
+
 if __name__ == '__main__':
     luigi.run()

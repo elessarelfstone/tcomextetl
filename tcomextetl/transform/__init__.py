@@ -52,7 +52,6 @@ StructRegister.add('sgov_active_joint_ventures', CompanieRow)
 StructRegister.add('sgov_active_entrepreneurs', CompanieRow)
 StructRegister.add('sgov_active_legal_branches', CompanieRow)
 
-
 # kgd.gov.kz
 StructRegister.add('kgd_bankrupt', BankruptRow)
 StructRegister.add('kgd_inactive', InactiveRow)
@@ -104,8 +103,10 @@ StructRegister.add('dgov_addrreg_sbuildings', DgovAddrRegSBuildingsRow)
 StructRegister.add('dgov_addrreg_spb', DgovAddrRegSPbRow)
 
 # dgov datasets egov.kz
-StructRegister.add('dgov_datasets_private_schools', DgovDatasetsPrivateSchoolsRow)
+StructRegister.add('dgov_datasets_private_schools', DgovDatasetsPrivateSchoolRow)
 StructRegister.add('dgov_datasets_medical_organizations', DgovDatasetsMedicalOrgRow)
+StructRegister.add('dgov_datasets_state_schools', DgovDatasetsStateSchoolRow)
+StructRegister.add('higher_education_org1', DgovDatasetsHigherEducationOrgRow)
 
 # samruk
 StructRegister.add('samruk_suppliers', SamrukSupplierRow)
@@ -119,7 +120,6 @@ StructRegister.add('samruk_contract_item_deliveries', SamrukContractItemDeliveri
 StructRegister.add('samruk_dicts', SamrukDictRow)
 StructRegister.add('samruk_entries', SamrukEntriesRow)
 StructRegister.add('samruk_participation_lots', SamrukParticipationLotRow)
-
 
 # infobip
 StructRegister.add('infobip_agents', InfobipAgentRow)
@@ -143,7 +143,6 @@ StructRegister.add('telecomobkz_logs_postbacks', TelecomobkzPostbackLogRow)
 StructRegister.add('telecomobkz_reps_acquisitions', TelecomobkzRepAcquisitionsRow)
 StructRegister.add('telecomobkz_reps_dau', TelecomobkzRepDauRow)
 StructRegister.add('telecomobkz_reps_events', TelecomobkzRepEventRow)
-
 
 # telecomkz
 StructRegister.add('telecomkz_reps_main_visits', TelecomkzMainVisitsRow)
