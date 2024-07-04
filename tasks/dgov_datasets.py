@@ -85,7 +85,47 @@ class DgovDatasetsStateSchools(DgovDatasetsRunner):
 
 
 class DgovDatasetsHigherEducationOrg(DgovDatasetsRunner):
-    name = luigi.Parameter('higher_education_org1')
+    name = luigi.Parameter('dgov_datasets_higher_education_org1')
+
+
+class DgovDatasetsRosogrzMp(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_rosogrz_mp')
+
+
+class DgovDatasetsKarzhyUiymdarynynIriKa(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_karzhy_uiymdarynyn_iri_ka')
+
+
+class DgovDatasetsMemlekettikBalabakshalarTura(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_memlekettik_balabakshalar_tura')
+
+
+class DgovDatasetsPerechenGosudarstvennyh(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_perechen_gosudarstvennyh2')
+
+
+class DgovDatasetsOstvko:
+    name = luigi.Parameter('dgov_datasets_ostvko')
+
+
+class DgovDatasetsOpendataApiUri(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_opendata_api_uri592')
+
+
+class DgovDatasetsPerechenGosudarstvennyhOrga(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_perechen_gosudarstvennyh_orga')
+
+
+class DgovDatasetsMu1021(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_mu_1021')
+
+
+class DgovDatasetsMu101(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_mu_101')
+
+
+class DgovDatasetsMu100(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_mu_100')
 
 
 if __name__ == '__main__':
