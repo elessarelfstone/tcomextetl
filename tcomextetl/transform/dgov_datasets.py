@@ -18,3 +18,13 @@ class DgovDatasetsPrivateSchoolsRow:
     geo_coordi = field(default='')
     area_name = field(default='')
     lat = field(default='')
+
+
+@define
+class DgovDatasetsMedicalOrgRow:
+    id = field(default='')
+    area_id = field(default='')
+    sdu_load_i = field(default='')
+    address_li = field(default='')
+    status = field(default='')
+    area_name = field(default='')

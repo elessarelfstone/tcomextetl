@@ -284,6 +284,10 @@ dgov_datasets_private_schools:
   rep_name: private_schools
   ftp_directory: dgov_datasets
 
+dgov_datasets_medical_organizations:
+  rep_name: medical_organizations
+  ftp_directory: dgov_datasets
+
 samruk_suppliers:
   endpoint: eprocsearch/unified-api/suppliers
   ftp_directory: samruk

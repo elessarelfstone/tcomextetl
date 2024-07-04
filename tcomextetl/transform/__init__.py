@@ -105,6 +105,7 @@ StructRegister.add('dgov_addrreg_spb', DgovAddrRegSPbRow)
 
 # dgov datasets egov.kz
 StructRegister.add('dgov_datasets_private_schools', DgovDatasetsPrivateSchoolsRow)
+StructRegister.add('dgov_datasets_medical_organizations', DgovDatasetsMedicalOrgRow)
 
 # samruk
 StructRegister.add('samruk_suppliers', SamrukSupplierRow)
