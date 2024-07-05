@@ -115,6 +115,17 @@ class DgovDatasetsPerechenGosudarstvennyhRow:
 
 
 @define
+class DgovDatasets305PerechenGosudarstvennyh1Row:
+    spec_rus = field(default='')
+    spec_kaz = field(default='')
+
+
+@define
+class DgovDatasets306PerechenGosudarstvennyhRow:
+    pass
+
+
+@define
 class DgovDatasetsOstvkoRow:
     region = field(default='')
     phone = field(default='')

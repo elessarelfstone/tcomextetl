@@ -116,6 +116,14 @@ class DgovDatasetsPerechenGosudarstvennyhOrga(DgovDatasetsRunner):
     name = luigi.Parameter('dgov_datasets_perechen_gosudarstvennyh_orga')
 
 
+class DgovDatasets305PerechenGosudarstsavennyh1(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_305_perechen_gosudarstvennyh1')
+
+
+class DgovDatasets306PerechenGosudarstsavennyh(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_306_perechen_gosudarstvennyh')
+
+
 class DgovDatasetsMu1021(DgovDatasetsRunner):
     name = luigi.Parameter('dgov_datasets_mu_1021')
 
