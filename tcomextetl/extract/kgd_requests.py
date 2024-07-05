@@ -78,7 +78,7 @@ Successes: {} - successfully processed BINs
 
         return True
 
-    @retry(wait=wait_fixed(2), stop=stop_after_attempt(3))
+    @retry(wait=wait_fixed(15), stop=stop_after_attempt(3))
     def load(self, params):
         request_xml = self.request_form.format(*params.values())
         r = self.request(self.url, data=request_xml)
