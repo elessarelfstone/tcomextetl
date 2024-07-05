@@ -15,6 +15,7 @@ from tcomextetl.transform.gosreestrkz import *
 from tcomextetl.transform.cloudpayments import *
 from tcomextetl.transform.amplitude import *
 from tcomextetl.transform.tvplus import *
+from tcomextetl.transform.dgov_datasets import *
 
 
 class StructRegister:
@@ -50,7 +51,6 @@ StructRegister.add('sgov_active_foreign_branches', CompanieRow)
 StructRegister.add('sgov_active_joint_ventures', CompanieRow)
 StructRegister.add('sgov_active_entrepreneurs', CompanieRow)
 StructRegister.add('sgov_active_legal_branches', CompanieRow)
-
 
 # kgd.gov.kz
 StructRegister.add('kgd_bankrupt', BankruptRow)
@@ -102,6 +102,23 @@ StructRegister.add('dgov_addrreg_sgrounds', DgovAddrRegSGroundsRow)
 StructRegister.add('dgov_addrreg_sbuildings', DgovAddrRegSBuildingsRow)
 StructRegister.add('dgov_addrreg_spb', DgovAddrRegSPbRow)
 
+# dgov datasets egov.kz
+StructRegister.add('dgov_datasets_private_schools', DgovDatasetsPrivateSchoolRow)
+StructRegister.add('dgov_datasets_medical_organizations', DgovDatasetsMedicalOrgRow)
+StructRegister.add('dgov_datasets_state_schools', DgovDatasetsStateSchoolRow)
+StructRegister.add('dgov_datasets_higher_education_org1', DgovDatasetsHigherEducationOrgRow)
+StructRegister.add('dgov_datasets_rosogrz_mp', DgovDatasetsRosogrzMpRow)
+StructRegister.add('dgov_datasets_583_karzhy_uiymdarynyn_iri_ka', DgovDatasetsKarzhyUimdarynynIriKaRow)
+StructRegister.add('dgov_datasets_memlekettik_balabakshalar_tura', DgovDatasetsMemlekettikBalabakshalarTuraRow)
+StructRegister.add('dgov_datasets_277_perechen_gosudarstvennyh2', DgovDatasetsPerechenGosudarstvennyhRow)
+StructRegister.add('dgov_datasets_ostvko15', DgovDatasetsOstvkoRow)
+StructRegister.add('dgov_datasets_opendata_api_uri', DgovDatasetsOpendataApiUriRow)
+StructRegister.add('dgov_datasets_perechen_gosudarstvennyh_orga', DgovDatasetsPerechenGosudarstvennyhOrgaRow)
+StructRegister.add('dgov_datasets_mu_1021', DgovDatasetsMu1021Row)
+StructRegister.add('dgov_datasets_mu_101', DgovDatasetsMu101Row)
+StructRegister.add('dgov_datasets_mu_100', DgovDatasetsMu100Row)
+StructRegister.add('dgov_datasets_305_perechen_gosudarstvennyh1', DgovDatasets305PerechenGosudarstvennyh1Row)
+StructRegister.add('dgov_datasets_306_perechen_gosudarstvennyh', DgovDatasets306PerechenGosudarstvennyhRow)
 # samruk
 StructRegister.add('samruk_suppliers', SamrukSupplierRow)
 StructRegister.add('samruk_bad_suppliers', SamrukBadSupplierRow)
@@ -114,7 +131,6 @@ StructRegister.add('samruk_contract_item_deliveries', SamrukContractItemDeliveri
 StructRegister.add('samruk_dicts', SamrukDictRow)
 StructRegister.add('samruk_entries', SamrukEntriesRow)
 StructRegister.add('samruk_participation_lots', SamrukParticipationLotRow)
-
 
 # infobip
 StructRegister.add('infobip_agents', InfobipAgentRow)
@@ -138,7 +154,6 @@ StructRegister.add('telecomobkz_logs_postbacks', TelecomobkzPostbackLogRow)
 StructRegister.add('telecomobkz_reps_acquisitions', TelecomobkzRepAcquisitionsRow)
 StructRegister.add('telecomobkz_reps_dau', TelecomobkzRepDauRow)
 StructRegister.add('telecomobkz_reps_events', TelecomobkzRepEventRow)
-
 
 # telecomkz
 StructRegister.add('telecomkz_reps_main_visits', TelecomkzMainVisitsRow)

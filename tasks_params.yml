@@ -284,6 +284,67 @@ dgov_datasets_private_schools:
   rep_name: private_schools
   ftp_directory: dgov_datasets
 
+dgov_datasets_medical_organizations:
+  rep_name: medical_organizations
+  ftp_directory: dgov_datasets
+
+dgov_datasets_state_schools:
+  rep_name: state_schools
+  ftp_directory: dgov_datasets
+
+dgov_datasets_higher_education_org1:
+  rep_name: higher_education_org1
+  ftp_directory: dgov_datasets
+
+dgov_datasets_rosogrz_mp:
+  rep_name: rosogrz_mp
+  version: v2
+  ftp_directory: dgov_datasets
+
+dgov_datasets_583_karzhy_uiymdarynyn_iri_ka:
+  rep_name: 583_karzhy_uiymdarynyn_iri_ka
+  ftp_directory: dgov_datasets
+
+dgov_datasets_memlekettik_balabakshalar_tura:
+  rep_name: memlekettik_balabakshalar_tura
+  ftp_directory: dgov_datasets
+
+dgov_datasets_277_perechen_gosudarstvennyh2:
+  rep_name: 277_perechen_gosudarstvennyh2
+  ftp_directory: dgov_datasets
+
+dgov_datasets_305_perechen_gosudarstvennyh1:
+  rep_name: 305_perechen_gosudarstvennyh1
+  ftp_directory: dgov_datasets
+
+dgov_datasets_306_perechen_gosudarstvennyh:
+  rep_name: 306_perechen_gosudarstvennyh
+  ftp_directory: dgov_datasets
+
+dgov_datasets_ostvko15:
+  rep_name: ostvko15
+  ftp_directory: dgov_datasets
+
+dgov_datasets_opendata_api_uri592:
+  rep_name: opendata-api-uri592
+  ftp_directory: dgov_datasets
+
+dgov_datasets_perechen_gosudarstvennyh_orga:
+  rep_name: perechen_gosudarstvennyh_orga
+  ftp_directory: dgov_datasets
+
+dgov_datasets_mu_1021:
+  rep_name: mu_1021
+  ftp_directory: dgov_datasets
+
+dgov_datasets_mu_101:
+  rep_name: mu_101
+  ftp_directory: dgov_datasets
+
+dgov_datasets_mu_100:
+  rep_name: mu_100
+  ftp_directory: dgov_datasets
+
 samruk_suppliers:
   endpoint: eprocsearch/unified-api/suppliers
   ftp_directory: samruk
