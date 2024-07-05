@@ -292,7 +292,7 @@ dgov_datasets_state_schools:
   rep_name: state_schools
   ftp_directory: dgov_datasets
 
-dgov_datasets_higher_education_org:
+dgov_datasets_higher_education_org1:
   rep_name: higher_education_org1
   ftp_directory: dgov_datasets
 
@@ -302,7 +302,7 @@ dgov_datasets_rosogrz_mp:
   ftp_directory: dgov_datasets
 
 dgov_datasets_583_karzhy_uiymdarynyn_iri_ka:
-  rep_name: karzhy_uiymdarynyn_iri_ka
+  rep_name: 583_karzhy_uiymdarynyn_iri_ka
   ftp_directory: dgov_datasets
 
 dgov_datasets_memlekettik_balabakshalar_tura:
@@ -310,7 +310,7 @@ dgov_datasets_memlekettik_balabakshalar_tura:
   ftp_directory: dgov_datasets
 
 dgov_datasets_277_perechen_gosudarstvennyh2:
-  rep_name: perechen_gosudarstvennyh2
+  rep_name: 277_perechen_gosudarstvennyh2
   ftp_directory: dgov_datasets
 
 dgov_datasets_ostvko:

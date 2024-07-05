@@ -110,7 +110,7 @@ StructRegister.add('dgov_datasets_higher_education_org1', DgovDatasetsHigherEduc
 StructRegister.add('dgov_datasets_rosogrz_mp', DgovDatasetsRosogrzMpRow)
 StructRegister.add('dgov_datasets_583_karzhy_uiymdarynyn_iri_ka', DgovDatasetsKarzhyUimdarynynIriKaRow)
 StructRegister.add('dgov_datasets_memlekettik_balabakshalar_tura', DgovDatasetsMemlekettikBalabakshalarTuraRow)
-StructRegister.add('dgov_datasets_perechen_gosudarstvennyh2', DgovDatasetsPerechenGosudarstvennyhRow)
+StructRegister.add('dgov_datasets_277_perechen_gosudarstvennyh2', DgovDatasetsPerechenGosudarstvennyhRow)
 StructRegister.add('dgov_datasets_ostvko', DgovDatasetsOstvkoRow)
 StructRegister.add('dgov_datasets_opendata_api_uri', DgovDatasetsOpendataApiUriRow)
 StructRegister.add('dgov_datasets_perechen_gosudarstvennyh_orga', DgovDatasetsPerechenGosudarstvennyhOrgaRow)

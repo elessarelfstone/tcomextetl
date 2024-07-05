@@ -93,7 +93,7 @@ class DgovDatasetsRosogrzMp(DgovDatasetsRunner):
 
 
 class DgovDatasetsKarzhyUiymdarynynIriKa(DgovDatasetsRunner):
-    name = luigi.Parameter('dgov_datasets_karzhy_uiymdarynyn_iri_ka')
+    name = luigi.Parameter('dgov_datasets_583_karzhy_uiymdarynyn_iri_ka')
 
 
 class DgovDatasetsMemlekettikBalabakshalarTura(DgovDatasetsRunner):
@@ -101,10 +101,10 @@ class DgovDatasetsMemlekettikBalabakshalarTura(DgovDatasetsRunner):
 
 
 class DgovDatasetsPerechenGosudarstvennyh(DgovDatasetsRunner):
-    name = luigi.Parameter('dgov_datasets_perechen_gosudarstvennyh2')
+    name = luigi.Parameter('dgov_datasets_277_perechen_gosudarstvennyh2')
 
 
-class DgovDatasetsOstvko:
+class DgovDatasetsOstvko(DgovDatasetsRunner):
     name = luigi.Parameter('dgov_datasets_ostvko')
 
 
