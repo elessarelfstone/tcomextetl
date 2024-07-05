@@ -105,7 +105,7 @@ class DgovDatasetsPerechenGosudarstvennyh(DgovDatasetsRunner):
 
 
 class DgovDatasetsOstvko(DgovDatasetsRunner):
-    name = luigi.Parameter('dgov_datasets_ostvko')
+    name = luigi.Parameter('dgov_datasets_ostvko15')
 
 
 class DgovDatasetsOpendataApiUri(DgovDatasetsRunner):

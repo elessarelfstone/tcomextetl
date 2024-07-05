@@ -11,7 +11,7 @@ from dags.docker_runner import ExternalEtlDockerRunner as Runner
 from dags.dgov_dags.common import get_dict_command_args
 
 with DAG(
-        dag_id='dgov_datasets_ostvko',
+        dag_id='dgov_datasets_ostvko15',
         catchup=False,
         start_date=pendulum.datetime(2024, 3, 1, tz=f'{Variable.get("TZ")}'),
         schedule_interval='@monthly',
@@ -26,7 +26,7 @@ with DAG(
     )
 
     dgov_datasets_ostvko = Runner(
-        task_id='dgov_datasets_ostvko',
+        task_id='dgov_datasets_ostvko15',
         luigi_module='dgov_datasets',
         luigi_task='DgovDatasetsOstvko',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
