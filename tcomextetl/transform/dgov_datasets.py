@@ -122,7 +122,8 @@ class DgovDatasets305PerechenGosudarstvennyh1Row:
 
 @define
 class DgovDatasets306PerechenGosudarstvennyhRow:
-    pass
+    spec_rus = field(default='')
+    spec_kaz = field(default='')
 
 
 @define
