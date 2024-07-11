@@ -117,13 +117,35 @@ class DgovDatasetsPerechenGosudarstvennyhRow:
 @define
 class DgovDatasets305PerechenGosudarstvennyh1Row:
     spec_rus = field(default='')
+    forma_rus = field(default='')
+    region_rus = field(default='')
+    name_rus = field(default='')
+    period_kaz = field(default='')
+    region_kaz = field(default='')
+    forma_kaz = field(default='')
+    adress_kaz = field(default='')
+    id = field(default='')
+    name_kaz = field(default='')
     spec_kaz = field(default='')
+    adress_rus = field(default='')
+    period_rus = field(default='')
 
 
 @define
 class DgovDatasets306PerechenGosudarstvennyhRow:
     spec_rus = field(default='')
+    forma_rus = field(default='')
+    region_rus = field(default='')
+    name_rus = field(default='')
+    period_kaz = field(default='')
+    region_kaz = field(default='')
+    forma_kaz = field(default='')
+    adress_kaz = field(default='')
+    id = field(default='')
+    name_kaz = field(default='')
     spec_kaz = field(default='')
+    adress_rus = field(default='')
+    period_rus = field(default='')
 
 
 @define
