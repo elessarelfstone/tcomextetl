@@ -35,16 +35,18 @@ class GosreestrKzSoapNotAvailable(Exception):
 
 
 class ProxyFactory:
+    # user = luigi.Parameter(default=PROXY_FACTORY_USER, visibility=ParameterVisibility.HIDDEN)
+    # password = luigi.Parameter(default=PROXY_FACTORY_PASS, visibility=ParameterVisibility.HIDDEN)
     _proxies = deque()
-    _user = 'spgfj7xv9k'
-    _pass = 'bezqXqZ32xtw1mOyV9'
     _base_address = "gate.smartproxy.com"
 
-    def __init__(self):
+    def __init__(self, user, password):
+        self.user = user
+        self.password = password
         ports = range(10000, 10099)
 
         for port in ports:
-            _p = f"http://{self._user}:{self._pass}@{self._base_address}:{port}"
+            _p = f"http://{self.user}:{self.password}@{self._base_address}:{port}"
             self._proxies.append(_p)
 
     def get(self):
@@ -56,7 +58,7 @@ class ProxyFactory:
 # Этот класс предназначен для взаимодействия с государственным реестром компаний РК
 class GosreestrKzRequests(HttpRequest):
 
-    def __init__(self, url, bins_list=None, **kwargs):
+    def __init__(self, url, bins_list=None, proxy_user=None, proxy_password=None, **kwargs):
         super(GosreestrKzRequests, self).__init__(**kwargs)
         self.data = None
         self.bins_list = bins_list
@@ -67,7 +69,7 @@ class GosreestrKzRequests(HttpRequest):
         self._raw = None
         self._parsed_company_cnt = 0
         self._parsed_contact_cnt = 0
-        self._proxies = ProxyFactory()
+        self._proxies = ProxyFactory(proxy_user, proxy_password)
 
     @staticmethod
     def header():

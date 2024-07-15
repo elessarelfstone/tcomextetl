@@ -148,7 +148,8 @@ class GosreestrKzCompanyOutput(ApiToCsv):
             self.input().get(str(self.ids_fpath))
 
         bins_list = self.bins_list
-        parser = GosreestrKzRequests(base_url, bins_list)
+        parser = GosreestrKzRequests(base_url, bins_list, proxy_user=PROXY_FACTORY_USER,
+                                             proxy_password=PROXY_FACTORY_PASS)
         company_data_dict = parser.get_all_bins_json
         company_tuples = list(
             zip(company_data_dict['bin'], company_data_dict['company_id'], company_data_dict['contact_id']))
@@ -180,8 +181,9 @@ class GosreestrKzCompanyOutput(ApiToCsv):
 
             try:
                 bin_id, company_id, contact_id = _id
-                print(f'BIN: {bin_id}. Company_ID: {company_id}. Contact_ID: {contact_id}')
-                parser = GosreestrKzRequests(gosreestrkz_company_url.format(company_id))
+                # print(f'BIN: {bin_id}. Company_ID: {company_id}. Contact_ID: {contact_id}')
+                parser = GosreestrKzRequests(gosreestrkz_company_url.format(company_id), proxy_user=PROXY_FACTORY_USER,
+                                             proxy_password=PROXY_FACTORY_PASS)
                 company_data = parser.process_company_id(company_id, contact_id)
 
             except errors:
@@ -346,7 +348,7 @@ class GosreestrKzContactOutput(ApiToCsv):
             self.input().get(str(self.ids_fpath))
 
         bins_list = self.bins_list
-        parser = GosreestrKzRequests(base_url, bins_list)
+        parser = GosreestrKzRequests(base_url, bins_list, proxy_user=PROXY_FACTORY_USER, proxy_password=PROXY_FACTORY_PASS)
         contact_data_dict = parser.get_all_bins_json
         contact_tuples = list(
             zip(contact_data_dict['bin'], contact_data_dict['company_id'], contact_data_dict['contact_id']))
@@ -378,7 +380,8 @@ class GosreestrKzContactOutput(ApiToCsv):
 
             try:
                 bin_id, company_id, contact_id = _id
-                parser = GosreestrKzRequests(gosreestrkz_contact_url.format(company_id, contact_id))
+                parser = GosreestrKzRequests(gosreestrkz_contact_url.format(company_id, contact_id),
+                                             proxy_user=PROXY_FACTORY_USER, proxy_password=PROXY_FACTORY_PASS)
                 contact_data = parser.process_contact_id(company_id, contact_id)
 
             except errors:
