@@ -321,6 +321,10 @@ dgov_datasets_306_perechen_gosudarstvennyh:
   rep_name: 306_perechen_gosudarstvennyh
   ftp_directory: dgov_datasets
 
+dgov_datasets_307_perechen_gosudarstvennyh1:
+  rep_name: 307_perechen_gosudarstvennyh1
+  ftp_directory: dgov_datasets
+
 dgov_datasets_ostvko15:
   rep_name: ostvko15
   ftp_directory: dgov_datasets

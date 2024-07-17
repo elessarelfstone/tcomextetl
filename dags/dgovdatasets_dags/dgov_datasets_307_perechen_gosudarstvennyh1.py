@@ -11,9 +11,9 @@ from dags.docker_runner import ExternalEtlDockerRunner as Runner
 from dags.dgov_dags.common import get_dict_command_args
 
 with DAG(
-        dag_id='dgov_datasets_306_perechen_gosudarstvennyh',
+        dag_id='dgov_datasets_307_perechen_gosudarstvennyh1',
         catchup=False,
-        start_date=pendulum.datetime(2024, 3, 1, tz=f'{Variable.get("TZ")}'),
+        start_date=pendulum.datetime(2024, 6, 11, tz=f'{Variable.get("TZ")}'),
         schedule_interval='@monthly',
         tags=['dgov_datasets']
 ) as dag:
@@ -24,14 +24,14 @@ with DAG(
         do_xcom_push=False,
     )
 
-    dgov_datasets_306_perechen_gosudarstvennyh = Runner(
-        task_id='dgov_datasets_306_perechen_gosudarstvennyh',
+    dgov_datasets_307_perechen_gosudarstvennyh1 = Runner(
+        task_id='dgov_datasets_307_perechen_gosudarstvennyh1',
         luigi_module='dgov_datasets',
-        luigi_task='DgovDatasets306PerechenGosudarstvennyh',
+        luigi_task='DgovDatasets307PerechenGosudarstvennyh1',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
         env_vars={'DATAGOV_TOKEN': Variable.get('DATAGOV_TOKEN')},
         pool='dgov_datasets',
         do_xcom_push=False
     )
 
-    command_args >> dgov_datasets_306_perechen_gosudarstvennyh
+    command_args >> dgov_datasets_307_perechen_gosudarstvennyh1
