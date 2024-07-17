@@ -27,7 +27,7 @@ with DAG(
     dgov_datasets_305_perechen_gosudarstvennyh1 = Runner(
         task_id='dgov_datasets_305_perechen_gosudarstvennyh1',
         luigi_module='dgov_datasets',
-        luigi_task='DgovDatasets305PerechenGosudarstsavennyh1',
+        luigi_task='DgovDatasets305PerechenGosudarstvennyh1',
         luigi_params="{{ task_instance.xcom_pull(task_ids='command_args', key='command_args') }}",
         env_vars={'DATAGOV_TOKEN': Variable.get('DATAGOV_TOKEN')},
         pool='dgov_datasets',

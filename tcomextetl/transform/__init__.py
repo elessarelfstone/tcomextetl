@@ -119,6 +119,7 @@ StructRegister.add('dgov_datasets_mu_101', DgovDatasetsMu101Row)
 StructRegister.add('dgov_datasets_mu_100', DgovDatasetsMu100Row)
 StructRegister.add('dgov_datasets_305_perechen_gosudarstvennyh1', DgovDatasets305PerechenGosudarstvennyh1Row)
 StructRegister.add('dgov_datasets_306_perechen_gosudarstvennyh', DgovDatasets306PerechenGosudarstvennyhRow)
+StructRegister.add('dgov_datasets_307_perechen_gosudarstvennyh1', DgovDatasets306PerechenGosudarstvennyhRow)
 # samruk
 StructRegister.add('samruk_suppliers', SamrukSupplierRow)
 StructRegister.add('samruk_bad_suppliers', SamrukBadSupplierRow)
