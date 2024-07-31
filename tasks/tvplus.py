@@ -50,6 +50,7 @@ class TvPlusProgramsOutput(CsvFileOutput):
     @staticmethod
     def extract_json_from_soup(soup, start_str="tvChannels"):
         script = soup.find(lambda tag: tag.name == "script" and start_str in tag.text)
+        print(f'script={script}')
         if not script:
             return None
 
@@ -89,6 +90,7 @@ class TvPlusProgramsOutput(CsvFileOutput):
             headers=headers
         )
         parser_text = parser.load()
+        print(parser_text)
 
         soup = BeautifulSoup(parser_text, "html.parser")
         data_json = self.extract_json_from_soup(soup)
