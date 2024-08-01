@@ -200,4 +200,5 @@ StructRegister.add('cloud_payments_list', CloudPaymentsRow)
 StructRegister.add('cloud_payments_no3ds', CloudPaymentsRow)
 
 StructRegister.add('amplitude_egov_logs', AmplitudeEgovLogsRow)
+StructRegister.add('amplitude_egov_logs_2', AmplitudeEgovLogs2Row)
 StructRegister.add('amplitude_telecomkz_logs', AmplitudeTelecomkzLogsRow)

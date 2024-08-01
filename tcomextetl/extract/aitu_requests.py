@@ -62,6 +62,7 @@ class AituRequests(HttpRequest):
     def stat(self):
         return {'parsed': self._parsed_count, 'files': self._parsed_files}
 
+    @property
     def load(self):
 
         data = []
@@ -69,7 +70,8 @@ class AituRequests(HttpRequest):
             with gzip.open(f, 'rt') as file:
                 for line in file:
                     json_data = json.loads(line)
-                    data.append(json_data)
+                    if json_data.get('event_type') not in ['session_start', 'session_end']:
+                        data.append(json_data)
 
         return data
 

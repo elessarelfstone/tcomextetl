@@ -800,3 +800,6 @@ amplitude_telecomkz_logs:
 
 amplitude_egov_logs:
   ftp_directory: amplitude
+
+amplitude_egov_logs_2:
+  ftp_directory: amplitude
