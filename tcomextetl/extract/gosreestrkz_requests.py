@@ -1,6 +1,7 @@
 import time
 import math
 import requests
+import logging
 from collections import deque
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
@@ -109,6 +110,11 @@ class GosreestrKzRequests(HttpRequest):
     @staticmethod
     def get_total_pages(soup):
         page_selector = soup.find('span', class_='pager-total-rows')
+
+        if page_selector is None:
+            logging.warning("Не удалось найти элемент с количеством страниц. Установлено значение по умолчанию: 0.")
+            return 0  # Например, можно вернуть 1 как значение по умолчанию
+
         return math.ceil(int(page_selector.text) / 15)
 
     # Статический метод для извлечения идентификатора контакта из URL.

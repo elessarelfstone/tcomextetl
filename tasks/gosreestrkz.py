@@ -186,6 +186,11 @@ class GosreestrKzCompanyOutput(ApiToCsv):
                                              proxy_password=PROXY_FACTORY_PASS)
                 company_data = parser.process_company_id(company_id, contact_id)
 
+                # Пропускаем итерацию, если company_data равно None
+                if company_data is None:
+                    logging.warning(f"Skipping ID: {_id} due to None company data.")
+                    continue
+
             except errors:
                 attempt_counts[_id] += 1
                 if attempt_counts[_id] < max_attempts:
@@ -194,13 +199,17 @@ class GosreestrKzCompanyOutput(ApiToCsv):
                     # Логировать проблемные ID и не добавлять их обратно
                     logging.error(f"Max attempts reached for bin: {bin_id}")
                 sleep(self.timeout)
+                continue  # Переходим к следующей итерации
 
-            else:
+            try:
                 data = dict_to_row(company_data, self.struct)
-                save_csvrows(self.output_fpath, [data], delimiter=';')
+            except AttributeError as e:
+                logging.error(f"Error processing ID {_id}: {e}")
+                continue  # Пропуск итерации в случае ошибки
 
-                append_file_tuple(self.parsed_ids_fpath, (company_id, contact_id))
-                parsed_cnt += 1
+            save_csvrows(self.output_fpath, [data], delimiter=';')
+            append_file_tuple(self.parsed_ids_fpath, (company_id, contact_id))
+            parsed_cnt += 1
 
             s = f'Total: {length}. Parsed: {parsed_cnt}. BIN: {_id[0]}. Company_ID: {_id[1]}. Contact_ID: {_id[2]}' + '\n'
             stat = {'total': length, 'parsed': parsed_cnt}
@@ -217,15 +226,18 @@ class GosreestrKzCompanyFtpUploadedOutput(FtpUploadedOutput):
 
     def file_name(self, input_fpath):
         tomorrow = datetime.today() + timedelta(days=1)
-        suff_tomorrow = '{date:%Y%m%d}'.format(date=tomorrow)
+        fixed_date = '{date:%Y%m}01'.format(date=tomorrow)
         ext = Path(input_fpath).suffix
 
-        # have to break it down to pieces to get file name without date
+        # Разбиваем имя файла на части, предполагая, что последняя часть - дата
         pieces = Path(input_fpath).stem.split('_')
-        pieces.pop()
-        pieces.append(suff_tomorrow)
+        if pieces[-1].isdigit() and len(pieces[-1]) == 8:  # Проверяем, что это дата в формате YYYYMMDD
+            pieces.pop()  # Удаляем старую дату
+        pieces.append(fixed_date)  # Добавляем фиксированную дату с днем 01
         f_name = '_'.join(pieces)
-        return Path(f_name).with_suffix(ext + self.gzip_ext).name
+        new_name = Path(f_name).with_suffix(ext + self.gzip_ext).name
+
+        return new_name
 
     def gzip_file(self, input_fpath):
 
@@ -384,6 +396,10 @@ class GosreestrKzContactOutput(ApiToCsv):
                                              proxy_user=PROXY_FACTORY_USER, proxy_password=PROXY_FACTORY_PASS)
                 contact_data = parser.process_contact_id(company_id, contact_id)
 
+                if contact_data is None:
+                    logging.warning(f"Skipping ID: {_id} due to None contact data.")
+                    continue
+
             except errors:
                 attempt_counts[_id] += 1
                 if attempt_counts[_id] < max_attempts:
@@ -392,13 +408,17 @@ class GosreestrKzContactOutput(ApiToCsv):
                     # Логировать проблемные ID и не добавлять их обратно
                     logging.error(f"Max attempts reached for ID {_id}")
                 sleep(self.timeout)
+                continue  # Переходим к следующей итерации
 
-            else:
+            try:
                 data = dict_to_row(contact_data, self.struct)
-                save_csvrows(self.output_fpath, [data], delimiter=';')
+            except AttributeError as e:
+                logging.error(f"Error processing ID {_id}: {e}")
+                continue  # Пропуск итерации в случае ошибки
 
-                append_file_tuple(self.parsed_ids_fpath, (company_id, contact_id))
-                parsed_cnt += 1
+            save_csvrows(self.output_fpath, [data], delimiter=';')
+            append_file_tuple(self.parsed_ids_fpath, (company_id, contact_id))
+            parsed_cnt += 1
 
             s = f'Total: {length}. Parsed: {parsed_cnt}. BIN: {_id[0]}. Company_ID: {_id[1]}. Contact_ID: {_id[2]}' + '\n'
             stat = {'total': length, 'parsed': parsed_cnt}
@@ -415,15 +435,18 @@ class GosreestrKzContactFtpUploadedOutput(FtpUploadedOutput):
 
     def file_name(self, input_fpath):
         tomorrow = datetime.today() + timedelta(days=1)
-        suff_tomorrow = '{date:%Y%m%d}'.format(date=tomorrow)
+        fixed_date = '{date:%Y%m}01'.format(date=tomorrow)
         ext = Path(input_fpath).suffix
 
-        # have to break it down to pieces to get file name without date
+        # Разбиваем имя файла на части, предполагая, что последняя часть - дата
         pieces = Path(input_fpath).stem.split('_')
-        pieces.pop()
-        pieces.append(suff_tomorrow)
+        if pieces[-1].isdigit() and len(pieces[-1]) == 8:  # Проверяем, что это дата в формате YYYYMMDD
+            pieces.pop()  # Удаляем старую дату
+        pieces.append(fixed_date)  # Добавляем фиксированную дату с днем 01
         f_name = '_'.join(pieces)
-        return Path(f_name).with_suffix(ext + self.gzip_ext).name
+        new_name = Path(f_name).with_suffix(ext + self.gzip_ext).name
+
+        return new_name
 
     def gzip_file(self, input_fpath):
 
