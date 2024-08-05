@@ -69,7 +69,7 @@ class IdsManager:
 
         parsed_ids = []
         if os.path.exists(parsed_fpath):
-            parsed_ids = read_csv_tuples(parsed_fpath)
+            parsed_ids = read_csv_tuples(parsed_fpath, delimiter=',')
 
         self._parsed_ids_count = len(parsed_ids)
 
@@ -147,13 +147,14 @@ class GosreestrKzCompanyOutput(ApiToCsv):
         if not os.path.exists(self.ids_fpath):
             self.input().get(str(self.ids_fpath))
 
-        bins_list = self.bins_list
-        parser = GosreestrKzRequests(base_url, bins_list, proxy_user=PROXY_FACTORY_USER,
-                                             proxy_password=PROXY_FACTORY_PASS)
-        company_data_dict = parser.get_all_bins_json
-        company_tuples = list(
-            zip(company_data_dict['bin'], company_data_dict['company_id'], company_data_dict['contact_id']))
-        company_deque = deque(company_tuples)
+        # bins_list = self.bins_list
+        # parser = GosreestrKzRequests(base_url, bins_list, proxy_user=PROXY_FACTORY_USER,
+        #                                      proxy_password=PROXY_FACTORY_PASS)
+        # company_data_dict = parser.get_all_bins_json
+        # company_tuples = list(
+        #     zip(company_data_dict['bin'], company_data_dict['company_id'], company_data_dict['contact_id']))
+        # company_deque = deque(company_tuples)
+        company_deque = deque()
 
         ids_manager = IdsManager(
             self.ids_fpath,
@@ -208,7 +209,7 @@ class GosreestrKzCompanyOutput(ApiToCsv):
                 continue  # Пропуск итерации в случае ошибки
 
             save_csvrows(self.output_fpath, [data], delimiter=';')
-            append_file_tuple(self.parsed_ids_fpath, (company_id, contact_id))
+            append_file_tuple(self.parsed_ids_fpath, (bin_id, company_id, contact_id))
             parsed_cnt += 1
 
             s = f'Total: {length}. Parsed: {parsed_cnt}. BIN: {_id[0]}. Company_ID: {_id[1]}. Contact_ID: {_id[2]}' + '\n'

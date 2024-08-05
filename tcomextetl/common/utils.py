@@ -173,11 +173,7 @@ def dict_keys_to_snake_case(d: dict):
 
 def read_csv_tuples(fpath: str, delimiter=';', encoding="utf-8") -> list[tuple]:
     """Return rows of csv file as list of tuples."""
-    with open(fpath, "r", encoding=encoding) as f:
-        reader = csv.reader(f, delimiter=delimiter)
-        # Преобразование каждой строки в кортеж и добавление в список
-        lines = [tuple(row) for row in reader]
-
+    lines = [tuple(row.split(delimiter)) for row in read_lines(fpath)]
     return lines
 
 
