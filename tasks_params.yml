@@ -349,6 +349,62 @@ dgov_datasets_mu_100:
   rep_name: mu_100
   ftp_directory: dgov_datasets
 
+dgov_datasets_375_perechen_gosudarstvennyh3:
+  rep_name: 375_perechen_gosudarstvennyh3
+  ftp_directory: dgov_datasets
+
+dgov_datasets_305_perechen_gosudarstvennyh:
+  rep_name: 305_perechen_gosudarstvennyh
+  ftp_directory: dgov_datasets
+
+dgov_datasets_memlekettik_auruhanalar_tizbes:
+  rep_name: memlekettik_auruhanalar_tizbes
+  ftp_directory: dgov_datasets
+
+dgov_datasets_mugedektigi_bar_adamdarga_arna:
+  rep_name: mugedektigi_bar_adamdarga_arna
+  ftp_directory: dgov_datasets
+
+dgov_datasets_ata_anasynyn_kamkorlygynsyz_ka:
+  rep_name: ata-anasynyn_kamkorlygynsyz_ka
+  ftp_directory: dgov_datasets
+
+dgov_datasets_memlekettik_auruhanalar_tizbes1:
+  rep_name: memlekettik_auruhanalar_tizbes1
+  ftp_directory: dgov_datasets
+
+dgov_datasets_perechen_gosudarstvennyh_rodi:
+  rep_name: perechen_gosudarstvennyh_rodi
+  ftp_directory: dgov_datasets
+
+dgov_datasets_perechen_gosudarstvennyh_disp:
+  rep_name: perechen_gosudarstvennyh_disp
+  ftp_directory: dgov_datasets
+
+dgov_datasets_perechen_gosudarstvennyh_bol:
+  rep_name: perechen_gosudarstvennyh_bol
+  ftp_directory: dgov_datasets
+
+dgov_datasets_304_perechen_gosudarstvennyh:
+  rep_name: 304_perechen_gosudarstvennyh
+  ftp_directory: dgov_datasets
+
+dgov_datasets_307_perechen_gosudarstvennyh:
+  rep_name: 307_perechen_gosudarstvennyh
+  ftp_directory: dgov_datasets
+
+dgov_datasets_grd_vko:
+  rep_name: grd_vko
+  ftp_directory: dgov_datasets
+
+dgov_datasets_pgb_vko:
+  rep_name: pgb_vko
+  ftp_directory: dgov_datasets
+
+dgov_datasets_psio_vko:
+  rep_name: psio_vko
+  ftp_directory: dgov_datasets
+
 samruk_suppliers:
   endpoint: eprocsearch/unified-api/suppliers
   ftp_directory: samruk

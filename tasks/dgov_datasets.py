@@ -140,5 +140,61 @@ class DgovDatasetsMu100(DgovDatasetsRunner):
     name = luigi.Parameter('dgov_datasets_mu_100')
 
 
+class DgovDatasets375PerechenGosudarstvennyh3(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_375_perechen_gosudarstvennyh3')
+
+
+class DgovDatasets305PerechenGosudarstvennyh(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_305_perechen_gosudarstvennyh')
+
+
+class DgovDatasetsMemlekettikAuruhanalarTizbes(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_memlekettik_auruhanalar_tizbes')
+
+
+class DgovDatasetsMugedektigiBarAdamdargaArna(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_mugedektigi_bar_adamdarga_arna')
+
+
+class DgovDatasetsAtaAnasynynKamkorlygynsyzKa(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_ata_anasynyn_kamkorlygynsyz_ka')
+
+
+class DgovDatasetsMemlekettikAuruhanalarTizbes1(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_memlekettik_auruhanalar_tizbes1')
+
+
+class DgovDatasetsPerechenGosudarstvennyhRodi(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_perechen_gosudarstvennyh_rodi')
+
+
+class DgovDatasetsPerechenGosudarstvennyhDisp(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_perechen_gosudarstvennyh_disp')
+
+
+class DgovDatasetsPerechenGosudarstvennyhBol(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_perechen_gosudarstvennyh_bol')
+
+
+class DgovDatasets304PerechenGosudarstvennyh(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_304_perechen_gosudarstvennyh')
+
+
+class DgovDatasets307PerechenGosudarstvennyh(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_307_perechen_gosudarstvennyh')
+
+
+class DgovDatasetsGrdVko(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_grd_vko')
+
+
+class DgovDatasetsPgbVko(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_pgb_vko')
+
+
+class DgovDatasetsPsioVko(DgovDatasetsRunner):
+    name = luigi.Parameter('dgov_datasets_psio_vko')
+
+
 if __name__ == '__main__':
     luigi.run()
