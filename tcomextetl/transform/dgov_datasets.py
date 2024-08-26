@@ -149,6 +149,23 @@ class DgovDatasets306PerechenGosudarstvennyhRow:
 
 
 @define
+class DgovDatasets307PerechenGosudarstvennyh1Row:
+    spec_rus = field(default='')
+    forma_rus = field(default='')
+    region_rus = field(default='')
+    name_rus = field(default='')
+    period_kaz = field(default='')
+    region_kaz = field(default='')
+    forma_kaz = field(default='')
+    adress_kaz = field(default='')
+    id = field(default='')
+    name_kaz = field(default='')
+    spec_kaz = field(default='')
+    adress_rus = field(default='')
+    period_rus = field(default='')
+
+
+@define
 class DgovDatasetsOstvkoRow:
     region = field(default='')
     phone = field(default='')
@@ -214,3 +231,203 @@ class DgovDatasetsMu100Row:
     kolvo = field(default='')
     oblastru = field(default='')
     oblastkz = field(default='')
+
+
+@define
+class DgovDatasets375PerechenGosudarstvennyh3Row:
+    spec_rus = field(default='')
+    forma_rus = field(default='')
+    region_rus = field(default='')
+    svob_mest = field(default='')
+    index = field(default='')
+    name_rus = field(default='')
+    period_kaz = field(default='')
+    region_kaz = field(default='')
+    forma_kaz = field(default='')
+    adress_kaz = field(default='')
+    id = field(default='')
+    name_kaz = field(default='')
+    spec_kaz = field(default='')
+    adress_rus = field(default='')
+    kol_mest = field(default='')
+    period_rus = field(default='')
+
+
+@define
+class DgovDatasets305PerechenGosudarstvennyhRow:
+    id = field(default='')
+    mail = field(default='')
+    adress_kz = field(default='')
+    operating = field(default='')
+    name_ru = field(default='')
+    internet = field(default='')
+    fio = field(default='')
+    name_kz = field(default='')
+    contacts = field(default='')
+    adress_ru = field(default='')
+
+
+@define
+class DgovDatasetsMemlekettikAuruhanalarTizbesRow:
+    field_3 = field(default='')
+    field_2 = field(default='')
+    field_1 = field(default='')
+    field_7 = field(default='')
+    field_6 = field(default='')
+    field_5 = field(default='')
+    field_4 = field(default='')
+
+
+@define
+class DgovDatasetsMugedektigiBarAdamdargaArnaRow:
+    field_3 = field(default='')
+    field_2 = field(default='')
+    field_1 = field(default='')
+
+
+@define
+class DgovDatasetsAtaAnasynynKamkorlygynsyzKaRow:
+    field_3 = field(default='')
+    field_2 = field(default='')
+    field_1 = field(default='')
+
+
+@define
+class DgovDatasetsMemlekettikAuruhanalarTizbes1Row:
+    field_3 = field(default='')
+    field_2 = field(default='')
+    field_1 = field(default='')
+
+
+@define
+class DgovDatasetsPerechenGosudarstvennyhRodiRow:
+    id = field(default='')
+    rezhim = field(default='')
+    adres = field(default='')
+    naimenovan = field(default='')
+    uslugi = field(default='')
+    telefon = field(default='')
+    pochta = field(default='')
+
+
+@define
+class DgovDatasetsPerechenGosudarstvennyhDispRow:
+    id = field(default='')
+    rezhim = field(default='')
+    adres = field(default='')
+    naimenovan = field(default='')
+    uslugi = field(default='')
+    telefon = field(default='')
+    pochta = field(default='')
+
+
+@define
+class DgovDatasetsPerechenGosudarstvennyhBolRow:
+    id = field(default='')
+    rezhim = field(default='')
+    adres = field(default='')
+    naimenovan = field(default='')
+    uslugi = field(default='')
+    telefon = field(default='')
+    pochta = field(default='')
+
+
+@define
+class DgovDatasets304PerechenGosudarstvennyhRow:
+    mail = field(default='')
+    adress_kz = field(default='')
+    operating = field(default='')
+    name_ru = field(default='')
+    official = field(default='')
+    fio = field(default='')
+    name_kz = field(default='')
+    contacts = field(default='')
+    adress_ru = field(default='')
+
+
+@define
+class DgovDatasets307PerechenGosudarstvennyhRow:
+    mail = field(default='')
+    adress_kz = field(default='')
+    operating = field(default='')
+    name_ru = field(default='')
+    fio = field(default='')
+    name_kz = field(default='')
+    contacts = field(default='')
+    adress_ru = field(default='')
+
+
+@define
+class DgovDatasetsGrdVkoRow:
+    phone_number = field(default='')
+    official_internet_resource = field(default='')
+    geoposition = field(default='')
+    contact_numbers = field(default='')
+    full_name_director = field(default='')
+    idrow = field(default='')
+    travel_bus_routes = field(default='')
+    working_hours_kz = field(default='')
+    days_of_reception = field(default='')
+    location_kz = field(default='')
+    types_services_kz = field(default='')
+    equipment_kz = field(default='')
+    location_ru = field(default='')
+    equipment_ru = field(default='')
+    name_kz = field(default='')
+    working_hours_ru = field(default='')
+    id = field(default='')
+    types_services_ru = field(default='')
+    date_of_dispatch = field(default='')
+    name_ru = field(default='')
+    registry = field(default='')
+    number_of_beds = field(default='')
+    email_address = field(default='')
+
+
+@define
+class DgovDatasetsPgbVkoRow:
+    travel_by_bus = field(default='')
+    phone = field(default='')
+    official_internet_resource = field(default='')
+    types_of_services_ru = field(default='')
+    address_kz = field(default='')
+    full_name_of_the_director = field(default='')
+    types_of_services_kz = field(default='')
+    geoposition = field(default='')
+    idrow = field(default='')
+    working_hours_kz = field(default='')
+    days_of_reception = field(default='')
+    address_ru = field(default='')
+    equipment_kz = field(default='')
+    equipment_ru = field(default='')
+    name_kz = field(default='')
+    working_hours_ru = field(default='')
+    id = field(default='')
+    date_of_dispatch = field(default='')
+    name_ru = field(default='')
+    registry = field(default='')
+    number_of_beds = field(default='')
+    phone_number_of_the_director = field(default='')
+    email_address = field(default='')
+
+
+@define
+class DgovDatasetsPsioVkoRow:
+    district_ru = field(default='')
+    phone = field(default='')
+    address_kz = field(default='')
+    full_name_of_the_director = field(default='')
+    direction_of_activity_kz = field(default='')
+    geoposition = field(default='')
+    idrow = field(default='')
+    working_hours_kz = field(default='')
+    address_ru = field(default='')
+    direction_of_activity_ru = field(default='')
+    name_kz = field(default='')
+    district_kz = field(default='')
+    working_hours_ru = field(default='')
+    id = field(default='')
+    number_of_students = field(default='')
+    date_of_dispatch = field(default='')
+    name_ru = field(default='')
+    email_address = field(default='')
