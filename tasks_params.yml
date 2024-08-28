@@ -666,7 +666,7 @@ iot_stat:
 
 mirapolis_offline_study:
   report_id: 974
-  report_group_id: 2040
+  report_group_id: 2162
   ftp_directory: mirapolis
 
 mirapolis_online_study:
