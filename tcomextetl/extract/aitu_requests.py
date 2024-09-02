@@ -78,17 +78,14 @@ class AituRequests(HttpRequest):
     def __iter__(self):
 
         for f in self._files:
-            data = []
             with gzip.open(f, 'rt') as file:
                 for line in file:
                     json_data = json.loads(line)
-                    if json_data.get('event_type') not in ['session_start', 'session_end']:
-                        data.append(json_data)
-                        self._parsed_count += 1  # Increment count by 1 for each valid event
-            if data:  # Only yield if there's data to return
-                yield data
+                    data = [json_data]
+                    yield data
+                    self._parsed_count += len(data)
             self._parsed_files += 1
-            os.remove(f)
+            os.remove(f)  # Delete the file after reading it
 
 class AituNotificationRequests(HttpRequest):
 
