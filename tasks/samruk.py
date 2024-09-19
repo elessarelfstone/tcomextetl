@@ -75,7 +75,6 @@ class SamrukOutput(ApiToCsv):
 
         return params
 
-
     def run(self):
 
         parser = SamrukParser(

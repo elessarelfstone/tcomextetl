@@ -22,7 +22,7 @@ class HttpRequest:
         timeout_ban=None,
         verify_cert=False
     ):
-
+        print(f"auth in begin of request code - {headers}")
         # verify always set in False
         # specifically for our company
         self.verify_cert = verify_cert
@@ -33,6 +33,7 @@ class HttpRequest:
             self.params = {}
 
         self.headers = headers
+        print(f"auth in request code - {self.headers}")
         self.auth = auth
 
         if auth and auth.get('user'):

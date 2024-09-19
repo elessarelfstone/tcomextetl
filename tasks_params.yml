@@ -859,3 +859,7 @@ amplitude_egov_logs:
 
 amplitude_egov_logs_2:
   ftp_directory: amplitude
+
+shop_telecomkz_nursat_plus:
+  ftp_directory: shop_telecomkz
+  endpoint: /agent/number

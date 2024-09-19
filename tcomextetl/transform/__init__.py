@@ -16,6 +16,7 @@ from tcomextetl.transform.cloudpayments import *
 from tcomextetl.transform.amplitude import *
 from tcomextetl.transform.tvplus import *
 from tcomextetl.transform.dgov_datasets import *
+from tcomextetl.transform.shop_telecomkz import *
 
 
 class StructRegister:
@@ -217,3 +218,5 @@ StructRegister.add('cloud_payments_no3ds', CloudPaymentsRow)
 StructRegister.add('amplitude_egov_logs', AmplitudeEgovLogsRow)
 StructRegister.add('amplitude_egov_logs_2', AmplitudeEgovLogs2Row)
 StructRegister.add('amplitude_telecomkz_logs', AmplitudeTelecomkzLogsRow)
+
+StructRegister.add('shop_telecomkz_nursat_plus', ShopTelecomKzNursatPlusRow)
