@@ -16,7 +16,7 @@ class ElectronicQueueApiParser(HttpRequest):
         self.url = url
         self.data = data
         self._raw = None
-        self._parsed_count = 0
+        self.parsed_count = 0
 
     def load(self):
         r = requests.get(self.url, headers=self.headers, data=json.dumps(self.data))
@@ -25,16 +25,17 @@ class ElectronicQueueApiParser(HttpRequest):
         return r.json()
 
     def set_parsed_count(self, count):
-        self._parsed_count = count
+        self.parsed_count = count
 
     @property
     def status_percent(self):
         # Статус прогресса для статистики
-        return self._parsed_count, len(self._raw) if self._raw else 0
+        return self.parsed_count, len(self._raw) if self._raw else 0
 
     @property
     def stat(self):
         # Возвращаем статистику парсинга
         return {
-            'parsed': self._parsed_count
+            'dateFrom': self.data['dateFrom'],
+            'dateTo': self.data['dateTo'],
         }

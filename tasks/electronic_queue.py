@@ -50,23 +50,25 @@ class ElectronicQueueOutput(ApiToCsv):
         )
 
         rows = parser.load()
-        print("Первая строка данных от API:", rows[0])
         if not rows:
             raise ExternalSourceError("Получен пустой ответ от API")
         data = []
-
+        rows_count = 0
         for row in rows:
             try:
                 # Преобразуем словарь в строку для CSV
                 row_data = dict_to_row(row, self.struct)
                 data.append(row_data)
-                parser.set_parsed_count(parser._parsed_count + 1)
+                rows_count += 1
             except Exception as e:
                 continue  # Пропускаем строки, которые не удалось обработать
 
         save_csvrows(self.output_fpath, data, quotechar='"')
         self.set_status_info(*parser.status_percent)
         stat = parser.stat
+        stat.update({"parsed": rows_count})
+        stat.update({"dateFrom-params": self.request_params['dateFrom']})
+        stat.update({"dateTo-params": self.request_params['dateTo']})
         rewrite_file(self.stat_fpath, json.dumps(stat))
 
         self.finalize()
@@ -85,8 +87,8 @@ class ElectronicQueueRunner(Runner):
     def params(self):
         params = super(ElectronicQueueRunner, self).params
         params['from_to'] = (
-            self.start_date.strftime(DEFAULT_FORMAT),
-            self.end_date.strftime(DEFAULT_FORMAT)
+            self.start_date.strftime("%Y-%m-%d 00:00:00"),
+            self.end_date.strftime("%Y-%m-%d 23:59:59")
         )
         return params
 
