@@ -17,6 +17,7 @@ from tcomextetl.transform.amplitude import *
 from tcomextetl.transform.tvplus import *
 from tcomextetl.transform.dgov_datasets import *
 from tcomextetl.transform.shop_telecomkz import *
+from tcomextetl.transform.electronic_queue import *
 
 
 class StructRegister:
@@ -121,7 +122,7 @@ StructRegister.add('dgov_datasets_mu_100', DgovDatasetsMu100Row)
 StructRegister.add('dgov_datasets_305_perechen_gosudarstvennyh1', DgovDatasets305PerechenGosudarstvennyh1Row)
 StructRegister.add('dgov_datasets_306_perechen_gosudarstvennyh', DgovDatasets306PerechenGosudarstvennyhRow)
 StructRegister.add('dgov_datasets_307_perechen_gosudarstvennyh1', DgovDatasets307PerechenGosudarstvennyh1Row)
-#new
+# new
 StructRegister.add('dgov_datasets_375_perechen_gosudarstvennyh3', DgovDatasets375PerechenGosudarstvennyh3Row)
 StructRegister.add('dgov_datasets_305_perechen_gosudarstvennyh', DgovDatasets305PerechenGosudarstvennyhRow)
 StructRegister.add('dgov_datasets_memlekettik_auruhanalar_tizbes', DgovDatasetsMemlekettikAuruhanalarTizbesRow)
@@ -220,3 +221,5 @@ StructRegister.add('amplitude_egov_logs_2', AmplitudeEgovLogs2Row)
 StructRegister.add('amplitude_telecomkz_logs', AmplitudeTelecomkzLogsRow)
 
 StructRegister.add('shop_telecomkz_nursat_plus', ShopTelecomKzNursatPlusRow)
+
+StructRegister.add('electronic_queue', ElectronicQueueRow)

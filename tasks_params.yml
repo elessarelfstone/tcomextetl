@@ -863,3 +863,6 @@ amplitude_egov_logs_2:
 shop_telecomkz_nursat_plus:
   ftp_directory: shop_telecomkz
   endpoint: /agent/number
+
+electronic_queue:
+  ftp_directory: electronic_queue
