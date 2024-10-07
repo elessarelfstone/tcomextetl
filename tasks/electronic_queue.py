@@ -50,18 +50,18 @@ class ElectronicQueueOutput(ApiToCsv):
         )
 
         rows = parser.load()
-        if not rows:
-            raise ExternalSourceError("Получен пустой ответ от API")
         data = []
         rows_count = 0
-        for row in rows:
-            try:
-                # Преобразуем словарь в строку для CSV
-                row_data = dict_to_row(row, self.struct)
-                data.append(row_data)
-                rows_count += 1
-            except Exception as e:
-                continue  # Пропускаем строки, которые не удалось обработать
+
+        if rows:
+            for row in rows:
+                try:
+                    # Преобразуем словарь в строку для CSV
+                    row_data = dict_to_row(row, self.struct)
+                    data.append(row_data)
+                    rows_count += 1
+                except Exception as e:
+                    continue  # Пропускаем строки, которые не удалось обработать
 
         save_csvrows(self.output_fpath, data, quotechar='"')
         self.set_status_info(*parser.status_percent)
