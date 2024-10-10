@@ -3,6 +3,8 @@ import pandas as pd
 from urllib.parse import urlparse
 from urllib.parse import parse_qsl
 
+from tenacity import retry, wait_fixed, stop_after_attempt
+
 from tcomextetl.extract.api_requests import ApiRequests
 from tcomextetl.common.exceptions import ExternalSourceError
 from tcomextetl.common.utils import read_file, flatten_dict, clean
@@ -44,6 +46,7 @@ class GoszakupRestApiParser(ApiRequests):
     def size(self):
         return self._raw.get('size')
 
+    @retry(wait=wait_fixed(15), stop=stop_after_attempt(3))
     def load(self, params):
         r = self.request(self.url, params=params)
         return r.json()
