@@ -100,6 +100,7 @@ class GoszakupGraphQLApiParser(ApiRequests):
         ext = self._raw.get('extensions')
         return ext['pageInfo']['lastId']
 
+    @retry(wait=wait_fixed(15), stop=stop_after_attempt(3))
     def load(self, params):
 
         variables = params
