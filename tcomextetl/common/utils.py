@@ -14,6 +14,8 @@ from settings import PARAMS_CONFIG_PATH
 
 FILE_FORMATS = [
     {"extension": "zip", "mime": "application/zip", "offset": 0, "signature": "50 4B 03 04"},
+    # this is patch for speedtest. since 16.10.2024 they start send wrong headers for zip files
+    {"extension": "zip", "mime": "text/plain; charset=utf-8", "offset": 0, "signature": "50 4B 03 04"},
     {"extension": "tar", "mime": "application/x-tar", "offset": 257, "signature": "75 73 74 61 72"},
     {"extension": "gzip", "mime": "application/gzip", "offset": 0, "signature": "1F 8B 08"},
     {"extension": "7z", "mime": "application/x-7z-compressed", "offset": 0, "signature": "37 7A BC AF 27 1C"},
