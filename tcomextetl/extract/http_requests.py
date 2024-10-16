@@ -129,10 +129,10 @@ class Downloader(HttpRequest):
             location = r.headers.get('Location')
             content_disposition = r.headers.get('Content-Disposition')
 
-            if content_type:
-                _format = list(filter(lambda f: f['mime'] == content_type, FILE_FORMATS))
-                if _format:
-                    file_format = _format.pop()
+            _format = list(filter(lambda f: f['mime'] == content_type, FILE_FORMATS))
+
+            if content_type and _format:
+                file_format = _format.pop()
 
             elif content_disposition:
                 file_name = re.findall('filename=(.+)', content_disposition)[0]
