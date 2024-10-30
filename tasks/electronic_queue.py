@@ -41,7 +41,6 @@ class ElectronicQueueOutput(ApiToCsv):
         headers = {
             "Content-Type": "application/json"
         }
-        print(self.request_params)
         parser = ElectronicQueueApiParser(
             url,
             headers=headers,
