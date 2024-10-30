@@ -22,6 +22,7 @@ class ElectronicQueueApiParser(HttpRequest):
         r = requests.get(self.url, headers=self.headers, data=json.dumps(self.data))
         if r.status_code != 200:
             raise ExternalSourceError(f"Ошибка в запросе: {r.status_code}")
+        r.encoding = 'utf-8'
         return r.json()
 
     def set_parsed_count(self, count):
