@@ -17,3 +17,4 @@ class ElectronicQueueRow:
     language = field(default='')
     reservationnumber = field(default='')
     pssid = field(default='')
+    ldaplogin = field(default='')
