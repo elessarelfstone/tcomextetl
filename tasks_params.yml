@@ -483,19 +483,19 @@ infobip_omni_conversations:
   endpoint: conversations
   ftp_directory: infobip
   timeout: !!float 30
-  timeout_ban: !!float 30
+  timeout_ban: !!float 3
 
 infobip_omni_messages:
   endpoint: messages
   ftp_directory: infobip
   timeout: !!float 30
-  timeout_ban: !!float 30
+  timeout_ban: !!float 3
 
 infobip_omni_tags:
   endpoint: tags
   ftp_directory: infobip
   timeout: !!float 30
-  timeout_ban: !!float 30
+  timeout_ban: !!float 3
 
 telecomobkz_logs_profiles:
   entity: logs/v1/export/profiles.csv
