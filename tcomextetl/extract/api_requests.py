@@ -4,7 +4,7 @@ from math import floor
 from time import sleep
 
 import humanize
-from requests.exceptions import ReadTimeout
+from requests.exceptions import ReadTimeout, ConnectTimeout
 
 from tcomextetl.common.dates import DEFAULT_DATETIME_FORMAT
 from tcomextetl.extract.http_requests import HttpRequest
@@ -82,5 +82,5 @@ class ApiRequests(ABC, HttpRequest):
                 yield data
                 if self.timeout_ban:
                     sleep(self.timeout_ban)
-            except ReadTimeout:
+            except (ReadTimeout, ConnectTimeout):
                 sleep(self.timeout)
