@@ -628,7 +628,7 @@ speedtest_sensitive_data:
   ftp_directory: speedtest
 
 crmsensor_checklist:
-  survey_ids: 16572, 15965, 15556, 15549, 15966, 15962
+  survey_ids: 17449, 17446, 17096, 17444, 17445
   ftp_directory: crmsensor
 
 telecomkz_reps_conversions_main:
