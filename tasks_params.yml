@@ -727,6 +727,13 @@ telecomkz_logs_redesign2_visits:
   timeout: !!float 60
   timeout_ban: !!float 90
 
+telecomkz_logs_redesign3_visits:
+  counter_id: 97611688
+  fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer,ym:s:browserLanguage,ym:s:operatingSystem,ym:s:mobilePhone,ym:s:mobilePhoneModel
+  ftp_directory: telecomkz
+  timeout: !!float 60
+  timeout_ban: !!float 90
+
 telecomkz_logs_wfm_visits:
   counter_id: 96910436
   fields: ym:s:visitID,ym:s:counterID,ym:s:watchIDs,ym:s:date,ym:s:dateTime,ym:s:isNewUser,ym:s:pageViews,ym:s:visitDuration,ym:s:bounce,ym:s:clientID,ym:s:counterUserIDHash,ym:s:goalsID,ym:s:goalsDateTime,ym:s:referer
