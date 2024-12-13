@@ -189,6 +189,7 @@ StructRegister.add('telecomkz_reps_conversions_lk2', TelecomkzConversionsLK2Row)
 StructRegister.add('telecomkz_logs_main_visits', TelecomkzLogsRow)
 StructRegister.add('telecomkz_logs_redesign_visits', TelecomkzRedesignLogsRow)
 StructRegister.add('telecomkz_logs_redesign2_visits', TelecomkzRedesignLogsRow)
+StructRegister.add('telecomkz_logs_redesign3_visits', TelecomkzRedesignLogsRow)
 StructRegister.add('telecomkz_logs_wfm_visits', TelecomkzWfmLogsRow)
 # speed test
 StructRegister.add('speedtest_sensitive_data', SpeedtestSensitiveDataRow)

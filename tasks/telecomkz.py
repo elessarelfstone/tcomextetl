@@ -21,7 +21,7 @@ from settings import (TELECOMOBKZ_YANDEX_APP_METRICA_TOKEN,
                       TELECOMKZ_YANDEX_METRICA_LOGS_YAM2_TOKEN,
                       TELECOMKZ_YANDEX_METRICA_LOGS_TERMINAL_TOKEN,
                       TELECOMKZ_YANDEX_METRICA_LOGS_REDESIGN_TOKEN,
-                      TELECOMKZ_YANDEX_METRICA_LOGS_WFM_TOKEN
+                      TELECOMKZ_YANDEX_METRICA_LOGS_WFM_TOKEN, TELECOMKZ_YANDEX_METRICA_LOGS_REDESIGN3_TOKEN
                       )
 
 app_metrika_host = 'https://api.appmetrica.yandex.ru'
@@ -502,6 +502,16 @@ class TelecomkzYandexMetricaLogsRedesign2Visits(TelecomkzYandexMetricaApiLogsRun
     def requires(self):
         return TelecomkzYandexMetricaLogsFtpOutput(
             token=TELECOMKZ_YANDEX_METRICA_LOGS_REDESIGN_TOKEN,
+            **self.params
+        )
+
+
+class TelecomkzYandexMetricaLogsRedesign3Visits(TelecomkzYandexMetricaApiLogsRunner):
+    name = luigi.Parameter('telecomkz_logs_redesign3_visits')
+
+    def requires(self):
+        return TelecomkzYandexMetricaLogsFtpOutput(
+            token=TELECOMKZ_YANDEX_METRICA_LOGS_REDESIGN3_TOKEN,
             **self.params
         )
 
