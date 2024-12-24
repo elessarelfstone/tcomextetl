@@ -878,12 +878,19 @@ cloud_payments_no3ds:
 
 amplitude_telecomkz_logs:
   ftp_directory: amplitude
+  amplitude_id: 333854
 
 amplitude_egov_logs:
   ftp_directory: amplitude
+  amplitude_id: 333828
 
 amplitude_egov_logs_2:
   ftp_directory: amplitude
+  amplitude_id: 622300
+
+amplitude_loyalty_program_logs:
+  ftp_directory: amplitude
+  amplitude_id: 620916
 
 shop_telecomkz_nursat_plus:
   ftp_directory: shop_telecomkz
