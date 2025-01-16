@@ -10,7 +10,7 @@ import json
 
 from tcomextetl.extract.cloudpayments_requests import CloudPaymentsParser
 
-cloudpayments_url = 'https://api.cloudpayments.kz'
+cloudpayments_url = "https://api.tiptoppay.kz"
 
 
 class CloudPaymentsListOutput(ApiToCsv):
