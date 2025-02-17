@@ -370,6 +370,7 @@ class GoszakupContractUnitsRow:
 @define
 class GoszakupTrdAppOffersRow:
     id = field(default='')
+    point_id = field(default='')
     lot_id = field(default='')
     app_lot_id = field(default='')
     price = field(default='')
