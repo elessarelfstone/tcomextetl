@@ -46,7 +46,6 @@ class GoszakupCompanyRow:
 @define
 class GoszakupContractRow:
     id = field(default='')
-    parent_id = field(default='')
     root_id = field(default='')
     trd_buy_id = field(default='')
     trd_buy_number_anno = field(default='')
