@@ -898,3 +898,7 @@ shop_telecomkz_nursat_plus:
 
 electronic_queue:
   ftp_directory: electronic_queue
+
+rocketdata_reviews:
+  ftp_directory: rocketdata
+  endpoint: /reviews/

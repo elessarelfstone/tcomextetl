@@ -1,3 +1,4 @@
+from tcomextetl.transform.rocketdata import RocketDataReview
 from tcomextetl.transform.sgov import *
 from tcomextetl.transform.kgd import *
 from tcomextetl.transform.goszakup import *
@@ -225,3 +226,4 @@ StructRegister.add('amplitude_loyalty_program_logs', AmplitudeLoyaltyProgramLogs
 StructRegister.add('shop_telecomkz_nursat_plus', ShopTelecomKzNursatPlusRow)
 
 StructRegister.add('electronic_queue', ElectronicQueueRow)
+StructRegister.add('rocketdata_reviews', RocketDataReview)
