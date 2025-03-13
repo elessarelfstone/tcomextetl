@@ -1,0 +1,41 @@
+from attrs import define, field
+
+@define
+class RocketDataReview:
+    date: str = field(default='')
+    author: str = field(default='')
+    created_in_catalog: str = field(default='')
+    created_in_rd: str = field(default='')
+    parsed_at: str = field(default='')
+    comment: str = field(default='')
+    rating: str = field(default='')
+    review_id: str = field(default='')
+    origin_url: str = field(default='')
+    location_url: str = field(default='')
+    # Company information
+    company_name: str = field(default='')
+    company_code: str = field(default='')
+    company_country: str = field(default='')
+    company_region: str = field(default='')
+    company_city: str = field(default='')
+    company_street: str = field(default='')
+    company_housenumber: str = field(default='')
+    company_postcode: str = field(default='')
+    # Brand information
+    brand_name: str = field(default='')
+    brand_is_test: str = field(default='')
+    able_to_reply: str = field(default='')
+    able_to_abuse: str = field(default='')
+    tags: str = field(default='')
+    is_changed: str = field(default='')
+    catalog_id: str = field(default='')
+    # Replies: list of Reply objects
+    reply_author: str = field(default='')
+    reply_comment: str = field(default='')
+    reply_created_in_catalog: str = field(default='')
+    reply_created_in_rd: str = field(default='')
+    reply_parsed_at: str = field(default='')
+    is_company_comment: str = field(default='')
+    is_autoreply: str = field(default='')
+    able_to_edit: str = field(default='')
+    able_to_delete: str = field(default='')
