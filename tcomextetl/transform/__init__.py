@@ -1,3 +1,4 @@
+from tcomextetl.transform.qualys import QualysVulnerabilitiesRow
 from tcomextetl.transform.rocketdata import RocketDataReview
 from tcomextetl.transform.sgov import *
 from tcomextetl.transform.kgd import *
@@ -227,3 +228,4 @@ StructRegister.add('shop_telecomkz_nursat_plus', ShopTelecomKzNursatPlusRow)
 
 StructRegister.add('electronic_queue', ElectronicQueueRow)
 StructRegister.add('rocketdata_reviews', RocketDataReview)
+StructRegister.add('qualys_vulnerabilities', QualysVulnerabilitiesRow)
