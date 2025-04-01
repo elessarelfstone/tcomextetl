@@ -902,3 +902,9 @@ electronic_queue:
 rocketdata_reviews:
   ftp_directory: rocketdata
   endpoint: /reviews/
+
+qualys_vulnerabilities:
+  ftp_directory: qualys
+  endpoint: /asset/host/vm/detection/
+  endpoint_qid_info: /knowledge_base/vuln/?action=list&ids=
+  ftp_file_mask: qualys_vulnerabilities_qid_title_*.csv
