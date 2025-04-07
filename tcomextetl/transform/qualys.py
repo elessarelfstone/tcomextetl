@@ -12,6 +12,7 @@ class QualysVulnerabilitiesRow:
     asset_ipv4: str = field(default='')
     asset_tags: str = field(default='')
     disabled: str = field(default='')
+    ignored: str = field(default='')
     qds: str = field(default='')
     qds_severity: str = field(default='')
     true_risk_score: str = field(default='')

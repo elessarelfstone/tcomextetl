@@ -2,22 +2,21 @@ import logging
 import requests
 import time
 
+from tcomextetl.extract.http_requests import HttpRequest
 
-class QualysDataRequest:
-    def __init__(self, url, headers=None, auth=None, params=None, timeout=300):
 
+class QualysDataRequest(HttpRequest):
+
+    def __init__(self, url, headers=None, auth=None, params=None, date_params=None, **kwargs):
+        super(QualysDataRequest, self).__init__(**kwargs)
         self.url = url
-        self.headers = headers or {}
+        self.headers = headers
         self.auth = auth
-        self.params = params or {}
-        self.timeout = timeout
+        self.params = params
+        self.date_params = date_params
         self.session = requests.Session()
 
-    def get_raw_data(self, params=None):
-
-        request_params = self.params.copy()
-        if params:
-            request_params.update(params)
+    def get_raw_data(self):
 
         max_attempts = 3
         for attempt in range(max_attempts):
@@ -25,7 +24,7 @@ class QualysDataRequest:
                 response = self.session.post(
                     self.url,
                     headers=self.headers,
-                    params=request_params,
+                    params=self.params,
                     auth=self.auth,
                     verify=False,
                     timeout=self.timeout
@@ -41,13 +40,13 @@ class QualysDataRequest:
                 logging.error(f"Request failed: {e}")
                 time.sleep(5)
 
-    def get_qid_info_raw(self, qid_url):
+    def get_qid_info_raw(self):
 
         retries = 3
         for attempt in range(retries):
             try:
                 response = self.session.get(
-                    qid_url,
+                    self.url,
                     headers=self.headers,
                     auth=self.auth,
                     verify=False
@@ -64,3 +63,10 @@ class QualysDataRequest:
             except requests.exceptions.RequestException as e:
                 logging.error(f"Request failed: {e}")
                 time.sleep(5)
+
+    @property
+    def stat(self):
+        return {
+            'dateFrom': self.date_params['date_from'],
+            'dateTo': self.date_params['date_to'],
+        }

@@ -12,7 +12,7 @@ from requests.auth import HTTPBasicAuth
 
 from tasks.base import FtpUploadedOutput, Runner, ApiToCsv, ExternalFtpCsvDFInput
 from tcomextetl.common.dates import today
-from tcomextetl.common.csv import save_csvrows
+from tcomextetl.common.csv import save_csvrows, dict_to_row
 from tcomextetl.common.utils import rewrite_file, read_csv_tuples
 from settings import QUALYS_API_USER, QUALYS_API_PASSWORD
 from tcomextetl.extract.qualys_requests import QualysDataRequest
@@ -126,7 +126,7 @@ class QidManager:
                 params=self.request_params
             )
 
-            xml_text = request.get_qid_info_raw(qid_url)
+            xml_text = request.get_qid_info_raw()
             root = ET.fromstring(xml_text)
             title = root.findtext(".//TITLE", default="N/A")
             return title
@@ -148,6 +148,7 @@ class QualysOutput(ApiToCsv):
         super().__init__(*args, **kwargs)
         self.logger = logging.getLogger(self.__class__.__name__)
         self.qid_manager = None
+        self.parsed_cnt = 0
 
     @property
     def dates_params(self):
@@ -307,38 +308,45 @@ class QualysOutput(ApiToCsv):
             url=self.url,
             headers=self.headers,
             auth=HTTPBasicAuth(self.username, self.password),
-            params=self.request_params
+            params=self.request_params,
+            date_params=self.dates_params
         )
 
         raw_xml = request.get_raw_data()
+        rows = self.parse_xml(raw_xml)
+        data = []
 
-        processed_data = self.parse_xml(raw_xml)
+        if rows:
+            for row in rows:
+                try:
+                    # Преобразуем словарь в строку для CSV
+                    row_data = dict_to_row(row, self.struct)
+                    data.append(row_data)
+                    self.parsed_cnt += 1
+                except Exception as e:
+                    continue
 
-        rows = [tuple(d.values()) for d in processed_data]
-        save_csvrows(self.output_fpath, rows, quotechar='"')
-
-        stat = {
-            'date': self.date,
-            'total': len(processed_data)
-        }
-        rewrite_file(self.stat_fpath, json.dumps(stat, default=str))
+        save_csvrows(self.output_fpath, data, quotechar='"')
+        stat = request.stat
+        stat.update({'name': self.name})
+        stat.update({'parsed': self.parsed_cnt})
+        rewrite_file(self.stat_fpath, json.dumps(stat))
 
         self.finalize()
 
 
 @requires(QualysOutput)
 class QualysFtpOutput(FtpUploadedOutput):
-    ftp_file_mask = luigi.Parameter()
     pass
 
 
-class QualysVulnerabilities(Runner):
-    name = luigi.Parameter('qualys_vulnerabilities')
+class QualysVulnerabilitiesRunner(Runner):
     start_date = luigi.DateParameter(default=today())
     end_date = luigi.DateParameter(default=today())
 
+    @property
     def params(self):
-        params = super(QualysVulnerabilities, self).params
+        params = super(QualysVulnerabilitiesRunner, self).params
 
         params['from_to'] = (
             self.start_date.isoformat(),
@@ -349,8 +357,12 @@ class QualysVulnerabilities(Runner):
 
     def requires(self):
         return QualysFtpOutput(
-            **self.params()
+            **self.params
         )
+
+
+class QualysVulnerabilities(QualysVulnerabilitiesRunner):
+    name = luigi.Parameter('qualys_vulnerabilities')
 
 
 if __name__ == '__main__':

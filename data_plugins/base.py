@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import urllib3
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
