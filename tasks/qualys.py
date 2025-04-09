@@ -246,20 +246,20 @@ class QualysOutput(ApiToCsv):
                                                                      external)
 
                     detection_data = {
-                        "QID": qid,
-                        "Title": title,
-                        "Severity": severity,
-                        "Last Detected": detection.findtext("LAST_FOUND_DATETIME", default="N/A"),
-                        "First Detected": detection.findtext("FIRST_FOUND_DATETIME", default="N/A"),
-                        "Status": status,
-                        "Asset Name": asset_name,
-                        "Asset IPV4": asset_ipv4,
-                        "Asset Tags": asset_tags,
-                        "Disabled": disabled,
-                        "Ignored": ignored,
-                        "QDS": qds_value,
-                        "QDS Severity": qds_severity,
-                        "True Risk Score": trurisk_score
+                        "qid": qid,
+                        "title": title,
+                        "severity": severity,
+                        "last_detected": detection.findtext("LAST_FOUND_DATETIME", default="N/A"),
+                        "first_detected": detection.findtext("FIRST_FOUND_DATETIME", default="N/A"),
+                        "status": status,
+                        "asset_name": asset_name,
+                        "asset_ipv4": asset_ipv4,
+                        "asset_tags": asset_tags,
+                        "disabled": disabled,
+                        "ignored": ignored,
+                        "qds": qds_value,
+                        "qds_severity": qds_severity,
+                        "true_risk_score": trurisk_score
                     }
 
                     processed_data.append(detection_data)
