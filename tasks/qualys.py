@@ -23,6 +23,7 @@ DEFAULT_PARAMS = {
     'action': 'list',
     'show_tags': '1',
     'show_qds': '1',
+    'show_igs': '1',
     'truncation_limit': '0',
     'status': 'New, Active, Re-Opened, Fixed',
     'severities': '1,2,3,4,5',
