@@ -28,6 +28,9 @@ DEFAULT_PARAMS = {
     'severities': '1,2,3,4,5',
     'include_ignored': '1',
     'include_disabled': '1',
+    'detection_last_tested_since_days': '365',
+    'include_vuln_type': 'confirmed',
+    'include_vuln_type': 'potential',
 }
 
 ACS_DICT = {
