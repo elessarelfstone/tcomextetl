@@ -23,14 +23,14 @@ DEFAULT_PARAMS = {
     'action': 'list',
     'show_tags': '1',
     'show_qds': '1',
+    'show_igs': '1',
     'truncation_limit': '0',
     'status': 'New, Active, Re-Opened, Fixed',
     'severities': '1,2,3,4,5',
     'include_ignored': '1',
     'include_disabled': '1',
     'detection_last_tested_since_days': '365',
-    'include_vuln_type': 'confirmed',
-    'include_vuln_type': 'potential',
+    'include_vuln_type': 'confirmed, potential',
 }
 
 ACS_DICT = {
