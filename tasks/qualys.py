@@ -30,8 +30,7 @@ DEFAULT_PARAMS = {
     'include_ignored': '1',
     'include_disabled': '1',
     'detection_last_tested_since_days': '365',
-    'include_vuln_type': 'confirmed',
-    'include_vuln_type': 'potential',
+    'include_vuln_type': 'confirmed, potential',
 }
 
 ACS_DICT = {
